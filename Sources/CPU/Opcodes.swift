@@ -65,16 +65,16 @@ public enum Opcodes6502: UInt8 {
     // MARK: Transfer
     case TAX = 0xAA
     case TAY = 0xA8
-    case TSX = 0xBA
+    case TSX = 0xBA                 // Test added
     case TXA = 0x8A
-    case TXS = 0x9A
+    case TXS = 0x9A                 // Test added
     case TYA = 0x98
 
     // MARK: Push and pull
-    case PHA = 0x48
-    case PHP = 0x08
-    case PLA = 0x68
-    case PLP = 0x28
+    case PHA = 0x48                 // Test added
+    case PHP = 0x08                 // Test added
+    case PLA = 0x68                 // Test added
+    case PLP = 0x28                 // Test added
     
     // MARK: Jump
     case JMP_Absolute = 0x4C        // Test added

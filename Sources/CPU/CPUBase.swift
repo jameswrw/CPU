@@ -18,7 +18,7 @@ public class CPU {
     public let wordSize: Int = 8
     public let endianness = Endianness.little
     public var tickcount: Int = 0
-    private var memory: UnsafeMutablePointer<UInt8>
+    internal var memory: UnsafeMutablePointer<UInt8>
     
     public func writeByte(addr: Int, value: UInt8) {
         memory[addr] = value

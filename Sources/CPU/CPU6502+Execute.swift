@@ -44,6 +44,28 @@ public extension CPU6502 {
             case .JMP_Indirect:
                 PC = readWord16(addr: Int(readWord16(addr: Int(PC))))     
                 tickcount += 5
+            case .TXS:
+                SP = X
+                tickcount += 2
+            case .TSX:
+                X = SP
+                tickcount += 2
+            case .PHA:
+                memory[0x100 + Int(SP)] = A
+                SP -= 1
+                tickcount += 3
+            case .PLA:
+                SP += 1
+                A = memory[0x100 + Int(SP)]
+                tickcount += 4
+            case .PHP:
+                memory[0x100 + Int(SP)] = F
+                SP -= 1
+                tickcount += 3
+            case .PLP:
+                SP += 1
+                F = memory[0x100 + Int(SP)]
+                tickcount += 4
             default:
                 fatalError("Unimplemented opcode")
             }
