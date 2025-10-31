@@ -7,11 +7,33 @@ import Testing
     defer { memory.deallocate() }
 
     let cpu = CPU6502(memory: memory)
-    print(cpu.A)
+    #expect(cpu.A == 0)
+    #expect(cpu.F == Flags.One.rawValue)
+
     // Place an opcode at the reset vector (or call reset and set PC accordingly)
-    memory[0xFFFC] = 0xAD // LDA Absolute opcode (placeholder; real absolute addressing needs two-byte address operand next)
+    memory[0xFFFC] = 0xAD
     memory[0xFFFD] = 42
 
     cpu.runForTicks(2)
-    print(cpu.A)
+    #expect(cpu.A == 42)
+    #expect(cpu.F == Flags.One.rawValue)
+    #expect(cpu.readFlag(flag: .Z) == false)
+
+    cpu.reset()
+    memory[0xFFFC] = 0xAD
+    memory[0xFFFD] = 0
+    
+    cpu.runForTicks(2)
+    #expect(cpu.A == 0)
+    #expect(cpu.F == Flags.Z.rawValue + Flags.One.rawValue)
+    #expect(cpu.readFlag(flag: .Z) == true)
+    
+    cpu.reset()
+    memory[0xFFFC] = 0xAD
+    memory[0xFFFD] = 0xFF
+    
+    cpu.runForTicks(2)
+    #expect(cpu.A == 0xFF)
+    #expect(cpu.F == Flags.N.rawValue + Flags.One.rawValue)
+    #expect(cpu.readFlag(flag: .N) == true)
 }

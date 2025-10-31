@@ -29,7 +29,7 @@ public class CPU6502: CPU {
     //
     // Avoiding an OptionSet as that implies struct which implies COW
     // which implies performance issues in this use case.
-    public var F: UInt8 = 0
+    public var F: UInt8 = Flags.One.rawValue
     
     public func setFlag(flag: Flags) {
         F |= flag.rawValue
@@ -40,7 +40,7 @@ public class CPU6502: CPU {
     }
     
     public func readFlag(flag: Flags) -> Bool {
-        F & flag.rawValue == 1
+        F & flag.rawValue != 0
     }
     
     // Execution.
@@ -52,6 +52,7 @@ public class CPU6502: CPU {
     
     public func nextOpcode() -> Opcodes6502 {
         let byte = readByte(addr: Int(PC))
+        PC += 1
         return Opcodes6502(rawValue: byte) ?? .NOP
     }
     

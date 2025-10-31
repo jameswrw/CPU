@@ -36,7 +36,7 @@ public extension CPU6502 {
             case .LDA_Absolute:
                 A = readByte(addr: Int(PC))
                 A == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                (A & 0x80  == 1) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                (A & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
                 tickcount += 2
             default:
                 fatalError("Unimplemented opcode")
