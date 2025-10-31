@@ -55,17 +55,57 @@ public extension CPU6502 {
                 SP -= 1
                 tickcount += 3
             case .PLA:
-                SP += 1
+                SP = SP &+ 1
                 A = memory[0x100 + Int(SP)]
                 tickcount += 4
             case .PHP:
                 memory[0x100 + Int(SP)] = F
-                SP -= 1
+                SP = SP &- 1
                 tickcount += 3
             case .PLP:
-                SP += 1
+                SP = SP &+ 1
                 F = memory[0x100 + Int(SP)]
                 tickcount += 4
+            case .TAX:
+                X = A
+                X == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
+                (X & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                tickcount += 2
+            case .TXA:
+                A = X
+                A == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
+                (A & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                tickcount += 2
+            case .TAY:
+                Y = A
+                Y == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
+                (Y & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                tickcount += 2
+            case .TYA:
+                A = Y
+                A == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
+                (A & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                tickcount += 2
+            case .INX:
+                X &+= 1
+                X == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
+                (X & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                tickcount += 2
+            case .DEX:
+                X &-= 1
+                X == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
+                (X & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                tickcount += 2
+            case .INY:
+                Y &+= 1
+                Y == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
+                (Y & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                tickcount += 2
+            case .DEY:
+                Y &-= 1
+                Y == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
+                (Y & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                tickcount += 2
             default:
                 fatalError("Unimplemented opcode")
             }

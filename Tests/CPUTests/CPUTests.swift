@@ -200,4 +200,315 @@ struct CPU6502Tests {
         }
     }
     
+    struct TransferTests {
+        @Test func testTAX() async throws {
+            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            defer { memory.deallocate() }
+            
+            let cpu = CPU6502(memory: memory)
+            #expect(cpu.A == 0)
+            #expect(cpu.X == 0)
+            #expect(cpu.F == Flags.One.rawValue)
+            
+            cpu.A = 0x64
+            cpu.memory[0xFFFC] = 0xAA
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0x64)
+            #expect(cpu.X == 0x64)
+            #expect(cpu.F == Flags.One.rawValue)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.A = 0x00
+            cpu.X = 0x12
+            cpu.memory[0xFFFC] = 0xAA
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0)
+            #expect(cpu.X == 0)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.A = 0xFF
+            cpu.memory[0xFFFC] = 0xAA
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0xFF)
+            #expect(cpu.X == 0xFF)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+        }
+        
+        @Test func testTXA() async throws {
+            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            defer { memory.deallocate() }
+            
+            let cpu = CPU6502(memory: memory)
+            #expect(cpu.A == 0)
+            #expect(cpu.X == 0)
+            #expect(cpu.F == Flags.One.rawValue)
+            
+            cpu.X = 0x64
+            cpu.memory[0xFFFC] = 0x8A
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0x64)
+            #expect(cpu.X == 0x64)
+            #expect(cpu.F == Flags.One.rawValue)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.X = 0x00
+            cpu.A = 0x12
+            cpu.memory[0xFFFC] = 0x8A
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0)
+            #expect(cpu.X == 0)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.A = 0x12
+            cpu.X = 0xFF
+            cpu.memory[0xFFFC] = 0x8A
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0xFF)
+            #expect(cpu.X == 0xFF)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+        }
+        
+        @Test func testTAY() async throws {
+            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            defer { memory.deallocate() }
+            
+            let cpu = CPU6502(memory: memory)
+            #expect(cpu.A == 0)
+            #expect(cpu.Y == 0)
+            #expect(cpu.F == Flags.One.rawValue)
+            
+            cpu.A = 0x64
+            cpu.memory[0xFFFC] = 0xA8
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0x64)
+            #expect(cpu.Y == 0x64)
+            #expect(cpu.F == Flags.One.rawValue)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.A = 0x00
+            cpu.Y = 0x12
+            cpu.memory[0xFFFC] = 0xA8
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0)
+            #expect(cpu.Y == 0)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.A = 0xFF
+            cpu.memory[0xFFFC] = 0xA8
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0xFF)
+            #expect(cpu.Y == 0xFF)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+        }
+        
+        @Test func testTYA() async throws {
+            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            defer { memory.deallocate() }
+            
+            let cpu = CPU6502(memory: memory)
+            #expect(cpu.A == 0)
+            #expect(cpu.Y == 0)
+            #expect(cpu.F == Flags.One.rawValue)
+            
+            cpu.Y = 0x64
+            cpu.memory[0xFFFC] = 0x98
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0x64)
+            #expect(cpu.Y == 0x64)
+            #expect(cpu.F == Flags.One.rawValue)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.Y = 0x00
+            cpu.A = 0x12
+            cpu.memory[0xFFFC] = 0x98
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0)
+            #expect(cpu.Y == 0)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.A = 0x12
+            cpu.Y = 0xFF
+            cpu.memory[0xFFFC] = 0x98
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0xFF)
+            #expect(cpu.Y == 0xFF)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+        }
+    }
+
+    struct IncrementTests {
+        @Test func testINX() async throws {
+            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            defer { memory.deallocate() }
+            
+            let cpu = CPU6502(memory: memory)
+            #expect(cpu.X == 0)
+            #expect(cpu.F == Flags.One.rawValue)
+            
+            cpu.X = 0x64
+            cpu.memory[0xFFFC] = 0xE8
+            
+            cpu.runForTicks(2)
+            #expect(cpu.X == 0x65)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.X = 0xFF
+            cpu.memory[0xFFFC] = 0xE8
+            
+            cpu.runForTicks(2)
+            #expect(cpu.X == 0x00)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.X = 0x7F
+            cpu.memory[0xFFFC] = 0xE8
+            
+            cpu.runForTicks(2)
+            #expect(cpu.X == 0x80)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+        }
+        
+        @Test func testINY() async throws {
+            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            defer { memory.deallocate() }
+            
+            let cpu = CPU6502(memory: memory)
+            #expect(cpu.Y == 0)
+            #expect(cpu.F == Flags.One.rawValue)
+            
+            cpu.Y = 0x64
+            cpu.memory[0xFFFC] = 0xC8
+            
+            cpu.runForTicks(2)
+            #expect(cpu.Y == 0x65)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.Y = 0xFF
+            cpu.memory[0xFFFC] = 0xC8
+            
+            cpu.runForTicks(2)
+            #expect(cpu.Y == 0x00)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.Y = 0x7F
+            cpu.memory[0xFFFC] = 0xC8
+            
+            cpu.runForTicks(2)
+            #expect(cpu.Y == 0x80)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+        }
+    }
+    
+    struct DecrementTests {
+        @Test func testDEX() async throws {
+            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            defer { memory.deallocate() }
+            
+            let cpu = CPU6502(memory: memory)
+            #expect(cpu.X == 0)
+            #expect(cpu.F == Flags.One.rawValue)
+            
+            cpu.X = 0x64
+            cpu.memory[0xFFFC] = 0xCA
+            
+            cpu.runForTicks(2)
+            #expect(cpu.X == 0x63)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.X = 0x00
+            cpu.memory[0xFFFC] = 0xCA
+            
+            cpu.runForTicks(2)
+            #expect(cpu.X == 0xFF)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+            
+            cpu.reset()
+            cpu.X = 0x01
+            cpu.memory[0xFFFC] = 0xCA
+            
+            cpu.runForTicks(2)
+            #expect(cpu.X == 0x00)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+        }
+        
+        @Test func testDEY() async throws {
+            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            defer { memory.deallocate() }
+            
+            let cpu = CPU6502(memory: memory)
+            #expect(cpu.Y == 0)
+            #expect(cpu.F == Flags.One.rawValue)
+            
+            cpu.Y = 0x64
+            cpu.memory[0xFFFC] = 0x88
+            
+            cpu.runForTicks(2)
+            #expect(cpu.Y == 0x63)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            cpu.reset()
+            cpu.Y = 0x00
+            cpu.memory[0xFFFC] = 0x88
+            
+            cpu.runForTicks(2)
+            #expect(cpu.Y == 0xFF)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+            
+            cpu.reset()
+            cpu.Y = 0x01
+            cpu.memory[0xFFFC] = 0x88
+            
+            cpu.runForTicks(2)
+            #expect(cpu.Y == 0x00)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+        }
+    }
 }

@@ -34,16 +34,16 @@ public enum Opcodes6502: UInt8 {
     case INC_ZeroPageX = 0xF6
     case INC_Absolute = 0xEE
     case INC_AbsoluteX = 0xFE
-    case INX = 0xE8
-    case INY = 0xC8
+    case INX = 0xE8                 // Test Added
+    case INY = 0xC8                 // Test Added
     
     // MARK: Decrement
     case DEC_ZeroPage = 0xC6
     case DEC_ZeroPageX = 0xD6
     case DEC_Absolute = 0xCE
     case DEC_AbsoluteX = 0xDE
-    case DEX = 0xCA
-    case DEY = 0x88
+    case DEX = 0xCA                 // Test Added
+    case DEY = 0x88                 // Test Added
     
     // MARK: Store
     case STA_ZeroPage = 0x85
@@ -63,12 +63,12 @@ public enum Opcodes6502: UInt8 {
     case STY_Absolute = 0x8C
 
     // MARK: Transfer
-    case TAX = 0xAA
-    case TAY = 0xA8
+    case TAX = 0xAA                 // Test added
+    case TAY = 0xA8                 // Test added
     case TSX = 0xBA                 // Test added
-    case TXA = 0x8A
+    case TXA = 0x8A                 // Test added
     case TXS = 0x9A                 // Test added
-    case TYA = 0x98
+    case TYA = 0x98                 // Test added
 
     // MARK: Push and pull
     case PHA = 0x48                 // Test added
