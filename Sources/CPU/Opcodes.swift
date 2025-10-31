@@ -7,8 +7,8 @@
 
 public enum Opcodes6502: UInt8 {
     
-    // Load.
-    case LDA_Immediate = 0xA9
+    // MARK: Load
+    case LDA_Immediate = 0xA9       // Test added
     case LDA_ZeroPage = 0xA5
     case LDA_ZeroPageX = 0xB5
     case LDA_Absolute = 0xAD
@@ -29,7 +29,7 @@ public enum Opcodes6502: UInt8 {
     case LDY_Absolute = 0xAC
     case LDY_AbsoluteX = 0xBC
     
-    // Increment.
+    // MARK: Increment
     case INC_ZeroPage = 0xE6
     case INC_ZeroPageX = 0xF6
     case INC_Absolute = 0xEE
@@ -37,7 +37,7 @@ public enum Opcodes6502: UInt8 {
     case INX = 0xE8
     case INY = 0xC8
     
-    // Decrement.
+    // MARK: Decrement
     case DEC_ZeroPage = 0xC6
     case DEC_ZeroPageX = 0xD6
     case DEC_Absolute = 0xCE
@@ -45,7 +45,7 @@ public enum Opcodes6502: UInt8 {
     case DEX = 0xCA
     case DEY = 0x88
     
-    // Store.
+    // MARK: Store
     case STA_ZeroPage = 0x85
     case STA_ZeroPageX = 0x95
     case STA_Absolute = 0x8D
@@ -62,7 +62,7 @@ public enum Opcodes6502: UInt8 {
     case STY_ZeroPageX = 0x94
     case STY_Absolute = 0x8C
 
-    // Transfer.
+    // MARK: Transfer
     case TAX = 0xAA
     case TAY = 0xA8
     case TSX = 0xBA
@@ -70,20 +70,20 @@ public enum Opcodes6502: UInt8 {
     case TXS = 0x9A
     case TYA = 0x98
 
-    // Push and pull.
+    // MARK: Push and pull
     case PHA = 0x48
     case PHP = 0x08
     case PLA = 0x68
     case PLP = 0x28
     
-    // Jumps
-    case JMP_Absolute = 0x4C
-    case JMP_Indirect = 0x6C
+    // MARK: Jump
+    case JMP_Absolute = 0x4C        // Test added
+    case JMP_Indirect = 0x6C        // Test added
     
     case JSR = 0x20
     case RTS = 0x60
     
-    // Add with carry
+    // MARK: Add with carry
     case ADC_Immediate = 0x69
     case ADC_ZeroPage = 0x65
     case ADC_ZeroPageX = 0x75
@@ -93,7 +93,7 @@ public enum Opcodes6502: UInt8 {
     case ADC_IndirectX = 0x61
     case ADC_IndirectY = 0x71
     
-    // Subtract with carry
+    // MARK: Subtract with carry
     case SBC_Immidiate = 0xE9
     case SBC_ZeroPage = 0xE5
     case SBC_ZeroPageX = 0xF5
@@ -103,7 +103,7 @@ public enum Opcodes6502: UInt8 {
     case SBC_IndirectX = 0xE1
     case SBC_IndirectY = 0xF1
     
-    // Logical operations.
+    // MARK: Logical operations
     case AND_Immediate = 0x29
     case AND_ZeroPage = 0x25
     case AND_ZeroPageX = 0x35
@@ -131,7 +131,7 @@ public enum Opcodes6502: UInt8 {
     case EOR_IndirectX = 0x41
     case EOR_IndirectY = 0x51
     
-    // Shifts and rotates.
+    // MARK: Shifts and rotates
     case ASL_Accumulator = 0x0A
     case ASL_ZeroPage = 0x06
     case ASL_ZeroPageX = 0x16
@@ -156,7 +156,7 @@ public enum Opcodes6502: UInt8 {
     case ROR_Absolute = 0x6E
     case ROR_AbsoluteX = 0x7E
     
-    // Branch.
+    // MARK: Branch
     case BCC = 0x90
     case BCS = 0xB0
     case BEQ = 0xF0
@@ -166,7 +166,7 @@ public enum Opcodes6502: UInt8 {
     case BVC = 0x50
     case BVS = 0x70
     
-    // Compare.
+    // MARK: Compare
     case CMP_Immediate = 0xC9
     case CMP_ZeroPage = 0xC5
     case CMP_ZeroPageX = 0xD5
@@ -184,18 +184,18 @@ public enum Opcodes6502: UInt8 {
     case CPY_ZeroPage = 0xC4
     case CPY_Absolute = 0xCC
     
-    // Clear flags.
+    // MARK: Clear flags
     case CLC = 0x18
     case CLD = 0xD8
     case CLI = 0x58
     case CLV = 0xB8
     
-    // Set flags.
+    // MARK: Set flags
     case SEC = 0x38
     case SED = 0xF8
     case SEI = 0x78
     
-    // Misc.
+    // MARK: Misc.
     case BRK = 0x00
     case NOP = 0xEA
     case BIT_ZeroPage = 0x24

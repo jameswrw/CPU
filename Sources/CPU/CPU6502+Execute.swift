@@ -17,7 +17,7 @@ public extension CPU6502 {
         clearFlag(flag: .V)
         clearFlag(flag: .B)
         
-        SP = 0
+        SP = 0xFF
         PC = 0xFFFC
         A = 0
         X = 0
@@ -38,6 +38,12 @@ public extension CPU6502 {
                 A == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
                 (A & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
                 tickcount += 2
+            case .JMP_Absolute:
+                PC = readWord16(addr: Int(PC))
+                tickcount += 3
+            case .JMP_Indirect:
+                PC = readWord16(addr: Int(readWord16(addr: Int(PC))))     
+                tickcount += 5
             default:
                 fatalError("Unimplemented opcode")
             }
