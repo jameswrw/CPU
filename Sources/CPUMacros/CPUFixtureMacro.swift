@@ -1,14 +1,13 @@
-import CPU
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
 // Public macro declaration visible to clients (e.g., tests).
-@freestanding(expression)
-public macro cpuFixture(assertInitialState: Bool = true) -> (CPU6502, UnsafeMutablePointer<UInt8>) = #externalMacro(
-    module: "CPUMacros",
-    type: "CPUFixtureMacro"
-)
+//@freestanding(expression)
+//public macro cpuFixture(assertInitialState: Bool = true) -> (CPU6502, UnsafeMutablePointer<UInt8>) = #externalMacro(
+//    module: "CPUMacros",
+//    type: "CPUFixtureMacro"
+//)
 
 public struct CPUFixtureMacro: ExpressionMacro {
     public static func expansion(
