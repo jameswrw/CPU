@@ -1,15 +1,30 @@
 import Testing
-import CPUMacroDecls
+//import CPUMacroDecls
 @testable import CPU
 
+@inline(__always)
+fileprivate func testCPU(assertInitialState: Bool = true) -> (CPU6502, UnsafeMutablePointer<UInt8>) {
+    let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+    let cpu = CPU6502(memory: memory)
+
+    if assertInitialState {
+        #expect(cpu.A == 0)
+        #expect(cpu.X == 0)
+        #expect(cpu.Y == 0)
+        #expect(cpu.SP == 0xFF)
+        #expect(cpu.PC == 0xFFFC)
+        #expect(cpu.F == Flags.One.rawValue)
+    }
+
+    return (cpu, memory)
+}
+
 struct CPU6502Tests {
-    
+
     struct LoadTests {
         @Test func testLDA_Absolute() async throws {
-            let (cpu, memory) = #cpuFixture()
-
-            #expect(cpu.A == 0)
-            #expect(cpu.F == Flags.One.rawValue)
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
             
             // Place an opcode at the reset vector (or call reset and set PC accordingly)
             memory[0xFFFC] = 0xAD
@@ -42,12 +57,8 @@ struct CPU6502Tests {
 
     struct JumpTests {
         @Test func testJMP_Absolute() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.A == 0)
-            #expect(cpu.F == Flags.One.rawValue)
             
             memory[0xFFFC] = 0x4C
             memory[0xFFFD] = 0x34
@@ -65,13 +76,9 @@ struct CPU6502Tests {
         }
         
         @Test func testJMP_Indirect() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.A == 0)
-            #expect(cpu.F == Flags.One.rawValue)
-            
+
             memory[0xFFFC] = 0x6C
             memory[0xFFFD] = 0x34
             memory[0xFFFE] = 0x12
@@ -91,13 +98,8 @@ struct CPU6502Tests {
     
     struct StackTests {
         @Test func testTSX() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.F == Flags.One.rawValue)
-            #expect(cpu.X == 0)
-            #expect(cpu.SP == 0xFF)
             
             cpu.X = 0x42
             cpu.memory[0xFFFC] = 0xBA
@@ -109,14 +111,8 @@ struct CPU6502Tests {
         }
         
         @Test func testTXS() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.A == 0)
-            #expect(cpu.F == Flags.One.rawValue)
-            #expect(cpu.X == 0)
-            #expect(cpu.SP == 0xFF)
             
             cpu.X = 0x42
             cpu.memory[0xFFFC] = 0x9A
@@ -128,13 +124,8 @@ struct CPU6502Tests {
         }
         
         @Test func testPHA() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.A == 0)
-            #expect(cpu.SP == 0xFF)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.A = 0x73
             cpu.memory[0xFFFC] = 0x48
@@ -147,13 +138,8 @@ struct CPU6502Tests {
         }
         
         @Test func testPLA() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.A == 0)
-            #expect(cpu.SP == 0xFF)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.SP = 0xFE
             cpu.memory[0xFFFC] = 0x68
@@ -165,12 +151,8 @@ struct CPU6502Tests {
         }
         
         @Test func testPHP() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.SP == 0xFF)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.memory[0xFFFC] = 0x08
             cpu.memory[0x1FF] = 0x0
@@ -181,12 +163,8 @@ struct CPU6502Tests {
         }
         
         @Test func testPLP() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.SP == 0xFF)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.SP = 0xFE
             cpu.memory[0xFFFC] = 0x28
@@ -200,13 +178,8 @@ struct CPU6502Tests {
     
     struct TransferTests {
         @Test func testTAX() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.A == 0)
-            #expect(cpu.X == 0)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.A = 0x64
             cpu.memory[0xFFFC] = 0xAA
@@ -241,13 +214,8 @@ struct CPU6502Tests {
         }
         
         @Test func testTXA() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.A == 0)
-            #expect(cpu.X == 0)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.X = 0x64
             cpu.memory[0xFFFC] = 0x8A
@@ -283,13 +251,8 @@ struct CPU6502Tests {
         }
         
         @Test func testTAY() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.A == 0)
-            #expect(cpu.Y == 0)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.A = 0x64
             cpu.memory[0xFFFC] = 0xA8
@@ -324,13 +287,8 @@ struct CPU6502Tests {
         }
         
         @Test func testTYA() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.A == 0)
-            #expect(cpu.Y == 0)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.Y = 0x64
             cpu.memory[0xFFFC] = 0x98
@@ -368,12 +326,8 @@ struct CPU6502Tests {
 
     struct IncrementTests {
         @Test func testINX() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.X == 0)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.X = 0x64
             cpu.memory[0xFFFC] = 0xE8
@@ -403,12 +357,8 @@ struct CPU6502Tests {
         }
         
         @Test func testINY() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.Y == 0)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.Y = 0x64
             cpu.memory[0xFFFC] = 0xC8
@@ -440,12 +390,8 @@ struct CPU6502Tests {
     
     struct DecrementTests {
         @Test func testDEX() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.X == 0)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.X = 0x64
             cpu.memory[0xFFFC] = 0xCA
@@ -475,12 +421,8 @@ struct CPU6502Tests {
         }
         
         @Test func testDEY() async throws {
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+            let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
-            #expect(cpu.Y == 0)
-            #expect(cpu.F == Flags.One.rawValue)
             
             cpu.Y = 0x64
             cpu.memory[0xFFFC] = 0x88

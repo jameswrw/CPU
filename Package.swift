@@ -10,7 +10,6 @@ let package = Package(
         .macOS(.v26)
     ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "CPU",
             targets: ["CPU"]
@@ -37,7 +36,7 @@ let package = Package(
         ),
         .testTarget(
             name: "CPUTests",
-            dependencies: ["CPU"]
+            dependencies: ["CPU"] // removed "CPUMacroDecls"
         )
     ]
 )
