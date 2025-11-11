@@ -14,11 +14,7 @@ let package = Package(
         .library(
             name: "CPU",
             targets: ["CPU"]
-        ),
-//        .library(
-//            name: "CPUMacroDecls",
-//            targets: ["CPUMacroDecls"]
-//        )
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-syntax.git", from: "602.0.0")
@@ -41,7 +37,7 @@ let package = Package(
         ),
         .testTarget(
             name: "CPUTests",
-            dependencies: ["CPU"]
+            dependencies: ["CPU", .byName(name: "CPUMacroDecls")]
         )
     ]
 )
