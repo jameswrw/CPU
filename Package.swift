@@ -37,7 +37,7 @@ let package = Package(
         ),
         .testTarget(
             name: "CPUTests",
-            dependencies: ["CPU", .byName(name: "CPUMacroDecls")]
+            dependencies: ["CPU"]
         )
     ]
 )
