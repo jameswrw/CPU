@@ -14,10 +14,10 @@ let package = Package(
         .library(
             name: "CPU",
             targets: ["CPU"]
-        )
+        ),
 //        .library(
-//            name: "CPUMacros",
-//            targets: ["CPUMacros"]
+//            name: "CPUMacroDecls",
+//            targets: ["CPUMacroDecls"]
 //        )
     ],
     dependencies: [
