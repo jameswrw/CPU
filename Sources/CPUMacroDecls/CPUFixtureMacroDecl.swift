@@ -5,4 +5,3 @@ public macro cpuFixture(assertInitialState: Bool = true) -> (CPU6502, UnsafeMuta
     module: "CPUMacros",
     type: "CPUFixtureMacro"
 )
-

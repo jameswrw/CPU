@@ -15,10 +15,8 @@ public struct CPUFixtureMacro: ExpressionMacro {
         in context: some MacroExpansionContext
     ) throws -> ExprSyntax {
 
-        // Default value for the optional parameter.
         var assertInitialState = true
 
-        // SwiftSyntax 602: argumentList is a LabeledExprListSyntax, not optional.
         for arg in node.arguments {
             if let label = arg.label, label.text == "assertInitialState" {
                 if let boolExpr = arg.expression.as(BooleanLiteralExprSyntax.self) {
@@ -27,7 +25,6 @@ public struct CPUFixtureMacro: ExpressionMacro {
             }
         }
 
-        // Build the body statements as source text to avoid tight coupling with specific Syntax nodes.
         var bodyLines: [String] = []
         bodyLines.append("let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)")
         bodyLines.append("defer { memory.deallocate() }")
@@ -46,7 +43,6 @@ public struct CPUFixtureMacro: ExpressionMacro {
 
         let bodySource = bodyLines.joined(separator: "\n")
 
-        // Wrap in a closure expression and immediately call it so the macro is an expression.
         let expansion: ExprSyntax = """
         { () -> (CPU6502, UnsafeMutablePointer<UInt8>) in
         \(raw: bodySource)

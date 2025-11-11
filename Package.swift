@@ -15,26 +15,33 @@ let package = Package(
             name: "CPU",
             targets: ["CPU"]
         )
+//        .library(
+//            name: "CPUMacros",
+//            targets: ["CPUMacros"]
+//        )
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-syntax.git", from: "602.0.0")
     ],
     targets: [
+        .target(
+            name: "CPU",
+            swiftSettings: [.unsafeFlags(["-strict-concurrency=complete"])]
+        ),
         .macro(
             name: "CPUMacros",
             dependencies: [
-                "CPU",
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
             ]
         ),
         .target(
-            name: "CPU",
-            swiftSettings: [.unsafeFlags(["-strict-concurrency=complete"])]
+            name: "CPUMacroDecls",
+            dependencies: ["CPUMacros"]
         ),
         .testTarget(
             name: "CPUTests",
             dependencies: ["CPU"]
-        ),
+        )
     ]
 )

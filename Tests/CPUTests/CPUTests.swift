@@ -1,15 +1,13 @@
 import Testing
+import CPUMacroDecls
 @testable import CPU
 
 struct CPU6502Tests {
     
     struct LoadTests {
         @Test func testLDA_Absolute() async throws {
-            // Allocate full 64 KiB for 6502 address space
-            let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
-            defer { memory.deallocate() }
-            
-            let cpu = CPU6502(memory: memory)
+            let (cpu, memory) = #cpuFixture()
+
             #expect(cpu.A == 0)
             #expect(cpu.F == Flags.One.rawValue)
             
