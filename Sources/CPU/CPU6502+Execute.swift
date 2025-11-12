@@ -106,6 +106,29 @@ public extension CPU6502 {
                 Y == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
                 (Y & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
                 tickcount += 2
+            case .CLC:
+                clearFlag(flag: .C)
+                tickcount += 2
+            case .CLD:
+                clearFlag(flag: .D)
+                tickcount += 2
+            case .CLI:
+                clearFlag(flag: .I)
+                tickcount += 2
+            case .CLV:
+                clearFlag(flag: .V)
+                tickcount += 2
+            case .SEC:
+                setFlag(flag: .C)
+                tickcount += 2
+            case .SED:
+                setFlag(flag: .D)
+                tickcount += 2
+            case .SEI:
+                setFlag(flag: .I)
+                tickcount += 2
+            case .NOP:
+                tickcount += 2
             default:
                 fatalError("Unimplemented opcode")
             }

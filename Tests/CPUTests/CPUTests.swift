@@ -451,4 +451,112 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .N) == false)
         }
     }
+    
+    struct FlagTests {
+        @Test func testCLC() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            cpu.memory[0xFFFC] = 0x18
+            cpu.setFlag(flag: .C)
+            #expect(cpu.readFlag(flag: .C) == true)
+            
+            cpu.runForTicks(2)
+            #expect(cpu.PC == 0xFFFD)
+            #expect(cpu.readFlag(flag: .C) == false)
+        }
+        
+        @Test func testCLD() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            cpu.memory[0xFFFC] = 0xD8
+            cpu.setFlag(flag: .D)
+            #expect(cpu.readFlag(flag: .D) == true)
+            
+            cpu.runForTicks(2)
+            #expect(cpu.PC == 0xFFFD)
+            #expect(cpu.readFlag(flag: .D) == false)
+        }
+        
+        @Test func testCLI() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+        
+            cpu.memory[0xFFFC] = 0x58
+            cpu.setFlag(flag: .I)
+            #expect(cpu.readFlag(flag: .I) == true)
+            
+            cpu.runForTicks(2)
+            #expect(cpu.PC == 0xFFFD)
+            #expect(cpu.readFlag(flag: .I) == false)
+        }
+        
+        @Test func testCLV() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            cpu.memory[0xFFFC] = 0xB8
+            cpu.setFlag(flag: .V)
+            #expect(cpu.readFlag(flag: .V) == true)
+            
+            cpu.runForTicks(2)
+            #expect(cpu.PC == 0xFFFD)
+            #expect(cpu.readFlag(flag: .V) == false)
+        }
+        
+        @Test func testSEC() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            cpu.memory[0xFFFC] = 0x38
+            #expect(cpu.readFlag(flag: .C) == false)
+            
+            cpu.runForTicks(2)
+            #expect(cpu.PC == 0xFFFD)
+            #expect(cpu.readFlag(flag: .C) == true)
+        }
+        
+        @Test func testSED() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            cpu.memory[0xFFFC] = 0xF8
+            #expect(cpu.readFlag(flag: .D) == false)
+
+            cpu.runForTicks(2)
+            #expect(cpu.PC == 0xFFFD)
+            #expect(cpu.readFlag(flag: .D) == true)
+        }
+        
+        @Test func testSEI() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            cpu.memory[0xFFFC] = 0x78
+            #expect(cpu.readFlag(flag: .I) == false)
+            
+            cpu.runForTicks(2)
+            #expect(cpu.PC == 0xFFFD)
+            #expect(cpu.readFlag(flag: .I) == true)
+
+        }
+    }
+    
+    struct MiscTests {
+        @Test func testNOP() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            cpu.memory[0xFFFC] = 0xEA
+            
+            cpu.runForTicks(2)
+            #expect(cpu.A == 0)
+            #expect(cpu.X == 0)
+            #expect(cpu.Y == 0)
+            #expect(cpu.SP == 0xFF)
+            #expect(cpu.PC == 0xFFFD)
+            #expect(cpu.F == Flags.One.rawValue)
+        }
+    }
 }

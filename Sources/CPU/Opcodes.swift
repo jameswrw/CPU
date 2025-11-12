@@ -185,19 +185,19 @@ public enum Opcodes6502: UInt8 {
     case CPY_Absolute = 0xCC
     
     // MARK: Clear flags
-    case CLC = 0x18
-    case CLD = 0xD8
-    case CLI = 0x58
-    case CLV = 0xB8
+    case CLC = 0x18                 // Test added
+    case CLD = 0xD8                 // Test added
+    case CLI = 0x58                 // Test added
+    case CLV = 0xB8                 // Test added
     
     // MARK: Set flags
-    case SEC = 0x38
-    case SED = 0xF8
-    case SEI = 0x78
+    case SEC = 0x38                 // Test added
+    case SED = 0xF8                 // Test added
+    case SEI = 0x78                 // Test added
     
     // MARK: Misc.
     case BRK = 0x00
-    case NOP = 0xEA
+    case NOP = 0xEA                 // Test added
     case BIT_ZeroPage = 0x24
     case BIT_Absolute = 0x2C
     case RTI = 0x40
