@@ -78,16 +78,16 @@ public class CPU6502: CPU {
     }
 
     public func pushWord(_ word: UInt16)  {
-        let highByte = UInt8((word & 0xFF00) >> 8)
-        let lowByte = UInt8(word & 0x00FF)
-        pushByte(highByte)
-        pushByte(lowByte)
+        let hi = UInt8((word & 0xFF00) >> 8)
+        let lo = UInt8(word & 0x00FF)
+        pushByte(hi)
+        pushByte(lo)
     }
 
     public func popWord() -> UInt16 {
-        let lowByte = UInt16(popByte())
-        let highByte = UInt16(popByte())
-        return (highByte << 8) | lowByte
+        let lo = UInt16(popByte())
+        let hi = UInt16(popByte())
+        return (hi << 8) | lo
     }
 }
 

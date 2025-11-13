@@ -34,15 +34,15 @@ public extension CPU6502 {
         while true {
             switch nextOpcode() {
             case .LDA_Absolute:
-                A = readByte(addr: Int(PC))
+                A = nextByte()
                 A == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
                 (A & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
                 tickcount += 2
             case .JMP_Absolute:
-                PC = readWord16(addr: Int(PC))
+                PC = nextWord()
                 tickcount += 3
             case .JMP_Indirect:
-                PC = readWord16(addr: Int(readWord16(addr: Int(PC))))     
+                PC = readWord16(addr: Int(nextWord()))
                 tickcount += 5
             case .TXS:
                 SP = X
@@ -126,7 +126,12 @@ public extension CPU6502 {
             case .NOP:
                 tickcount += 2
             case .JSR:
-                let target = readWord16(addr: Int(PC))
+                let target = nextWord()
+                pushWord(PC - 1)
+                PC = target
+                tickcount += 6
+            case .RTS:
+                PC = popWord() + 1
                 tickcount += 6
             default:
                 fatalError("Unimplemented opcode")

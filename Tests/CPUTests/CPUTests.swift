@@ -94,6 +94,38 @@ struct CPU6502Tests {
             #expect(cpu.A == 0x42)
             #expect(cpu.F == Flags.One.rawValue)
         }
+        
+        @Test func testJSR_RTS() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            // Not much space at the rest vector, so:
+            // • JMP to 0x1234
+            // • JSR to 0x5578
+            // • RTS should take us to 0x1237 - i.e. an advance of one from where we jumped from.
+            memory[0xFFFC] = 0x4C
+            memory[0xFFFD] = 0x34
+            memory[0xFFFE] = 0x12
+            memory[0x1234] = 0x20
+            memory[0x1235] = 0x78
+            memory[0x1236] = 0x56
+            memory[0x5678] = 0x60
+
+            // JMP 0x1234
+            cpu.runForTicks(3)
+            #expect(cpu.PC == 0x1234)
+            #expect(cpu.SP == 0xFF)
+
+            // JSR 0x5678
+            cpu.runForTicks(6)
+            #expect(cpu.PC == 0x5678)
+            #expect(cpu.SP == 0xFD)
+
+            // RTS
+            cpu.runForTicks(6)
+            #expect(cpu.PC == 0x1237)
+            #expect(cpu.SP == 0xFF)
+        }
     }
     
     struct StackTests {
