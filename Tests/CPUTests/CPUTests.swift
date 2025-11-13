@@ -27,7 +27,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             // Place an opcode at the reset vector (or call reset and set PC accordingly)
-            memory[0xFFFC] = 0xAD
+            memory[0xFFFC] = Opcodes6502.LDA_Absolute.rawValue
             memory[0xFFFD] = 42
             
             cpu.runForTicks(2)
@@ -36,7 +36,7 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .Z) == false)
             
             cpu.reset()
-            memory[0xFFFC] = 0xAD
+            memory[0xFFFC] = Opcodes6502.LDA_Absolute.rawValue
             memory[0xFFFD] = 0
             
             cpu.runForTicks(2)
@@ -45,7 +45,7 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .Z) == true)
             
             cpu.reset()
-            memory[0xFFFC] = 0xAD
+            memory[0xFFFC] = Opcodes6502.LDA_Absolute.rawValue
             memory[0xFFFD] = 0xFF
             
             cpu.runForTicks(2)
@@ -54,13 +54,13 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .N) == true)
         }
     }
-
+    
     struct JumpTests {
         @Test func testJMP_Absolute() async throws {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            memory[0xFFFC] = 0x4C
+            memory[0xFFFC] = Opcodes6502.JMP_Absolute.rawValue
             memory[0xFFFD] = 0x34
             memory[0xFFFE] = 0x12
             memory[0x1234] = 0xAD
@@ -79,7 +79,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
 
-            memory[0xFFFC] = 0x6C
+            memory[0xFFFC] = Opcodes6502.JMP_Indirect.rawValue
             memory[0xFFFD] = 0x34
             memory[0xFFFE] = 0x12
             memory[0x1234] = 0x78
@@ -103,13 +103,13 @@ struct CPU6502Tests {
             // • JMP to 0x1234
             // • JSR to 0x5578
             // • RTS should take us to 0x1237 - i.e. an advance of one from where we jumped from.
-            memory[0xFFFC] = 0x4C
+            memory[0xFFFC] = Opcodes6502.JMP_Absolute.rawValue
             memory[0xFFFD] = 0x34
             memory[0xFFFE] = 0x12
-            memory[0x1234] = 0x20
+            memory[0x1234] = Opcodes6502.JSR.rawValue
             memory[0x1235] = 0x78
             memory[0x1236] = 0x56
-            memory[0x5678] = 0x60
+            memory[0x5678] = Opcodes6502.RTS.rawValue
 
             // JMP 0x1234
             cpu.runForTicks(3)
@@ -134,7 +134,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.X = 0x42
-            cpu.memory[0xFFFC] = 0xBA
+            cpu.memory[0xFFFC] = Opcodes6502.TSX.rawValue
             
             cpu.runForTicks(2)
             #expect(cpu.X == 0xFF)
@@ -147,8 +147,8 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.X = 0x42
-            cpu.memory[0xFFFC] = 0x9A
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TXS.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.X == 0x42)
             #expect(cpu.SP == 0x42)
@@ -160,7 +160,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.A = 0x73
-            cpu.memory[0xFFFC] = 0x48
+            cpu.memory[0xFFFC] = Opcodes6502.PHA.rawValue
             cpu.memory[0x1FF] = 0x0
             
             cpu.runForTicks(3)
@@ -174,7 +174,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.SP = 0xFE
-            cpu.memory[0xFFFC] = 0x68
+            cpu.memory[0xFFFC] = Opcodes6502.PLA.rawValue
             cpu.memory[0x1FF] = 0xFF
             
             cpu.runForTicks(4)
@@ -186,7 +186,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = 0x08
+            cpu.memory[0xFFFC] = Opcodes6502.PHP.rawValue
             cpu.memory[0x1FF] = 0x0
             
             cpu.runForTicks(3)
@@ -199,7 +199,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.SP = 0xFE
-            cpu.memory[0xFFFC] = 0x28
+            cpu.memory[0xFFFC] = Opcodes6502.PLP.rawValue
             cpu.memory[0x1FF] = 0xAA
             
             cpu.runForTicks(4)
@@ -214,8 +214,8 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.A = 0x64
-            cpu.memory[0xFFFC] = 0xAA
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TAX.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0x64)
             #expect(cpu.X == 0x64)
@@ -226,8 +226,8 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.A = 0x00
             cpu.X = 0x12
-            cpu.memory[0xFFFC] = 0xAA
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TAX.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0)
             #expect(cpu.X == 0)
@@ -236,8 +236,8 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.A = 0xFF
-            cpu.memory[0xFFFC] = 0xAA
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TAX.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0xFF)
             #expect(cpu.X == 0xFF)
@@ -250,8 +250,8 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.X = 0x64
-            cpu.memory[0xFFFC] = 0x8A
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TXA.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0x64)
             #expect(cpu.X == 0x64)
@@ -262,8 +262,8 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.X = 0x00
             cpu.A = 0x12
-            cpu.memory[0xFFFC] = 0x8A
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TXA.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0)
             #expect(cpu.X == 0)
@@ -273,8 +273,8 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.A = 0x12
             cpu.X = 0xFF
-            cpu.memory[0xFFFC] = 0x8A
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TXA.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0xFF)
             #expect(cpu.X == 0xFF)
@@ -287,8 +287,8 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.A = 0x64
-            cpu.memory[0xFFFC] = 0xA8
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TAY.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0x64)
             #expect(cpu.Y == 0x64)
@@ -299,8 +299,8 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.A = 0x00
             cpu.Y = 0x12
-            cpu.memory[0xFFFC] = 0xA8
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TAY.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0)
             #expect(cpu.Y == 0)
@@ -309,8 +309,8 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.A = 0xFF
-            cpu.memory[0xFFFC] = 0xA8
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TAY.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0xFF)
             #expect(cpu.Y == 0xFF)
@@ -323,8 +323,8 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.Y = 0x64
-            cpu.memory[0xFFFC] = 0x98
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TYA.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0x64)
             #expect(cpu.Y == 0x64)
@@ -335,8 +335,8 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.Y = 0x00
             cpu.A = 0x12
-            cpu.memory[0xFFFC] = 0x98
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TYA.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0)
             #expect(cpu.Y == 0)
@@ -346,8 +346,8 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.A = 0x12
             cpu.Y = 0xFF
-            cpu.memory[0xFFFC] = 0x98
-            
+            cpu.memory[0xFFFC] = Opcodes6502.TYA.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0xFF)
             #expect(cpu.Y == 0xFF)
@@ -356,14 +356,216 @@ struct CPU6502Tests {
         }
     }
 
-    struct IncrementTests {
+    struct IncrementMemoryTests {
+        @Test func testINC_ZeroPage() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            // Simple increment.
+            memory[0xFFFC] = Opcodes6502.INC_ZeroPage.rawValue
+            memory[0xFFFD] = 0x42
+            memory[0x42] = 0x0
+            
+            cpu.runForTicks(5)
+            #expect(cpu.PC == 0xFFFE)
+            #expect(memory[0x42] == 1)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+
+            // Increment that sets the N flag.
+            cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INC_ZeroPage.rawValue
+            memory[0xFFFD] = 0x42
+            memory[0x42] = 0x7F
+
+            cpu.runForTicks(5)
+            #expect(cpu.PC == 0xFFFE)
+            #expect(memory[0x42] == 0x80)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+            
+            // Increment that sets the Z flag.
+            cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INC_ZeroPage.rawValue
+            memory[0xFFFD] = 0x42
+            memory[0x42] = 0xFF
+
+            cpu.runForTicks(5)
+            #expect(cpu.PC == 0xFFFE)
+            #expect(memory[0x42] == 0x00)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+        }
+        
+        @Test func testINC_ZeroPageX() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            // Simple increment.
+            memory[0xFFFC] = Opcodes6502.INC_ZeroPageX.rawValue
+            memory[0xFFFD] = 0x70
+            cpu.X = 0x3
+            memory[0x73] = 0x0
+            
+            cpu.runForTicks(6)
+            #expect(cpu.PC == 0xFFFE)
+            #expect(memory[0x73] == 1)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+
+            // Increment that sets the N flag.
+            cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INC_ZeroPageX.rawValue
+            memory[0xFFFD] = 0x70
+            cpu.X = 0x3
+            memory[0x73] = 0x7F
+
+            cpu.runForTicks(6)
+            #expect(cpu.PC == 0xFFFE)
+            #expect(memory[0x73] == 0x80)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+            
+            // Increment that sets the Z flag.
+            cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INC_ZeroPageX.rawValue
+            memory[0xFFFD] = 0x70
+            cpu.X = 0x3
+            memory[0x73] = 0xFF
+
+            cpu.runForTicks(6)
+            #expect(cpu.PC == 0xFFFE)
+            #expect(memory[0x73] == 0x00)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            // Increment that checks that (opcode argument + X) wraps around.
+            cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INC_ZeroPageX.rawValue
+            memory[0xFFFD] = 0xFF
+            cpu.X = 0x74
+            memory[0x73] = 0x0
+            
+            cpu.runForTicks(6)
+            #expect(cpu.PC == 0xFFFE)
+            #expect(memory[0x73] == 0x1)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+        }
+        
+        @Test func testINC_Absolute() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            // Simple increment.
+            memory[0xFFFC] = Opcodes6502.INC_Absolute.rawValue
+            memory[0xFFFD] = 0x73
+            memory[0xFFFE] = 0x19
+            memory[0x1973] = 0x0
+            
+            cpu.runForTicks(6)
+            #expect(cpu.PC == 0xFFFF)
+            #expect(memory[0x1973] == 1)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+
+            // Increment that sets the N flag.
+            cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INC_Absolute.rawValue
+            memory[0xFFFD] = 0x73
+            memory[0xFFFE] = 0x19
+            memory[0x1973] = 0x7F
+
+            cpu.runForTicks(6)
+            #expect(cpu.PC == 0xFFFF)
+            #expect(memory[0x1973] == 0x80)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+            
+            // Increment that sets the Z flag.
+            cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INC_Absolute.rawValue
+            memory[0xFFFD] = 0x73
+            memory[0xFFFE] = 0x19
+            memory[0x1973] = 0xFF
+
+            cpu.runForTicks(6)
+            #expect(cpu.PC == 0xFFFF)
+            #expect(memory[0x1973] == 0x00)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+        }
+        
+        @Test func testINC_AbsoluteX() async throws {
+            let (cpu, memory) = testCPU()
+            defer { memory.deallocate() }
+            
+            // Simple increment.
+            memory[0xFFFC] = Opcodes6502.INC_AbsoluteX.rawValue
+            memory[0xFFFD] = 0x00
+            memory[0xFFFE] = 0xF0
+            cpu.X = 0xD
+            memory[0xF00D] = 0x0
+            
+            cpu.runForTicks(7)
+            #expect(cpu.PC == 0xFFFF)
+            #expect(memory[0xF00D] == 1)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+
+            // Increment that sets the N flag.
+            cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INC_AbsoluteX.rawValue
+            memory[0xFFFD] = 0x00
+            memory[0xFFFE] = 0xF0
+            cpu.X = 0xD
+            memory[0xF00D] = 0x7F
+
+            cpu.runForTicks(7)
+            #expect(cpu.PC == 0xFFFF)
+            #expect(memory[0xF00D] == 0x80)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == true)
+            
+            // Increment that sets the Z flag.
+            cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INC_AbsoluteX.rawValue
+            memory[0xFFFD] = 0x00
+            memory[0xFFFE] = 0xF0
+            cpu.X = 0xD
+            memory[0xF00D] = 0xFF
+
+            cpu.runForTicks(7)
+            #expect(cpu.PC == 0xFFFF)
+            #expect(memory[0xF00D] == 0x00)
+            #expect(cpu.readFlag(flag: .Z) == true)
+            #expect(cpu.readFlag(flag: .N) == false)
+            
+            // Increment that checks that (opcode argument + X) wraps around.
+            cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INC_AbsoluteX.rawValue
+            memory[0xFFFD] = 0xFF
+            memory[0xFFFE] = 0xFF
+            cpu.X = 0x12
+            memory[0x11] = 0x0
+            
+            cpu.runForTicks(7)
+            #expect(cpu.PC == 0xFFFF)
+            #expect(memory[0x11] == 0x1)
+            #expect(cpu.readFlag(flag: .Z) == false)
+            #expect(cpu.readFlag(flag: .N) == false)
+        }
+    }
+
+    struct IncrementRegisterTests {
         @Test func testINX() async throws {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
             cpu.X = 0x64
-            cpu.memory[0xFFFC] = 0xE8
-            
+            cpu.memory[0xFFFC] = Opcodes6502.INX.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.X == 0x65)
             #expect(cpu.readFlag(flag: .Z) == false)
@@ -371,8 +573,8 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.X = 0xFF
-            cpu.memory[0xFFFC] = 0xE8
-            
+            cpu.memory[0xFFFC] = Opcodes6502.INX.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.X == 0x00)
             #expect(cpu.readFlag(flag: .Z) == true)
@@ -380,8 +582,8 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.X = 0x7F
-            cpu.memory[0xFFFC] = 0xE8
-            
+            cpu.memory[0xFFFC] = Opcodes6502.INX.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.X == 0x80)
             #expect(cpu.readFlag(flag: .Z) == false)
@@ -393,8 +595,8 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.Y = 0x64
-            cpu.memory[0xFFFC] = 0xC8
-            
+            cpu.memory[0xFFFC] = Opcodes6502.INY.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.Y == 0x65)
             #expect(cpu.readFlag(flag: .Z) == false)
@@ -402,8 +604,8 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.Y = 0xFF
-            cpu.memory[0xFFFC] = 0xC8
-            
+            cpu.memory[0xFFFC] = Opcodes6502.INY.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.Y == 0x00)
             #expect(cpu.readFlag(flag: .Z) == true)
@@ -411,8 +613,8 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.Y = 0x7F
-            cpu.memory[0xFFFC] = 0xC8
-            
+            cpu.memory[0xFFFC] = Opcodes6502.INY.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.Y == 0x80)
             #expect(cpu.readFlag(flag: .Z) == false)
@@ -426,8 +628,8 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.X = 0x64
-            cpu.memory[0xFFFC] = 0xCA
-            
+            cpu.memory[0xFFFC] = Opcodes6502.DEX.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.X == 0x63)
             #expect(cpu.readFlag(flag: .Z) == false)
@@ -435,8 +637,8 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.X = 0x00
-            cpu.memory[0xFFFC] = 0xCA
-            
+            cpu.memory[0xFFFC] = Opcodes6502.DEX.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.X == 0xFF)
             #expect(cpu.readFlag(flag: .Z) == false)
@@ -444,8 +646,8 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.X = 0x01
-            cpu.memory[0xFFFC] = 0xCA
-            
+            cpu.memory[0xFFFC] = Opcodes6502.DEX.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.X == 0x00)
             #expect(cpu.readFlag(flag: .Z) == true)
@@ -457,8 +659,8 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.Y = 0x64
-            cpu.memory[0xFFFC] = 0x88
-            
+            cpu.memory[0xFFFC] = Opcodes6502.DEY.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.Y == 0x63)
             #expect(cpu.readFlag(flag: .Z) == false)
@@ -466,8 +668,8 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.Y = 0x00
-            cpu.memory[0xFFFC] = 0x88
-            
+            cpu.memory[0xFFFC] = Opcodes6502.DEY.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.Y == 0xFF)
             #expect(cpu.readFlag(flag: .Z) == false)
@@ -475,8 +677,8 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.Y = 0x01
-            cpu.memory[0xFFFC] = 0x88
-            
+            cpu.memory[0xFFFC] = Opcodes6502.DEY.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.Y == 0x00)
             #expect(cpu.readFlag(flag: .Z) == true)
@@ -489,7 +691,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = 0x18
+            cpu.memory[0xFFFC] = Opcodes6502.CLC.rawValue
             cpu.setFlag(flag: .C)
             #expect(cpu.readFlag(flag: .C) == true)
             
@@ -502,7 +704,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = 0xD8
+            cpu.memory[0xFFFC] = Opcodes6502.CLD.rawValue
             cpu.setFlag(flag: .D)
             #expect(cpu.readFlag(flag: .D) == true)
             
@@ -515,7 +717,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
         
-            cpu.memory[0xFFFC] = 0x58
+            cpu.memory[0xFFFC] = Opcodes6502.CLI.rawValue
             cpu.setFlag(flag: .I)
             #expect(cpu.readFlag(flag: .I) == true)
             
@@ -528,7 +730,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = 0xB8
+            cpu.memory[0xFFFC] = Opcodes6502.CLV.rawValue
             cpu.setFlag(flag: .V)
             #expect(cpu.readFlag(flag: .V) == true)
             
@@ -541,7 +743,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = 0x38
+            cpu.memory[0xFFFC] = Opcodes6502.SEC.rawValue
             #expect(cpu.readFlag(flag: .C) == false)
             
             cpu.runForTicks(2)
@@ -553,7 +755,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = 0xF8
+            cpu.memory[0xFFFC] = Opcodes6502.SED.rawValue
             #expect(cpu.readFlag(flag: .D) == false)
 
             cpu.runForTicks(2)
@@ -565,7 +767,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = 0x78
+            cpu.memory[0xFFFC] = Opcodes6502.SEI.rawValue
             #expect(cpu.readFlag(flag: .I) == false)
             
             cpu.runForTicks(2)
@@ -580,8 +782,8 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = 0xEA
-            
+            cpu.memory[0xFFFC] = Opcodes6502.NOP.rawValue
+
             cpu.runForTicks(2)
             #expect(cpu.A == 0)
             #expect(cpu.X == 0)

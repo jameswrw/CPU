@@ -68,11 +68,11 @@ public class CPU6502: CPU {
     // MARK: Stack push/pop
     public func pushByte(_ byte: UInt8) {
         memory[0x100 + Int(SP)] = byte
-        SP =  SP &- 1
+        SP &-= 1
     }
 
     public func popByte() -> UInt8 {
-        SP = SP &+ 1
+        SP &+= 1
         let byte = memory[0x100 + Int(SP)]
         return byte
     }

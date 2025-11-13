@@ -6,7 +6,8 @@
 //
 
 public extension CPU6502 {
-        
+       
+    // MARK: Reset and run
     func reset() {
         clearFlag(flag: .C)
         clearFlag(flag: .Z)
@@ -15,7 +16,7 @@ public extension CPU6502 {
         clearFlag(flag: .B)
         setFlag(flag: .One)
         clearFlag(flag: .V)
-        clearFlag(flag: .B)
+        clearFlag(flag: .N)
         
         SP = 0xFF
         PC = 0xFFFC
@@ -33,17 +34,52 @@ public extension CPU6502 {
         
         while true {
             switch nextOpcode() {
+                
+            // MARK: LDAs
             case .LDA_Absolute:
                 A = nextByte()
-                A == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                (A & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                updateFlagsFor(newValue: A)
                 tickcount += 2
+                
+            // MARK: JMPs
             case .JMP_Absolute:
                 PC = nextWord()
                 tickcount += 3
             case .JMP_Indirect:
+                // TODO: The following is not implemented.
+                //
+                // From: http://www.6502.org/tutorials/6502opcodes.html#INC
+                // AN INDIRECT JUMP MUST NEVER USE A
+                // VECTOR BEGINNING ON THE LAST BYTE
+                // OF A PAGE
+                // For example if address $3000 contains $40, $30FF contains $80, and $3100 contains $50, the result of JMP ($30FF) will be a transfer of control to $4080 rather than $5080 as you intended i.e. the 6502 took the low byte of the address from $30FF and the high byte from $3000.
+                
                 PC = readWord16(addr: Int(nextWord()))
                 tickcount += 5
+                
+            // MARK: Increment memory locations
+            case .INC_ZeroPage:
+                let address = nextByte()
+                memory[Int(address)] &+= 1
+                updateFlagsFor(newValue: memory[Int(address)])
+                tickcount += 5
+            case .INC_ZeroPageX:
+                let address = nextByte() &+ X
+                memory[Int(address)] &+= 1
+                updateFlagsFor(newValue: memory[Int(address)])
+                tickcount += 6
+            case .INC_Absolute:
+                let address = nextWord()
+                memory[Int(address)] &+= 1
+                updateFlagsFor(newValue: memory[Int(address)])
+                tickcount += 6
+            case .INC_AbsoluteX:
+                let address = nextWord() &+ UInt16(X)
+                memory[Int(address)] &+= 1
+                updateFlagsFor(newValue: memory[Int(address)])
+                tickcount += 7
+                
+            // MARK: Stack operations
             case .TXS:
                 SP = X
                 tickcount += 2
@@ -62,46 +98,44 @@ public extension CPU6502 {
             case .PLP:
                 F = popByte()
                 tickcount += 4
+                
+            // MARK: Transfer between A, X and Y
             case .TAX:
                 X = A
-                X == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                (X & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                updateFlagsFor(newValue: X)
                 tickcount += 2
             case .TXA:
                 A = X
-                A == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                (A & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                updateFlagsFor(newValue: A)
                 tickcount += 2
             case .TAY:
                 Y = A
-                Y == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                (Y & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                updateFlagsFor(newValue: Y)
                 tickcount += 2
             case .TYA:
                 A = Y
-                A == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                (A & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                updateFlagsFor(newValue: A)
                 tickcount += 2
+               
+            // MARK: Incrememnt and decrement X and Y
             case .INX:
                 X &+= 1
-                X == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                (X & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                updateFlagsFor(newValue: X)
                 tickcount += 2
             case .DEX:
                 X &-= 1
-                X == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                (X & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                updateFlagsFor(newValue: X)
                 tickcount += 2
             case .INY:
                 Y &+= 1
-                Y == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                (Y & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                updateFlagsFor(newValue: Y)
                 tickcount += 2
             case .DEY:
                 Y &-= 1
-                Y == 0 ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                (Y & 0x80  != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+                updateFlagsFor(newValue: Y)
                 tickcount += 2
+                
+            // MARK: Clear flags
             case .CLC:
                 clearFlag(flag: .C)
                 tickcount += 2
@@ -114,6 +148,8 @@ public extension CPU6502 {
             case .CLV:
                 clearFlag(flag: .V)
                 tickcount += 2
+                
+            // MARK: Set flags
             case .SEC:
                 setFlag(flag: .C)
                 tickcount += 2
@@ -123,8 +159,12 @@ public extension CPU6502 {
             case .SEI:
                 setFlag(flag: .I)
                 tickcount += 2
+                
+            // MARK: Misc
             case .NOP:
                 tickcount += 2
+    
+            // MARK: Subroutines
             case .JSR:
                 let target = nextWord()
                 pushWord(PC - 1)
@@ -138,6 +178,12 @@ public extension CPU6502 {
             }
             if ticks > 0 && tickcount >= startTicks + ticks { break }
         }
+    }
+    
+    // MARK: Utilities
+    fileprivate func updateFlagsFor(newValue: UInt8) {
+        (newValue == 0) ? setFlag(flag: .Z) : clearFlag(flag: .Z)
+        (newValue & 0x80 != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
     }
 }
 
