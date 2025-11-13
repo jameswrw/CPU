@@ -1,10 +1,12 @@
 import Testing
+import Foundation
 //import CPUMacroDecls
 @testable import CPU
 
 @inline(__always)
 fileprivate func testCPU(assertInitialState: Bool = true) -> (CPU6502, UnsafeMutablePointer<UInt8>) {
     let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
+    memset(memory, 0xFF, 0x10000) // 0xFF is an invalid opcode, so this should catch some tickcount issues.
     let cpu = CPU6502(memory: memory)
 
     if assertInitialState {
