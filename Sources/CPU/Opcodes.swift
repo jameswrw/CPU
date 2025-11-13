@@ -132,29 +132,29 @@ public enum Opcodes6502: UInt8 {
     case EOR_IndirectY = 0x51
     
     // MARK: Shifts and rotates
-    case ASL_Accumulator = 0x0A
-    case ASL_ZeroPage = 0x06
-    case ASL_ZeroPageX = 0x16
-    case ASL_Absolute = 0x0E
-    case ASL_AbsoluteX = 0x1E
+    case ASL_Accumulator = 0x0A     // Test added
+    case ASL_ZeroPage = 0x06        // Test added
+    case ASL_ZeroPageX = 0x16       // Test added
+    case ASL_Absolute = 0x0E        // Test added
+    case ASL_AbsoluteX = 0x1E       // Test added
     
-    case LSR_Accumulator = 0x4A
-    case LSR_ZeroPage = 0x46
-    case LSR_ZeroPageX = 0x56
-    case LSR_Absolute = 0x4E
-    case LSR_AbsoluteX = 0x5E
+    case LSR_Accumulator = 0x4A     // Test added
+    case LSR_ZeroPage = 0x46        // Test added
+    case LSR_ZeroPageX = 0x56       // Test added
+    case LSR_Absolute = 0x4E        // Test added
+    case LSR_AbsoluteX = 0x5E       // Test added
     
-    case ROL_Accumulator = 0x2A
-    case ROL_ZeroPage = 0x26
-    case ROL_ZeroPageX = 0x36
-    case ROL_Absolute = 0x2E
-    case ROL_AbsoluteX = 0x3E
+    case ROL_Accumulator = 0x2A     // Test added
+    case ROL_ZeroPage = 0x26        // Test added
+    case ROL_ZeroPageX = 0x36       // Test added
+    case ROL_Absolute = 0x2E        // Test added
+    case ROL_AbsoluteX = 0x3E       // Test added
     
-    case ROR_Accumulator = 0x6A
-    case ROR_ZeroPage = 0x66
-    case ROR_ZeroPageX = 0x76
-    case ROR_Absolute = 0x6E
-    case ROR_AbsoluteX = 0x7E
+    case ROR_Accumulator = 0x6A     // Test added
+    case ROR_ZeroPage = 0x66        // Test added
+    case ROR_ZeroPageX = 0x76       // Test added
+    case ROR_Absolute = 0x6E        // Test added
+    case ROR_AbsoluteX = 0x7E       // Test added
     
     // MARK: Branch
     case BCC = 0x90

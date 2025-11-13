@@ -136,7 +136,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.X = 0x42
-            cpu.memory[0xFFFC] = Opcodes6502.TSX.rawValue
+            memory[0xFFFC] = Opcodes6502.TSX.rawValue
             
             cpu.runForTicks(2)
             #expect(cpu.X == 0xFF)
@@ -149,7 +149,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.X = 0x42
-            cpu.memory[0xFFFC] = Opcodes6502.TXS.rawValue
+            memory[0xFFFC] = Opcodes6502.TXS.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.X == 0x42)
@@ -162,13 +162,13 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.A = 0x73
-            cpu.memory[0xFFFC] = Opcodes6502.PHA.rawValue
-            cpu.memory[0x1FF] = 0x0
+            memory[0xFFFC] = Opcodes6502.PHA.rawValue
+            memory[0x1FF] = 0x0
             
             cpu.runForTicks(3)
             #expect(cpu.A == 0x73)
             #expect(cpu.SP == 0xFE)
-            #expect(cpu.memory[0x1FF] == 0x73)
+            #expect(memory[0x1FF] == 0x73)
         }
         
         @Test func testPLA() async throws {
@@ -176,8 +176,8 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.SP = 0xFE
-            cpu.memory[0xFFFC] = Opcodes6502.PLA.rawValue
-            cpu.memory[0x1FF] = 0xFF
+            memory[0xFFFC] = Opcodes6502.PLA.rawValue
+            memory[0x1FF] = 0xFF
             
             cpu.runForTicks(4)
             #expect(cpu.A == 0xFF)
@@ -188,12 +188,12 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = Opcodes6502.PHP.rawValue
-            cpu.memory[0x1FF] = 0x0
+            memory[0xFFFC] = Opcodes6502.PHP.rawValue
+            memory[0x1FF] = 0x0
             
             cpu.runForTicks(3)
             #expect(cpu.SP == 0xFE)
-            #expect(cpu.memory[0x1FF] == Flags.One.rawValue)
+            #expect(memory[0x1FF] == Flags.One.rawValue)
         }
         
         @Test func testPLP() async throws {
@@ -201,8 +201,8 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.SP = 0xFE
-            cpu.memory[0xFFFC] = Opcodes6502.PLP.rawValue
-            cpu.memory[0x1FF] = 0xAA
+            memory[0xFFFC] = Opcodes6502.PLP.rawValue
+            memory[0x1FF] = 0xAA
             
             cpu.runForTicks(4)
             #expect(cpu.SP == 0xFF)
@@ -216,7 +216,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.A = 0x64
-            cpu.memory[0xFFFC] = Opcodes6502.TAX.rawValue
+            memory[0xFFFC] = Opcodes6502.TAX.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0x64)
@@ -228,7 +228,7 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.A = 0x00
             cpu.X = 0x12
-            cpu.memory[0xFFFC] = Opcodes6502.TAX.rawValue
+            memory[0xFFFC] = Opcodes6502.TAX.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0)
@@ -238,7 +238,7 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.A = 0xFF
-            cpu.memory[0xFFFC] = Opcodes6502.TAX.rawValue
+            memory[0xFFFC] = Opcodes6502.TAX.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0xFF)
@@ -252,7 +252,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.X = 0x64
-            cpu.memory[0xFFFC] = Opcodes6502.TXA.rawValue
+            memory[0xFFFC] = Opcodes6502.TXA.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0x64)
@@ -264,7 +264,7 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.X = 0x00
             cpu.A = 0x12
-            cpu.memory[0xFFFC] = Opcodes6502.TXA.rawValue
+            memory[0xFFFC] = Opcodes6502.TXA.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0)
@@ -275,7 +275,7 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.A = 0x12
             cpu.X = 0xFF
-            cpu.memory[0xFFFC] = Opcodes6502.TXA.rawValue
+            memory[0xFFFC] = Opcodes6502.TXA.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0xFF)
@@ -289,7 +289,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.A = 0x64
-            cpu.memory[0xFFFC] = Opcodes6502.TAY.rawValue
+            memory[0xFFFC] = Opcodes6502.TAY.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0x64)
@@ -301,7 +301,7 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.A = 0x00
             cpu.Y = 0x12
-            cpu.memory[0xFFFC] = Opcodes6502.TAY.rawValue
+            memory[0xFFFC] = Opcodes6502.TAY.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0)
@@ -311,7 +311,7 @@ struct CPU6502Tests {
             
             cpu.reset()
             cpu.A = 0xFF
-            cpu.memory[0xFFFC] = Opcodes6502.TAY.rawValue
+            memory[0xFFFC] = Opcodes6502.TAY.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0xFF)
@@ -325,7 +325,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.Y = 0x64
-            cpu.memory[0xFFFC] = Opcodes6502.TYA.rawValue
+            memory[0xFFFC] = Opcodes6502.TYA.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0x64)
@@ -337,7 +337,7 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.Y = 0x00
             cpu.A = 0x12
-            cpu.memory[0xFFFC] = Opcodes6502.TYA.rawValue
+            memory[0xFFFC] = Opcodes6502.TYA.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0)
@@ -348,7 +348,7 @@ struct CPU6502Tests {
             cpu.reset()
             cpu.A = 0x12
             cpu.Y = 0xFF
-            cpu.memory[0xFFFC] = Opcodes6502.TYA.rawValue
+            memory[0xFFFC] = Opcodes6502.TYA.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0xFF)
@@ -565,8 +565,8 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
+            memory[0xFFFC] = Opcodes6502.INX.rawValue
             cpu.X = 0x64
-            cpu.memory[0xFFFC] = Opcodes6502.INX.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.X == 0x65)
@@ -574,8 +574,8 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .N) == false)
             
             cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INX.rawValue
             cpu.X = 0xFF
-            cpu.memory[0xFFFC] = Opcodes6502.INX.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.X == 0x00)
@@ -583,8 +583,8 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .N) == false)
             
             cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INX.rawValue
             cpu.X = 0x7F
-            cpu.memory[0xFFFC] = Opcodes6502.INX.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.X == 0x80)
@@ -596,8 +596,8 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
+            memory[0xFFFC] = Opcodes6502.INY.rawValue
             cpu.Y = 0x64
-            cpu.memory[0xFFFC] = Opcodes6502.INY.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.Y == 0x65)
@@ -605,8 +605,8 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .N) == false)
             
             cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INY.rawValue
             cpu.Y = 0xFF
-            cpu.memory[0xFFFC] = Opcodes6502.INY.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.Y == 0x00)
@@ -614,8 +614,8 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .N) == false)
             
             cpu.reset()
+            memory[0xFFFC] = Opcodes6502.INY.rawValue
             cpu.Y = 0x7F
-            cpu.memory[0xFFFC] = Opcodes6502.INY.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.Y == 0x80)
@@ -830,8 +830,8 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
+            memory[0xFFFC] = Opcodes6502.DEX.rawValue
             cpu.X = 0x64
-            cpu.memory[0xFFFC] = Opcodes6502.DEX.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.X == 0x63)
@@ -839,8 +839,8 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .N) == false)
             
             cpu.reset()
+            memory[0xFFFC] = Opcodes6502.DEX.rawValue
             cpu.X = 0x00
-            cpu.memory[0xFFFC] = Opcodes6502.DEX.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.X == 0xFF)
@@ -848,8 +848,8 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .N) == true)
             
             cpu.reset()
+            memory[0xFFFC] = Opcodes6502.DEX.rawValue
             cpu.X = 0x01
-            cpu.memory[0xFFFC] = Opcodes6502.DEX.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.X == 0x00)
@@ -862,7 +862,7 @@ struct CPU6502Tests {
             defer { memory.deallocate() }
             
             cpu.Y = 0x64
-            cpu.memory[0xFFFC] = Opcodes6502.DEY.rawValue
+            memory[0xFFFC] = Opcodes6502.DEY.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.Y == 0x63)
@@ -870,8 +870,8 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .N) == false)
             
             cpu.reset()
+            memory[0xFFFC] = Opcodes6502.DEY.rawValue
             cpu.Y = 0x00
-            cpu.memory[0xFFFC] = Opcodes6502.DEY.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.Y == 0xFF)
@@ -879,8 +879,8 @@ struct CPU6502Tests {
             #expect(cpu.readFlag(flag: .N) == true)
             
             cpu.reset()
+            memory[0xFFFC] = Opcodes6502.DEY.rawValue
             cpu.Y = 0x01
-            cpu.memory[0xFFFC] = Opcodes6502.DEY.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.Y == 0x00)
@@ -889,12 +889,988 @@ struct CPU6502Tests {
         }
     }
     
+    struct ShiftAndRotateTests {
+        struct ASLTests {
+            @Test func testASL_Accumulator() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left shift.
+                memory[0xFFFC] = Opcodes6502.ASL_Accumulator.rawValue
+                cpu.A = 0x1
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x02)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left shift that sets zero and carry flags.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ASL_Accumulator.rawValue
+                cpu.A = 0x80
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x00)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Left shift that sets negative flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ASL_Accumulator.rawValue
+                cpu.A = 0x42
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x84)
+                #expect(cpu.PC == 0xFFFD)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testASL_ZeroPage() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left shift.
+                memory[0xFFFC] = Opcodes6502.ASL_ZeroPage.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0x11] = 0x21
+                
+                cpu.runForTicks(5)
+                #expect(memory[0x11] == 0x42)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left shift that sets zero and carry flags.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ASL_ZeroPage.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0x11] = 0x80
+                
+                cpu.runForTicks(5)
+                #expect(memory[0x11] == 0x00)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Left shift that sets negative flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ASL_ZeroPage.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0x11] = 0x40
+                
+                cpu.runForTicks(5)
+                #expect(memory[0x11] == 0x80)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testASL_ZeroPageX() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left shift
+                cpu.X = 0xA
+                memory[0xFFFC] = Opcodes6502.ASL_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0x04
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x08)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left shift that sets zero and carry flags.
+                cpu.reset()
+                cpu.X = 0xA
+                memory[0xFFFC] = Opcodes6502.ASL_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0x80
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x00)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Left shift that sets negative flag.
+                cpu.reset()
+                cpu.X = 0xA
+                memory[0xFFFC] = Opcodes6502.ASL_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0x40
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x80)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testASL_Absolute() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left shift.
+                memory[0xFFFC] = Opcodes6502.ASL_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0x15
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x2A)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left shift that sets zero and carry flags.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ASL_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0x80
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x00)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Left shift that sets negative flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ASL_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0x40
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x80)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testASL_AbsoluteX() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left shift
+                cpu.X = 0xAA
+                memory[0xFFFC] = Opcodes6502.ASL_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0x04
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x08)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left shift that sets zero and carry flags.
+                cpu.reset()
+                cpu.X = 0xAA
+                memory[0xFFFC] = Opcodes6502.ASL_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0x80
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x00)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Left shift that sets negative flag.
+                cpu.reset()
+                cpu.X = 0xAA
+                memory[0xFFFC] = Opcodes6502.ASL_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0x40
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x80)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+        }
+        
+        struct ROLTests {
+            @Test func testROL_Accumulator() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left rotate.
+                memory[0xFFFC] = Opcodes6502.ROL_Accumulator.rawValue
+                cpu.A = 0x01
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x02)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left rotate that sets carry flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROL_Accumulator.rawValue
+                cpu.A = 0x80
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x01)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Left rotate that sets negative flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROL_Accumulator.rawValue
+                cpu.A = 0x42
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x84)
+                #expect(cpu.PC == 0xFFFD)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left rotate that sets zero flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROL_Accumulator.rawValue
+                cpu.A = 0x00
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x00)
+                #expect(cpu.PC == 0xFFFD)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testROL_ZeroPage() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left rotate.
+                memory[0xFFFC] = Opcodes6502.ROL_ZeroPage.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0x11] = 0x21
+                
+                cpu.runForTicks(5)
+                #expect(memory[0x11] == 0x42)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left rorate that sets zero and carry flags.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROL_ZeroPage.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0x11] = 0x80
+                
+                cpu.runForTicks(5)
+                #expect(memory[0x11] == 0x01)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Left rotate that sets negative flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROL_ZeroPage.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0x11] = 0x40
+                
+                cpu.runForTicks(5)
+                #expect(memory[0x11] == 0x80)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left rotate that sets zero flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROL_ZeroPage.rawValue
+                memory[0xFFFD] = 0xAA
+                memory[0xAA] = 0x00
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x00)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testROL_ZeroPageX() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left rotate
+                cpu.X = 0xA
+                memory[0xFFFC] = Opcodes6502.ROL_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0x04
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x08)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left rotate that sets carry flag.
+                cpu.reset()
+                cpu.X = 0xA
+                memory[0xFFFC] = Opcodes6502.ROL_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0x80
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x01)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Left rotate that sets negative flag.
+                cpu.reset()
+                cpu.X = 0xA
+                memory[0xFFFC] = Opcodes6502.ASL_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0x40
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x80)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left rotate that sets zero flag.
+                cpu.reset()
+                cpu.X = 0xA
+                memory[0xFFFC] = Opcodes6502.ROL_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0x00
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x00)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testROL_Absolute() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left rotate.
+                memory[0xFFFC] = Opcodes6502.ROL_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0x15
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x2A)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left rotate that sets carry flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROL_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0x80
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x01)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Left rotate that sets negative flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROL_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0x40
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x80)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left rotate that sets zero flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROL_Absolute.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x60
+                memory[0x6050] = 0x00
+                
+                cpu.runForTicks(2)
+                #expect(memory[0x6050] == 0x00)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testROL_AbsoluteX() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left rotate
+                cpu.X = 0xAA
+                memory[0xFFFC] = Opcodes6502.ROL_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0x04
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x08)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left rotate that sets carry flag.
+                cpu.reset()
+                cpu.X = 0xAA
+                memory[0xFFFC] = Opcodes6502.ROL_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0x80
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x01)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Left rotate that sets negative flag.
+                cpu.reset()
+                cpu.X = 0xAA
+                memory[0xFFFC] = Opcodes6502.ASL_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0x40
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x80)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Left rotate that sets zero flag.
+                cpu.reset()
+                cpu.X = 0xAA
+                memory[0xFFFC] = Opcodes6502.ROL_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x60
+                memory[0x60FA] = 0x00
+                
+                cpu.runForTicks(2)
+                #expect(memory[0x60FA] == 0x00)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+        }
+        
+        struct LSRTests {
+            @Test func testLSR_Accumulator() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple right shift.
+                memory[0xFFFC] = Opcodes6502.LSR_Accumulator.rawValue
+                cpu.A = 0x8
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x04)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Right shift that sets zero and carry flags.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.LSR_Accumulator.rawValue
+                cpu.A = 0x01
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x00)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Right shift can't set the negative flag but it can clear it.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.LSR_Accumulator.rawValue
+                cpu.A = 0xFF
+                cpu.setFlag(flag: .N)
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x7F)
+                #expect(cpu.PC == 0xFFFD)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+            }
+            
+            @Test func testLSR_ZeroPage() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple right shift.
+                memory[0xFFFC] = Opcodes6502.LSR_ZeroPage.rawValue
+                memory[0xFFFD] = 0xBB
+                memory[0xBB] = 0x42
+                
+                cpu.runForTicks(5)
+                #expect(memory[0xBB] == 0x21)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Right shift that sets zero and carry flags.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.LSR_ZeroPage.rawValue
+                memory[0xFFFD] = 0xBB
+                memory[0xBB] = 0x01
+                cpu.setFlag(flag: .N)
+                
+                cpu.runForTicks(5)
+                #expect(memory[0xBB] == 0x00)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Right shift can't set the negative flag but it can clear it.
+                cpu.reset()
+                cpu.setFlag(flag: .N)
+                memory[0xFFFC] = Opcodes6502.LSR_ZeroPage.rawValue
+                memory[0xFFFD] = 0xBB
+                memory[0xBB] = 0xFF
+                
+                cpu.runForTicks(5)
+                #expect(memory[0xBB] == 0x7F)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+            }
+            
+            @Test func testLSR_ZeroPageX() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple right shift
+                cpu.X = 0xA
+                memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0x04
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x02)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Right shift that sets zero and carry flags.
+                cpu.reset()
+                cpu.X = 0xA
+                memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0x01
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x00)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Right shift can't set the negative flag but it can clear it.
+                cpu.reset()
+                cpu.X = 0xA
+                cpu.setFlag(flag: .N)
+                memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0xFF
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x7F)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+            }
+            
+            @Test func testLSR_Absolute() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple right shift.
+                memory[0xFFFC] = Opcodes6502.LSR_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0x08
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x04)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Right shift that sets zero and carry flags.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.LSR_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0x01
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x00)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Right shift can't set the negative flag but it can clear it.
+                cpu.reset()
+                cpu.setFlag(flag: .N)
+                memory[0xFFFC] = Opcodes6502.LSR_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0xFF
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x7F)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+            }
+            
+            @Test func testLSR_AbsoluteX() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left shift
+                cpu.X = 0xAA
+                memory[0xFFFC] = Opcodes6502.LSR_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0x04
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x02)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Right shift that sets zero and carry flags.
+                cpu.reset()
+                cpu.X = 0xAA
+                memory[0xFFFC] = Opcodes6502.LSR_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0x01
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x00)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Right shift can't set the negative flag but it can clear it.
+                cpu.reset()
+                cpu.X = 0xAA
+                cpu.setFlag(flag: .N)
+                memory[0xFFFC] = Opcodes6502.LSR_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0xFF
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x7F)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == true)
+            }
+        }
+        
+        struct RORTests {
+            @Test func testROR_Accumulator() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple right rotate.
+                memory[0xFFFC] = Opcodes6502.ROR_Accumulator.rawValue
+                cpu.A = 0x8
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x04)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Right rotate that sets negative and carry flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROR_Accumulator.rawValue
+                cpu.A = 0x01
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x80)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Right rotate that sets the zero flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROR_Accumulator.rawValue
+                cpu.A = 0x00
+                
+                cpu.runForTicks(2)
+                #expect(cpu.A == 0x00)
+                #expect(cpu.PC == 0xFFFD)
+                #expect(cpu.readFlag(flag: .Z) == true)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testROR_ZeroPage() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple right rotate.
+                memory[0xFFFC] = Opcodes6502.ROR_ZeroPage.rawValue
+                memory[0xFFFD] = 0xBB
+                memory[0xBB] = 0x42
+                
+                cpu.runForTicks(5)
+                #expect(memory[0xBB] == 0x21)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Right rotate that sets negative and carry flag.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROR_ZeroPage.rawValue
+                memory[0xFFFD] = 0xBB
+                memory[0xBB] = 0x01
+                
+                cpu.runForTicks(5)
+                #expect(memory[0xBB] == 0x80)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Right rotate that clears the negative flag.
+                cpu.reset()
+                cpu.setFlag(flag: .N)
+                memory[0xFFFC] = Opcodes6502.ROR_ZeroPage.rawValue
+                memory[0xFFFD] = 0xBB
+                memory[0xBB] = 0xFE
+                
+                cpu.runForTicks(5)
+                #expect(memory[0xBB] == 0x7F)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testROR_ZeroPageX() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple right shift
+                cpu.X = 0xA
+                memory[0xFFFC] = Opcodes6502.ROR_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0x04
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x02)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Right rotate that sets negative and carry flags.
+                cpu.reset()
+                cpu.X = 0xA
+                memory[0xFFFC] = Opcodes6502.ROR_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0x01
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x80)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Right rotate that clears the negative flag.
+                cpu.reset()
+                cpu.X = 0xA
+                cpu.setFlag(flag: .N)
+                memory[0xFFFC] = Opcodes6502.ROR_ZeroPageX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0x5A] = 0xFE
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x5A] == 0x7F)
+                #expect(cpu.PC == 0xFFFE)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testROR_Absolute() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple right rotate.
+                memory[0xFFFC] = Opcodes6502.ROR_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0x08
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x04)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Right rotate that sets negative and carry flags.
+                cpu.reset()
+                memory[0xFFFC] = Opcodes6502.ROR_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0x01
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x80)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Right rotate that clears the negative flag.
+                cpu.reset()
+                cpu.setFlag(flag: .N)
+                memory[0xFFFC] = Opcodes6502.ROR_Absolute.rawValue
+                memory[0xFFFD] = 0x11
+                memory[0xFFFE] = 0x22
+                memory[0x2211] = 0xFE
+                
+                cpu.runForTicks(6)
+                #expect(memory[0x2211] == 0x7F)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+            
+            @Test func testROR_AbsoluteX() async throws {
+                let (cpu, memory) = testCPU()
+                defer { memory.deallocate() }
+                
+                // Simple left rotate
+                cpu.X = 0xAA
+                memory[0xFFFC] = Opcodes6502.ROR_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0x04
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x02)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+                
+                // Right rotate that sets negative and carry flags.
+                cpu.reset()
+                cpu.X = 0xAA
+                memory[0xFFFC] = Opcodes6502.ROR_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0x01
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x80)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == true)
+                #expect(cpu.readFlag(flag: .C) == true)
+                
+                // Right rotate that clears the negative flag.
+                cpu.reset()
+                cpu.X = 0xAA
+                cpu.setFlag(flag: .N)
+                memory[0xFFFC] = Opcodes6502.LSR_AbsoluteX.rawValue
+                memory[0xFFFD] = 0x50
+                memory[0xFFFE] = 0x50
+                memory[0x50FA] = 0xFE
+                
+                cpu.runForTicks(7)
+                #expect(memory[0x50FA] == 0x7F)
+                #expect(cpu.PC == 0xFFFF)
+                #expect(cpu.readFlag(flag: .Z) == false)
+                #expect(cpu.readFlag(flag: .N) == false)
+                #expect(cpu.readFlag(flag: .C) == false)
+            }
+        }
+    }
+
     struct FlagTests {
         @Test func testCLC() async throws {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = Opcodes6502.CLC.rawValue
+            memory[0xFFFC] = Opcodes6502.CLC.rawValue
             cpu.setFlag(flag: .C)
             #expect(cpu.readFlag(flag: .C) == true)
             
@@ -907,7 +1883,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = Opcodes6502.CLD.rawValue
+            memory[0xFFFC] = Opcodes6502.CLD.rawValue
             cpu.setFlag(flag: .D)
             #expect(cpu.readFlag(flag: .D) == true)
             
@@ -920,7 +1896,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
         
-            cpu.memory[0xFFFC] = Opcodes6502.CLI.rawValue
+            memory[0xFFFC] = Opcodes6502.CLI.rawValue
             cpu.setFlag(flag: .I)
             #expect(cpu.readFlag(flag: .I) == true)
             
@@ -933,7 +1909,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = Opcodes6502.CLV.rawValue
+            memory[0xFFFC] = Opcodes6502.CLV.rawValue
             cpu.setFlag(flag: .V)
             #expect(cpu.readFlag(flag: .V) == true)
             
@@ -946,7 +1922,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = Opcodes6502.SEC.rawValue
+            memory[0xFFFC] = Opcodes6502.SEC.rawValue
             #expect(cpu.readFlag(flag: .C) == false)
             
             cpu.runForTicks(2)
@@ -958,7 +1934,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = Opcodes6502.SED.rawValue
+            memory[0xFFFC] = Opcodes6502.SED.rawValue
             #expect(cpu.readFlag(flag: .D) == false)
 
             cpu.runForTicks(2)
@@ -970,7 +1946,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = Opcodes6502.SEI.rawValue
+            memory[0xFFFC] = Opcodes6502.SEI.rawValue
             #expect(cpu.readFlag(flag: .I) == false)
             
             cpu.runForTicks(2)
@@ -985,7 +1961,7 @@ struct CPU6502Tests {
             let (cpu, memory) = testCPU()
             defer { memory.deallocate() }
             
-            cpu.memory[0xFFFC] = Opcodes6502.NOP.rawValue
+            memory[0xFFFC] = Opcodes6502.NOP.rawValue
 
             cpu.runForTicks(2)
             #expect(cpu.A == 0)
