@@ -79,6 +79,28 @@ public extension CPU6502 {
                 updateFlagsFor(newValue: memory[Int(address)])
                 tickcount += 7
                 
+            // MARK: Decrement memory locations
+            case .DEC_ZeroPage:
+                let address = nextByte()
+                memory[Int(address)] &-= 1
+                updateFlagsFor(newValue: memory[Int(address)])
+                tickcount += 5
+            case .DEC_ZeroPageX:
+                let address = nextByte() &+ X
+                memory[Int(address)] &-= 1
+                updateFlagsFor(newValue: memory[Int(address)])
+                tickcount += 6
+            case .DEC_Absolute:
+                let address = nextWord()
+                memory[Int(address)] &-= 1
+                updateFlagsFor(newValue: memory[Int(address)])
+                tickcount += 6
+            case .DEC_AbsoluteX:
+                let address = nextWord() &+ UInt16(X)
+                memory[Int(address)] &-= 1
+                updateFlagsFor(newValue: memory[Int(address)])
+                tickcount += 7
+                
             // MARK: Stack operations
             case .TXS:
                 SP = X
