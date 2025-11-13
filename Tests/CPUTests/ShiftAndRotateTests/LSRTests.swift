@@ -1,0 +1,239 @@
+//
+//  LSRests.swift
+//  CPU
+//
+//  Created by James Weatherley on 13/11/2025.
+//
+
+import Testing
+@testable import CPU
+
+struct LSRTests {
+    @Test func testLSR_Accumulator() async throws {
+        let (cpu, memory) = testCPU()
+        defer { memory.deallocate() }
+        
+        // Simple right shift.
+        memory[0xFFFC] = Opcodes6502.LSR_Accumulator.rawValue
+        cpu.A = 0x8
+        
+        cpu.runForTicks(2)
+        #expect(cpu.A == 0x04)
+        #expect(cpu.readFlag(flag: .Z) == false)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == false)
+        
+        // Right shift that sets zero and carry flags.
+        cpu.reset()
+        memory[0xFFFC] = Opcodes6502.LSR_Accumulator.rawValue
+        cpu.A = 0x01
+        
+        cpu.runForTicks(2)
+        #expect(cpu.A == 0x00)
+        #expect(cpu.readFlag(flag: .Z) == true)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == true)
+        
+        // Right shift can't set the negative flag but it can clear it.
+        cpu.reset()
+        memory[0xFFFC] = Opcodes6502.LSR_Accumulator.rawValue
+        cpu.A = 0xFF
+        cpu.setFlag(flag: .N)
+        
+        cpu.runForTicks(2)
+        #expect(cpu.A == 0x7F)
+        #expect(cpu.PC == 0xFFFD)
+        #expect(cpu.readFlag(flag: .Z) == false)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == true)
+    }
+    
+    @Test func testLSR_ZeroPage() async throws {
+        let (cpu, memory) = testCPU()
+        defer { memory.deallocate() }
+        
+        // Simple right shift.
+        memory[0xFFFC] = Opcodes6502.LSR_ZeroPage.rawValue
+        memory[0xFFFD] = 0xBB
+        memory[0xBB] = 0x42
+        
+        cpu.runForTicks(5)
+        #expect(memory[0xBB] == 0x21)
+        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.readFlag(flag: .Z) == false)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == false)
+        
+        // Right shift that sets zero and carry flags.
+        cpu.reset()
+        memory[0xFFFC] = Opcodes6502.LSR_ZeroPage.rawValue
+        memory[0xFFFD] = 0xBB
+        memory[0xBB] = 0x01
+        cpu.setFlag(flag: .N)
+        
+        cpu.runForTicks(5)
+        #expect(memory[0xBB] == 0x00)
+        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.readFlag(flag: .Z) == true)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == true)
+        
+        // Right shift can't set the negative flag but it can clear it.
+        cpu.reset()
+        cpu.setFlag(flag: .N)
+        memory[0xFFFC] = Opcodes6502.LSR_ZeroPage.rawValue
+        memory[0xFFFD] = 0xBB
+        memory[0xBB] = 0xFF
+        
+        cpu.runForTicks(5)
+        #expect(memory[0xBB] == 0x7F)
+        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.readFlag(flag: .Z) == false)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == true)
+    }
+    
+    @Test func testLSR_ZeroPageX() async throws {
+        let (cpu, memory) = testCPU()
+        defer { memory.deallocate() }
+        
+        // Simple right shift
+        cpu.X = 0xA
+        memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
+        memory[0xFFFD] = 0x50
+        memory[0x5A] = 0x04
+        
+        cpu.runForTicks(6)
+        #expect(memory[0x5A] == 0x02)
+        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.readFlag(flag: .Z) == false)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == false)
+        
+        // Right shift that sets zero and carry flags.
+        cpu.reset()
+        cpu.X = 0xA
+        memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
+        memory[0xFFFD] = 0x50
+        memory[0x5A] = 0x01
+        
+        cpu.runForTicks(6)
+        #expect(memory[0x5A] == 0x00)
+        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.readFlag(flag: .Z) == true)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == true)
+        
+        // Right shift can't set the negative flag but it can clear it.
+        cpu.reset()
+        cpu.X = 0xA
+        cpu.setFlag(flag: .N)
+        memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
+        memory[0xFFFD] = 0x50
+        memory[0x5A] = 0xFF
+        
+        cpu.runForTicks(6)
+        #expect(memory[0x5A] == 0x7F)
+        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.readFlag(flag: .Z) == false)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == true)
+    }
+    
+    @Test func testLSR_Absolute() async throws {
+        let (cpu, memory) = testCPU()
+        defer { memory.deallocate() }
+        
+        // Simple right shift.
+        memory[0xFFFC] = Opcodes6502.LSR_Absolute.rawValue
+        memory[0xFFFD] = 0x11
+        memory[0xFFFE] = 0x22
+        memory[0x2211] = 0x08
+        
+        cpu.runForTicks(6)
+        #expect(memory[0x2211] == 0x04)
+        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.readFlag(flag: .Z) == false)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == false)
+        
+        // Right shift that sets zero and carry flags.
+        cpu.reset()
+        memory[0xFFFC] = Opcodes6502.LSR_Absolute.rawValue
+        memory[0xFFFD] = 0x11
+        memory[0xFFFE] = 0x22
+        memory[0x2211] = 0x01
+        
+        cpu.runForTicks(6)
+        #expect(memory[0x2211] == 0x00)
+        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.readFlag(flag: .Z) == true)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == true)
+        
+        // Right shift can't set the negative flag but it can clear it.
+        cpu.reset()
+        cpu.setFlag(flag: .N)
+        memory[0xFFFC] = Opcodes6502.LSR_Absolute.rawValue
+        memory[0xFFFD] = 0x11
+        memory[0xFFFE] = 0x22
+        memory[0x2211] = 0xFF
+        
+        cpu.runForTicks(6)
+        #expect(memory[0x2211] == 0x7F)
+        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.readFlag(flag: .Z) == false)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == true)
+    }
+    
+    @Test func testLSR_AbsoluteX() async throws {
+        let (cpu, memory) = testCPU()
+        defer { memory.deallocate() }
+        
+        // Simple left shift
+        cpu.X = 0xAA
+        memory[0xFFFC] = Opcodes6502.LSR_AbsoluteX.rawValue
+        memory[0xFFFD] = 0x50
+        memory[0xFFFE] = 0x50
+        memory[0x50FA] = 0x04
+        
+        cpu.runForTicks(7)
+        #expect(memory[0x50FA] == 0x02)
+        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.readFlag(flag: .Z) == false)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == false)
+        
+        // Right shift that sets zero and carry flags.
+        cpu.reset()
+        cpu.X = 0xAA
+        memory[0xFFFC] = Opcodes6502.LSR_AbsoluteX.rawValue
+        memory[0xFFFD] = 0x50
+        memory[0xFFFE] = 0x50
+        memory[0x50FA] = 0x01
+        
+        cpu.runForTicks(7)
+        #expect(memory[0x50FA] == 0x00)
+        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.readFlag(flag: .Z) == true)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == true)
+        
+        // Right shift can't set the negative flag but it can clear it.
+        cpu.reset()
+        cpu.X = 0xAA
+        cpu.setFlag(flag: .N)
+        memory[0xFFFC] = Opcodes6502.LSR_AbsoluteX.rawValue
+        memory[0xFFFD] = 0x50
+        memory[0xFFFE] = 0x50
+        memory[0x50FA] = 0xFF
+        
+        cpu.runForTicks(7)
+        #expect(memory[0x50FA] == 0x7F)
+        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.readFlag(flag: .Z) == false)
+        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(flag: .C) == true)
+    }
+}

@@ -19,8 +19,8 @@ public enum Flags: UInt8 {
 public class CPU6502: CPU {
     
     // Registers.
-    public var SP: UInt8 = 0xFF
-    public var PC: UInt16 = 0xFFFC
+    public var SP: UInt8 = 0xFF     // Top of stack. Base address is 0x100, so 0x1FF -> 0x100 is your stack.
+    public var PC: UInt16 = 0xFFFC  // Reset vector - execution starts here.
     public var A: UInt8 = 0
     public var X: UInt8 = 0
     public var Y: UInt8 = 0
