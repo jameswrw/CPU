@@ -80,8 +80,8 @@ public enum Opcodes6502: UInt8 {
     case JMP_Absolute = 0x4C        // Test added
     case JMP_Indirect = 0x6C        // Test added
     
-    case JSR = 0x20
-    case RTS = 0x60
+    case JSR = 0x20                 // Test added
+    case RTS = 0x60                 // Test added
     
     // MARK: Add with carry
     case ADC_Immediate = 0x69
