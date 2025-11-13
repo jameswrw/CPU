@@ -51,20 +51,16 @@ public extension CPU6502 {
                 X = SP
                 tickcount += 2
             case .PHA:
-                memory[0x100 + Int(SP)] = A
-                SP -= 1
+                pushByte(A)
                 tickcount += 3
             case .PLA:
-                SP = SP &+ 1
-                A = memory[0x100 + Int(SP)]
+                A = popByte()
                 tickcount += 4
             case .PHP:
-                memory[0x100 + Int(SP)] = F
-                SP = SP &- 1
+                pushByte(F)
                 tickcount += 3
             case .PLP:
-                SP = SP &+ 1
-                F = memory[0x100 + Int(SP)]
+                F = popByte()
                 tickcount += 4
             case .TAX:
                 X = A
@@ -129,6 +125,9 @@ public extension CPU6502 {
                 tickcount += 2
             case .NOP:
                 tickcount += 2
+            case .JSR:
+                let target = readWord16(addr: Int(PC))
+                tickcount += 6
             default:
                 fatalError("Unimplemented opcode")
             }

@@ -25,10 +25,13 @@ public class CPU6502: CPU {
     public var X: UInt8 = 0
     public var Y: UInt8 = 0
     
-    // Flags.
+    // MARK: Flags
     //
     // Avoiding an OptionSet as that implies struct which implies COW
     // which implies performance issues in this use case.
+    //
+    // This is unproven - so take a look at OptionSet in the future.
+
     public var F: UInt8 = Flags.One.rawValue
     
     public func setFlag(flag: Flags) {
@@ -43,7 +46,7 @@ public class CPU6502: CPU {
         F & flag.rawValue != 0
     }
     
-    // Execution.
+    // MARK: Memory access
     public func nextByte() -> UInt8 {
         let byte = readByte(addr: Int(PC))
         PC += 1
@@ -55,11 +58,36 @@ public class CPU6502: CPU {
         PC += 1
         return Opcodes6502(rawValue: byte) ?? .NOP
     }
-    
+
     public func nextWord() -> UInt16 {
         let word = readWord16(addr: Int(PC))
         PC += 2
         return word
+    }
+
+    // MARK: Stack push/pop
+    public func pushByte(_ byte: UInt8) {
+        memory[0x100 + Int(SP)] = byte
+        SP =  SP &- 1
+    }
+
+    public func popByte() -> UInt8 {
+        SP = SP &+ 1
+        let byte = memory[0x100 + Int(SP)]
+        return byte
+    }
+
+    public func pushWord(_ word: UInt16)  {
+        let highByte = UInt8((word & 0xFF00) >> 8)
+        let lowByte = UInt8(word & 0x00FF)
+        pushByte(highByte)
+        pushByte(lowByte)
+    }
+
+    public func popWord() -> UInt16 {
+        let lowByte = UInt16(popByte())
+        let highByte = UInt16(popByte())
+        return (highByte << 8) | lowByte
     }
 }
 
