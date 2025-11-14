@@ -311,6 +311,29 @@ public extension CPU6502 {
             case .NOP:
                 tickcount += 2
                 
+            case .BIT_ZeroPage:
+                let value = memory[Int(nextByte())]
+                
+                let Z = (value & A) == 0
+                let N = (value & 0x80) != 0
+                let V = (value & 0x40) != 0
+                
+                Z ? setFlag(flag: .Z) : clearFlag(flag: .Z)
+                N ? setFlag(flag: .N) : clearFlag(flag: .N)
+                V ? setFlag(flag: .V) : clearFlag(flag: .V)
+
+                tickcount += 3
+            case .BIT_Absolute:
+                let value = memory[Int(nextWord())]
+                
+                let Z = (value & A) == 0
+                let N = (value & 0x80) != 0
+                let V = (value & 0x40) != 0
+                
+                Z ? setFlag(flag: .Z) : clearFlag(flag: .Z)
+                N ? setFlag(flag: .N) : clearFlag(flag: .N)
+                V ? setFlag(flag: .V) : clearFlag(flag: .V)
+                tickcount += 4
             default:
                 fatalError("Unimplemented opcode")
             }
