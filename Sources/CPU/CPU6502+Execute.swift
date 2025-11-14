@@ -57,6 +57,24 @@ public extension CPU6502 {
                 PC = readWord16(addr: Int(nextWord()))
                 tickcount += 5
                 
+            // MARK: Branches
+            case .BCC:
+                branchOnClear(flag: .C)
+            case .BCS:
+                branchOnSet(flag: .C)
+            case .BEQ:
+                branchOnSet(flag: .Z)
+            case .BNE:
+                branchOnClear(flag: .Z)
+            case .BMI:
+                branchOnSet(flag: .N)
+            case .BPL:
+                branchOnClear(flag: .N)
+            case .BVC:
+                branchOnClear(flag: .V, advanceTickcountOnPageChange: false)
+            case .BVS:
+                branchOnSet(flag: .V)
+                
             // MARK: Increment memory locations
             case .INC_ZeroPage:
                 let address = nextByte()
@@ -328,6 +346,40 @@ public extension CPU6502 {
         writeByte(addr: Int(address), value: newValue)
         updateNZFlagsFor(newValue: newValue)
         (lsb != 0) ? setFlag(flag: .C) : clearFlag(flag: .C)
+    }
+    
+    fileprivate func addingSignedByte(_ base: UInt16, _ deltaUnsigned: UInt8) -> UInt16 {
+        let deltaSigned = Int8(bitPattern: deltaUnsigned)
+        let sumSigned = Int16(bitPattern: base) &+ Int16(deltaSigned)
+        return UInt16(bitPattern: sumSigned)
+    }
+    
+    fileprivate func samePage(address1: UInt16, address2: UInt16) -> Bool {
+        address1 & 0x100 == address2 & 0x100
+    }
+    
+    fileprivate func branchOnSet(flag: Flags) {
+        branch(flag: flag, branchIfSet: true)
+    }
+    
+    fileprivate func branchOnClear(flag: Flags, advanceTickcountOnPageChange: Bool = true) {
+        branch(flag: flag, branchIfSet: false, advanceTickcountOnPageChange: advanceTickcountOnPageChange)
+    }
+    
+    fileprivate func branch(flag: Flags, branchIfSet: Bool, advanceTickcountOnPageChange: Bool = true) {
+        let delta = nextByte()
+        tickcount += 2
+        let branch = branchIfSet ? readFlag(flag: flag) : !readFlag(flag: flag)
+        if branch {
+            let target = addingSignedByte(PC, delta)
+            if !samePage(address1: PC, address2: target) {
+                if advanceTickcountOnPageChange {
+                    tickcount += 1
+                }
+            }
+            PC = target
+            tickcount += 1
+        }
     }
 
 }

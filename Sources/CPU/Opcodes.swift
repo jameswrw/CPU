@@ -157,14 +157,14 @@ public enum Opcodes6502: UInt8 {
     case ROR_AbsoluteX = 0x7E       // Test added
     
     // MARK: Branch
-    case BCC = 0x90
-    case BCS = 0xB0
-    case BEQ = 0xF0
-    case BMI = 0x30
-    case BNE = 0xD0
-    case BPL = 0x10
-    case BVC = 0x50
-    case BVS = 0x70
+    case BCC = 0x90                 // Test added
+    case BCS = 0xB0                 // Test added
+    case BEQ = 0xF0                 // Test added
+    case BMI = 0x30                 // Test added
+    case BNE = 0xD0                 // Test added
+    case BPL = 0x10                 // Test added
+    case BVC = 0x50                 // Test added
+    case BVS = 0x70                 // Test added
     
     // MARK: Compare
     case CMP_Immediate = 0xC9
