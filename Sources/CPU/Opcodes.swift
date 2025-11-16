@@ -46,21 +46,21 @@ public enum Opcodes6502: UInt8 {
     case DEY = 0x88                 // Test Added
     
     // MARK: Store
-    case STA_ZeroPage = 0x85
-    case STA_ZeroPageX = 0x95
-    case STA_Absolute = 0x8D
-    case STA_AbsoluteX = 0x9D
-    case STA_AbsoluteY = 0x99
-    case STA_IndirectX = 0x81
-    case STA_IndirectY = 0x91
+    case STA_ZeroPage = 0x85        // Test Added
+    case STA_ZeroPageX = 0x95       // Test Added
+    case STA_Absolute = 0x8D        // Test Added
+    case STA_AbsoluteX = 0x9D       // Test Added
+    case STA_AbsoluteY = 0x99       // Test Added
+    case STA_IndirectX = 0x81       // Test Added
+    case STA_IndirectY = 0x91       // Test Added
     
-    case STX_ZeroPage = 0x86
-    case STX_ZeroPageY = 0x96
-    case STX_Absolute = 0x8E
+    case STX_ZeroPage = 0x86        // Test Added
+    case STX_ZeroPageY = 0x96       // Test Added
+    case STX_Absolute = 0x8E        // Test Added
     
-    case STY_ZeroPage = 0x84
-    case STY_ZeroPageX = 0x94
-    case STY_Absolute = 0x8C
+    case STY_ZeroPage = 0x84        // Test Added
+    case STY_ZeroPageX = 0x94       // Test Added
+    case STY_Absolute = 0x8C        // Test Added
 
     // MARK: Transfer
     case TAX = 0xAA                 // Test added

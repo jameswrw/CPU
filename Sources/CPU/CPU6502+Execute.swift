@@ -304,23 +304,23 @@ public extension CPU6502 {
                 compare(value, withRegister: A)
                 tickcount += samePage(address1: baseAddress, address2: targetAddesss) ? 4 : 5
             case .CMP_IndirectX:
-                let zeroPageAddress = addingSignedByte(UInt16(nextByte()), X)
-                let loByte = memory[Int(zeroPageAddress)]
-                let hiByte = memory[Int(zeroPageAddress + 1)]
-                let address = addingSignedByte(UInt16(hiByte) << 8 | UInt16(loByte), Y)
-                let value = memory[Int(address)]
+                let value = valueFrom(
+                    zeroPageAddress: nextByte(),
+                    zeroPageOffet: X,
+                    targetOffset: 0,
+                    incrementTickcountIfPageBoundaryCrossed: false
+                )
                 compare(value, withRegister: A)
                 tickcount += 5
             case .CMP_IndirectY:
-                let zeroPageAddress = nextByte()
-                let loByte = memory[Int(zeroPageAddress)]
-                let hiByte = memory[Int(zeroPageAddress + 1)]
-                let baseAddress = UInt16(hiByte) << 8 | UInt16(loByte)
-                let targetAddress = addingSignedByte(baseAddress, Y)
-                let value = memory[Int(targetAddress)]
+                let value = valueFrom(
+                    zeroPageAddress: nextByte(),
+                    zeroPageOffet: 0,
+                    targetOffset: Y,
+                    incrementTickcountIfPageBoundaryCrossed: true
+                )
                 compare(value, withRegister: A)
-                tickcount +=  samePage(address1: baseAddress, address2: targetAddress) ? 5 : 6
-
+                tickcount +=  5
             // CMP X
             case .CPX_Immediate:
                 let value = nextByte()
@@ -347,6 +347,49 @@ public extension CPU6502 {
             case .CPY_Absolute:
                 let value = memory[Int(nextWord())]
                 compare(value, withRegister: Y)
+                tickcount += 4
+                
+            // MARK: Stores
+            case .STA_ZeroPage:
+                A = memory[Int(nextByte())]
+                tickcount += 3
+            case .STA_ZeroPageX:
+                A = memory[Int(addingSignedByte(UInt16(nextByte()), X))]
+                tickcount += 4
+            case .STA_Absolute:
+                A = memory[Int(nextWord())]
+                tickcount += 4
+            case .STA_AbsoluteX:
+                A = memory[Int(addingSignedByte(nextWord(), X))]
+                tickcount += 5
+            case .STA_AbsoluteY:
+                A = memory[Int(addingSignedByte(nextWord(), Y))]
+                tickcount += 5
+            case .STA_IndirectX:
+                A = valueFrom(zeroPageAddress: nextByte(), zeroPageOffet: X, targetOffset: 0, incrementTickcountIfPageBoundaryCrossed: false)
+                tickcount += 6
+            case .STA_IndirectY:
+                A = valueFrom(zeroPageAddress: nextByte(), zeroPageOffet: 0, targetOffset: Y, incrementTickcountIfPageBoundaryCrossed: false)
+                tickcount += 6
+                
+            case .STX_ZeroPage:
+                X = memory[Int(nextByte())]
+                tickcount += 3
+            case .STX_ZeroPageY:
+                X = memory[Int(addingSignedByte(UInt16(nextByte()), Y))]
+                tickcount += 4
+            case .STX_Absolute:
+                X = memory[Int(nextWord())]
+                tickcount += 4
+                
+            case .STY_ZeroPage:
+                tickcount += 3
+                Y = memory[Int(nextByte())]
+            case .STY_ZeroPageX:
+                Y = memory[Int(addingSignedByte(UInt16(nextByte()), X))]
+                tickcount += 4
+            case .STY_Absolute:
+                Y = memory[Int(nextWord())]
                 tickcount += 4
                 
             // MARK: Clear flags

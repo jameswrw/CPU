@@ -36,6 +36,32 @@ extension CPU6502 {
         (lsb != 0) ? setFlag(flag: .C) : clearFlag(flag: .C)
     }
     
+    /// Bit of a messay function, but at least it keeps the mess in one place.
+    /// (zeroPageAddress + zeroPageOffet) and (zeroPageAddress + zeroPageOffset + 1) contain another address in memory - the target.
+    /// Typically either zeroPageOffet or targetOffset may be set, but not both.
+    ///
+    ///     zeroPageAddress:    Base address in the ZeroPage
+    ///     zeroPageOffset:     Offset form zeroPageAddress - typically comes from X
+    ///     targetOffset:       Offset form target (see comments above) - typically comes from Y
+    ///     incrementTickcountIfPageBoundaryCrossed:    If true and target + target crosses a page boundary then add one to tickcount
+    ///
+    internal func valueFrom(
+        zeroPageAddress: UInt8,
+        zeroPageOffet: UInt8,
+        targetOffset: UInt8,
+        incrementTickcountIfPageBoundaryCrossed: Bool
+    ) -> UInt8 {
+        let offsetZeroPageAddress = addingSignedByte(UInt16(zeroPageAddress), zeroPageOffet)
+        let loByte = memory[Int(offsetZeroPageAddress)]
+        let hiByte = memory[Int(offsetZeroPageAddress + 1)]
+        let targetAddress = (UInt16(hiByte) << 8) | (UInt16(loByte))
+        let offsetTargetAddress = addingSignedByte(targetAddress, targetOffset)
+        if incrementTickcountIfPageBoundaryCrossed {
+            tickcount +=  samePage(address1: targetAddress, address2: offsetTargetAddress) ? 0 : 1
+        }
+        return memory[Int(offsetTargetAddress)]
+    }
+
     internal func addingSignedByte(_ base: UInt16, _ deltaUnsigned: UInt8) -> UInt16 {
         let deltaSigned = Int8(bitPattern: deltaUnsigned)
         let sumSigned = Int16(bitPattern: base) &+ Int16(deltaSigned)
