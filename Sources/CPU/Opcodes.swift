@@ -167,22 +167,22 @@ public enum Opcodes6502: UInt8 {
     case BVS = 0x70                 // Test added
     
     // MARK: Compare
-    case CMP_Immediate = 0xC9
-    case CMP_ZeroPage = 0xC5
-    case CMP_ZeroPageX = 0xD5
-    case CMP_Absolute = 0xCD
-    case CMP_AbsoluteX = 0xDD
-    case CMP_AbsoluteY = 0xD9
-    case CMP_IndirectX = 0xC1
-    case CMP_IndirectY = 0xD1
+    case CMP_Immediate = 0xC9       // Test added
+    case CMP_ZeroPage = 0xC5        // Test added
+    case CMP_ZeroPageX = 0xD5       // Test added
+    case CMP_Absolute = 0xCD        // Test added
+    case CMP_AbsoluteX = 0xDD       // Test added
+    case CMP_AbsoluteY = 0xD9       // Test added
+    case CMP_IndirectX = 0xC1       // Test added
+    case CMP_IndirectY = 0xD1       // Test added
     
-    case CPX_Immediate = 0xE0
-    case CPX_ZeroPage = 0xE4
-    case CPX_Absolute = 0xEC
+    case CPX_Immediate = 0xE0       // Test added
+    case CPX_ZeroPage = 0xE4        // Test added
+    case CPX_Absolute = 0xEC        // Test added
   
-    case CPY_Immediate = 0xC0
-    case CPY_ZeroPage = 0xC4
-    case CPY_Absolute = 0xCC
+    case CPY_Immediate = 0xC0       // Test added
+    case CPY_ZeroPage = 0xC4        // Test added
+    case CPY_Absolute = 0xCC        // Test added
     
     // MARK: Clear flags
     case CLC = 0x18                 // Test added
