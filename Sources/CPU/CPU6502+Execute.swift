@@ -364,6 +364,59 @@ public extension CPU6502 {
                 RightShiftShared(address: Int(address), rotate: true)
                 tickcount += 7
 
+            // MARK: Logical
+            // All the logical operations work with A and the operand storing the result in A.
+            
+            // AND
+            case .AND_Immediate:
+                A = A & nextByte()
+                updateNZFlagsFor(newValue: A)
+                tickcount += 2
+            case .AND_ZeroPage:
+                A = A & memory[Int(nextByte())]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 3
+            case .AND_ZeroPageX:
+                A = A & memory[Int(addingSignedByte(UInt16(nextByte()), X))]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 4
+            case .AND_Absolute:
+                A = A & memory[Int(nextWord())]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 4
+            case .AND_AbsoluteX:
+                let baseAddress = nextWord()
+                let targetAddress = addingSignedByte(baseAddress, X)
+                A = A & memory[Int(targetAddress)]
+                updateNZFlagsFor(newValue: A)
+                tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
+            case .AND_AbsoluteY:
+                let baseAddress = nextWord()
+                let targetAddress = addingSignedByte(baseAddress, Y)
+                A = A & memory[Int(targetAddress)]
+                updateNZFlagsFor(newValue: A)
+                tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
+            case .AND_IndirectX:
+                let zeroPageBase = nextByte()
+                A = A & valueFrom(
+                    zeroPageAddress: zeroPageBase,
+                    zeroPageOffet: X,
+                    targetOffset: 0,
+                    incrementTickcountIfPageBoundaryCrossed: false
+                )
+                updateNZFlagsFor(newValue: A)
+                tickcount += 6
+            case .AND_IndirectY:
+                let zeroPageBase = nextByte()
+                A = A & valueFrom(
+                    zeroPageAddress: zeroPageBase,
+                    zeroPageOffet: 0,
+                    targetOffset: Y,
+                    incrementTickcountIfPageBoundaryCrossed: true
+                )
+                updateNZFlagsFor(newValue: A)
+                tickcount += 5
+                
             // MARK: Compare
             // CMP A
             case .CMP_Immediate:

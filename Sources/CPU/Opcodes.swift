@@ -104,14 +104,14 @@ public enum Opcodes6502: UInt8 {
     case SBC_IndirectY = 0xF1
     
     // MARK: Logical operations
-    case AND_Immediate = 0x29
-    case AND_ZeroPage = 0x25
-    case AND_ZeroPageX = 0x35
-    case AND_Absolute = 0x2D
-    case AND_AbsoluteX = 0x3D
-    case AND_AbsoluteY = 0x39
-    case AND_IndirectX = 0x21
-    case AND_IndirectY = 0x31
+    case AND_Immediate = 0x29       // Test added
+    case AND_ZeroPage = 0x25        // Test added
+    case AND_ZeroPageX = 0x35       // Test added
+    case AND_Absolute = 0x2D        // Test added
+    case AND_AbsoluteX = 0x3D       // Test added
+    case AND_AbsoluteY = 0x39       // Test added
+    case AND_IndirectX = 0x21       // Test added
+    case AND_IndirectY = 0x31       // Test added
     
     case ORA_Immediate = 0x09
     case ORA_ZeroPage = 0x05
