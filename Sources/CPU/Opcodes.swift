@@ -9,25 +9,25 @@ public enum Opcodes6502: UInt8 {
     
     // MARK: Load
     case LDA_Immediate = 0xA9       // Test added
-    case LDA_ZeroPage = 0xA5
-    case LDA_ZeroPageX = 0xB5
-    case LDA_Absolute = 0xAD
-    case LDA_AbsoluteX = 0xBD
-    case LDA_AbsoluteY = 0xB9
-    case LDA_IndirectX = 0xA1
-    case LDA_IndirectY = 0xB1
+    case LDA_ZeroPage = 0xA5        // Test added
+    case LDA_ZeroPageX = 0xB5       // Test added
+    case LDA_Absolute = 0xAD        // Test added
+    case LDA_AbsoluteX = 0xBD       // Test added
+    case LDA_AbsoluteY = 0xB9       // Test added
+    case LDA_IndirectX = 0xA1       // Test added
+    case LDA_IndirectY = 0xB1       // Test added
     
-    case LDX_Immediate = 0xA2
-    case LDX_ZeroPage = 0xA6
-    case LDX_ZeroPageY = 0xB6
-    case LDX_Absolute = 0xAE
-    case LDX_AbsoluteY = 0xBE
+    case LDX_Immediate = 0xA2       // Test added
+    case LDX_ZeroPage = 0xA6        // Test added
+    case LDX_ZeroPageY = 0xB6       // Test added
+    case LDX_Absolute = 0xAE        // Test added
+    case LDX_AbsoluteY = 0xBE       // Test added
     
-    case LDY_Immediate = 0xA0
-    case LDY_ZeroPage = 0xA4
-    case LDY_ZeroPageX = 0xB4
-    case LDY_Absolute = 0xAC
-    case LDY_AbsoluteX = 0xBC
+    case LDY_Immediate = 0xA0       // Test added
+    case LDY_ZeroPage = 0xA4        // Test added
+    case LDY_ZeroPageX = 0xB4       // Test added
+    case LDY_Absolute = 0xAC        // Test added
+    case LDY_AbsoluteX = 0xBC       // Test added
     
     // MARK: Increment
     case INC_ZeroPage = 0xE6        // Test added

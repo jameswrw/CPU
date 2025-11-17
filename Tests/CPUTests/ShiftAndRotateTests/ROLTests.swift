@@ -10,7 +10,7 @@ import Testing
 
 struct ROLTests {
     @Test func testROL_Accumulator() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple left rotate.
@@ -60,7 +60,7 @@ struct ROLTests {
     }
     
     @Test func testROL_ZeroPage() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple left rotate.
@@ -116,7 +116,7 @@ struct ROLTests {
     }
     
     @Test func testROL_ZeroPageX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple left rotate
@@ -176,7 +176,7 @@ struct ROLTests {
     }
     
     @Test func testROL_Absolute() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple left rotate.
@@ -236,7 +236,7 @@ struct ROLTests {
     }
     
     @Test func testROL_AbsoluteX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple left rotate

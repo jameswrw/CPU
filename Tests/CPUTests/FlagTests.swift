@@ -10,7 +10,7 @@ import Testing
 
 struct FlagTests {
     @Test func testCLC() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.CLC.rawValue
@@ -23,7 +23,7 @@ struct FlagTests {
     }
     
     @Test func testCLD() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.CLD.rawValue
@@ -36,7 +36,7 @@ struct FlagTests {
     }
     
     @Test func testCLI() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
     
         memory[0xFFFC] = Opcodes6502.CLI.rawValue
@@ -49,7 +49,7 @@ struct FlagTests {
     }
     
     @Test func testCLV() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.CLV.rawValue
@@ -62,7 +62,7 @@ struct FlagTests {
     }
     
     @Test func testSEC() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.SEC.rawValue
@@ -74,7 +74,7 @@ struct FlagTests {
     }
     
     @Test func testSED() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.SED.rawValue
@@ -86,7 +86,7 @@ struct FlagTests {
     }
     
     @Test func testSEI() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.SEI.rawValue

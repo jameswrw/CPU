@@ -36,7 +36,7 @@ extension CPU6502 {
         (lsb != 0) ? setFlag(flag: .C) : clearFlag(flag: .C)
     }
     
-    /// Bit of a messay function, but at least it keeps the mess in one place.
+    /// Bit of a messy function, but at least it keeps the mess in one place.
     /// (zeroPageAddress + zeroPageOffet) and (zeroPageAddress + zeroPageOffset + 1) contain another address in memory - the target.
     /// Typically either zeroPageOffet or targetOffset may be set, but not both.
     ///

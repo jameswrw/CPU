@@ -18,7 +18,7 @@ struct BitTests {
     
     func testBIT_ZeroPage(value: UInt8, expectedFlags: ExpectedFlags) {
         
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Z = 0, N == 0, V == 0
@@ -35,7 +35,7 @@ struct BitTests {
     
     func testBIT_Absolute(value: UInt8, expectedFlags: ExpectedFlags) {
         
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Z = 0, N == 0, V == 0

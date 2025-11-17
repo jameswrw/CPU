@@ -10,7 +10,7 @@ import Testing
 
 struct TransferTests {
     @Test func testTAX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         cpu.A = 0x64
@@ -46,7 +46,7 @@ struct TransferTests {
     }
     
     @Test func testTXA() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         cpu.X = 0x64
@@ -83,7 +83,7 @@ struct TransferTests {
     }
     
     @Test func testTAY() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         cpu.A = 0x64
@@ -119,7 +119,7 @@ struct TransferTests {
     }
     
     @Test func testTYA() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         cpu.Y = 0x64
