@@ -56,7 +56,7 @@ struct DecrementMemoryTests {
         // Simple decrement.
         memory[0xFFFC] = Opcodes6502.DEC_ZeroPageX.rawValue
         memory[0xFFFD] = 0x70
-        cpu.X = 0x3
+        cpu.X = 0x03
         memory[0x73] = 0x0A
         
         cpu.runForTicks(6)
@@ -69,7 +69,7 @@ struct DecrementMemoryTests {
         cpu.reset()
         memory[0xFFFC] = Opcodes6502.DEC_ZeroPageX.rawValue
         memory[0xFFFD] = 0x70
-        cpu.X = 0x3
+        cpu.X = 0x03
         memory[0x73] = 0x88
 
         cpu.runForTicks(6)
@@ -82,7 +82,7 @@ struct DecrementMemoryTests {
         cpu.reset()
         memory[0xFFFC] = Opcodes6502.DEC_ZeroPageX.rawValue
         memory[0xFFFD] = 0x70
-        cpu.X = 0x3
+        cpu.X = 0x03
         memory[0x73] = 0x01
 
         cpu.runForTicks(6)
@@ -96,7 +96,7 @@ struct DecrementMemoryTests {
         memory[0xFFFC] = Opcodes6502.DEC_ZeroPageX.rawValue
         memory[0xFFFD] = 0xFF
         cpu.X = 0x74
-        memory[0x73] = 0x0
+        memory[0x73] = 0x00
         
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFE)
@@ -156,7 +156,7 @@ struct DecrementMemoryTests {
         memory[0xFFFC] = Opcodes6502.DEC_AbsoluteX.rawValue
         memory[0xFFFD] = 0x00
         memory[0xFFFE] = 0xF0
-        cpu.X = 0xD
+        cpu.X = 0x0D
         memory[0xF00D] = 0x66
         
         cpu.runForTicks(7)
@@ -170,7 +170,7 @@ struct DecrementMemoryTests {
         memory[0xFFFC] = Opcodes6502.DEC_AbsoluteX.rawValue
         memory[0xFFFD] = 0x00
         memory[0xFFFE] = 0xF0
-        cpu.X = 0xD
+        cpu.X = 0x0D
         memory[0xF00D] = 0x99
 
         cpu.runForTicks(7)
@@ -184,7 +184,7 @@ struct DecrementMemoryTests {
         memory[0xFFFC] = Opcodes6502.DEC_AbsoluteX.rawValue
         memory[0xFFFD] = 0x00
         memory[0xFFFE] = 0xF0
-        cpu.X = 0xD
+        cpu.X = 0x0D
         memory[0xF00D] = 0x01
 
         cpu.runForTicks(7)

@@ -6,7 +6,7 @@
 //
 
 public extension CPU6502 {
-       
+    
     // MARK: Reset and run
     func reset() {
         clearFlag(flag: .C)
@@ -24,7 +24,7 @@ public extension CPU6502 {
         X = 0
         Y = 0
     }
-
+    
     func run() {
         runForTicks(-1)
     }
@@ -35,7 +35,7 @@ public extension CPU6502 {
         while true {
             switch nextOpcode() {
                 
-            // MARK: LDAs
+                // MARK: LDAs
             case .LDA_Immediate:
                 A = nextByte()
                 updateNZFlagsFor(newValue: A)
@@ -84,7 +84,7 @@ public extension CPU6502 {
                 )
                 updateNZFlagsFor(newValue: A)
                 tickcount += 5
-
+                
             case .LDX_Immediate:
                 X = nextByte()
                 updateNZFlagsFor(newValue: X)
@@ -108,7 +108,7 @@ public extension CPU6502 {
                 updateNZFlagsFor(newValue: X)
                 tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 0 : 1
                 tickcount += 4
-            
+                
             case .LDY_Immediate:
                 Y = nextByte()
                 updateNZFlagsFor(newValue: Y)
@@ -133,7 +133,7 @@ public extension CPU6502 {
                 tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 0 : 1
                 tickcount += 4
                 
-            // MARK: JMPs
+                // MARK: JMPs
             case .JMP_Absolute:
                 PC = nextWord()
                 tickcount += 3
@@ -149,7 +149,7 @@ public extension CPU6502 {
                 PC = readWord16(addr: Int(nextWord()))
                 tickcount += 5
                 
-            // MARK: Branches
+                // MARK: Branches
             case .BCC:
                 branchOnClear(flag: .C)
             case .BCS:
@@ -167,7 +167,7 @@ public extension CPU6502 {
             case .BVS:
                 branchOnSet(flag: .V)
                 
-            // MARK: Increment memory locations
+                // MARK: Increment memory locations
             case .INC_ZeroPage:
                 let address = nextByte()
                 memory[Int(address)] &+= 1
@@ -189,7 +189,7 @@ public extension CPU6502 {
                 updateNZFlagsFor(newValue: memory[Int(address)])
                 tickcount += 7
                 
-            // MARK: Decrement memory locations
+                // MARK: Decrement memory locations
             case .DEC_ZeroPage:
                 let address = nextByte()
                 memory[Int(address)] &-= 1
@@ -211,7 +211,7 @@ public extension CPU6502 {
                 updateNZFlagsFor(newValue: memory[Int(address)])
                 tickcount += 7
                 
-            // MARK: Stack operations
+                // MARK: Stack operations
             case .TXS:
                 SP = X
                 tickcount += 2
@@ -231,7 +231,7 @@ public extension CPU6502 {
                 F = popByte()
                 tickcount += 4
                 
-            // MARK: Transfer between A, X and Y
+                // MARK: Transfer between A, X and Y
             case .TAX:
                 X = A
                 updateNZFlagsFor(newValue: X)
@@ -248,8 +248,8 @@ public extension CPU6502 {
                 A = Y
                 updateNZFlagsFor(newValue: A)
                 tickcount += 2
-               
-            // MARK: Increment and decrement X and Y
+                
+                // MARK: Increment and decrement X and Y
             case .INX:
                 X &+= 1
                 updateNZFlagsFor(newValue: X)
@@ -267,7 +267,7 @@ public extension CPU6502 {
                 updateNZFlagsFor(newValue: Y)
                 tickcount += 2
                 
-            // MARK: Shifts and rotates
+                // MARK: Shifts and rotates
             case .ASL_Accumulator:
                 let msb = A & 0x80
                 let newValue = A << 1
@@ -363,11 +363,11 @@ public extension CPU6502 {
                 let address = nextWord() &+ UInt16(X)
                 RightShiftShared(address: Int(address), rotate: true)
                 tickcount += 7
-
-            // MARK: Logical
-            // All the logical operations work with A and the operand storing the result in A.
-            
-            // AND
+                
+                // MARK: Bitwise
+                // All the bitwise operations work with A and the operand storing the result in A.
+                
+                // AND
             case .AND_Immediate:
                 A = A & nextByte()
                 updateNZFlagsFor(newValue: A)
@@ -417,8 +417,108 @@ public extension CPU6502 {
                 updateNZFlagsFor(newValue: A)
                 tickcount += 5
                 
-            // MARK: Compare
-            // CMP A
+                // OR
+            case .ORA_Immediate:
+                A = A | nextByte()
+                updateNZFlagsFor(newValue: A)
+                tickcount += 2
+            case .ORA_ZeroPage:
+                A = A | memory[Int(nextByte())]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 3
+            case .ORA_ZeroPageX:
+                A = A | memory[Int(addingSignedByte(UInt16(nextByte()), X))]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 4
+            case .ORA_Absolute:
+                A = A | memory[Int(nextWord())]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 4
+            case .ORA_AbsoluteX:
+                let baseAddress = nextWord()
+                let targetAddress = addingSignedByte(baseAddress, X)
+                A = A | memory[Int(targetAddress)]
+                updateNZFlagsFor(newValue: A)
+                tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
+            case .ORA_AbsoluteY:
+                let baseAddress = nextWord()
+                let targetAddress = addingSignedByte(baseAddress, Y)
+                A = A | memory[Int(targetAddress)]
+                updateNZFlagsFor(newValue: A)
+                tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
+            case .ORA_IndirectX:
+                let zeroPageBase = nextByte()
+                A = A | valueFrom(
+                    zeroPageAddress: zeroPageBase,
+                    zeroPageOffet: X,
+                    targetOffset: 0,
+                    incrementTickcountIfPageBoundaryCrossed: false
+                )
+                updateNZFlagsFor(newValue: A)
+                tickcount += 6
+            case .ORA_IndirectY:
+                let zeroPageBase = nextByte()
+                A = A | valueFrom(
+                    zeroPageAddress: zeroPageBase,
+                    zeroPageOffet: 0,
+                    targetOffset: Y,
+                    incrementTickcountIfPageBoundaryCrossed: true
+                )
+                updateNZFlagsFor(newValue: A)
+                tickcount += 5
+                
+                // XOR
+            case .EOR_Immediate:
+                A = A ^ nextByte()
+                updateNZFlagsFor(newValue: A)
+                tickcount += 2
+            case .EOR_ZeroPage:
+                A = A ^ memory[Int(nextByte())]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 3
+            case .EOR_ZeroPageX:
+                A = A ^ memory[Int(addingSignedByte(UInt16(nextByte()), X))]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 4
+            case .EOR_Absolute:
+                A = A ^ memory[Int(nextWord())]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 4
+            case .EOR_AbsoluteX:
+                let baseAddress = nextWord()
+                let targetAddress = addingSignedByte(baseAddress, X)
+                A = A ^ memory[Int(targetAddress)]
+                updateNZFlagsFor(newValue: A)
+                tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
+            case .EOR_AbsoluteY:
+                let baseAddress = nextWord()
+                let targetAddress = addingSignedByte(baseAddress, Y)
+                A = A ^ memory[Int(targetAddress)]
+                updateNZFlagsFor(newValue: A)
+                tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
+            case .EOR_IndirectX:
+                let zeroPageBase = nextByte()
+                A = A ^ valueFrom(
+                    zeroPageAddress: zeroPageBase,
+                    zeroPageOffet: X,
+                    targetOffset: 0,
+                    incrementTickcountIfPageBoundaryCrossed: false
+                )
+                updateNZFlagsFor(newValue: A)
+                tickcount += 6
+            case .EOR_IndirectY:
+                let zeroPageBase = nextByte()
+                A = A ^ valueFrom(
+                    zeroPageAddress: zeroPageBase,
+                    zeroPageOffet: 0,
+                    targetOffset: Y,
+                    incrementTickcountIfPageBoundaryCrossed: true
+                )
+                updateNZFlagsFor(newValue: A)
+                tickcount += 5
+                
+                // MARK: Compare
+                // CMP A
             case .CMP_Immediate:
                 let value = nextByte()
                 compare(value, withRegister: A)
@@ -466,7 +566,7 @@ public extension CPU6502 {
                 )
                 compare(value, withRegister: A)
                 tickcount +=  5
-            // CMP X
+                // CMP X
             case .CPX_Immediate:
                 let value = nextByte()
                 compare(value, withRegister: X)
@@ -480,7 +580,7 @@ public extension CPU6502 {
                 compare(value, withRegister: X)
                 tickcount += 4
                 
-            // CMP Y
+                // CMP Y
             case .CPY_Immediate:
                 let value = nextByte()
                 compare(value, withRegister: Y)
@@ -494,7 +594,7 @@ public extension CPU6502 {
                 compare(value, withRegister: Y)
                 tickcount += 4
                 
-            // MARK: Stores
+                // MARK: Stores
             case .STA_ZeroPage:
                 A = memory[Int(nextByte())]
                 tickcount += 3
@@ -537,7 +637,7 @@ public extension CPU6502 {
                 Y = memory[Int(nextWord())]
                 tickcount += 4
                 
-            // MARK: Clear flags
+                // MARK: Clear flags
             case .CLC:
                 clearFlag(flag: .C)
                 tickcount += 2
@@ -551,7 +651,7 @@ public extension CPU6502 {
                 clearFlag(flag: .V)
                 tickcount += 2
                 
-            // MARK: Set flags
+                // MARK: Set flags
             case .SEC:
                 setFlag(flag: .C)
                 tickcount += 2
@@ -561,8 +661,8 @@ public extension CPU6502 {
             case .SEI:
                 setFlag(flag: .I)
                 tickcount += 2
-    
-            // MARK: Subroutines
+                
+                // MARK: Subroutines
             case .JSR:
                 let target = nextWord()
                 pushWord(PC - 1)
@@ -572,7 +672,7 @@ public extension CPU6502 {
                 PC = popWord() + 1
                 tickcount += 6
                 
-            // MARK: Misc
+                // MARK: Misc
             case .NOP:
                 tickcount += 2
                 
@@ -586,7 +686,7 @@ public extension CPU6502 {
                 Z ? setFlag(flag: .Z) : clearFlag(flag: .Z)
                 N ? setFlag(flag: .N) : clearFlag(flag: .N)
                 V ? setFlag(flag: .V) : clearFlag(flag: .V)
-
+                
                 tickcount += 3
             case .BIT_Absolute:
                 let value = memory[Int(nextWord())]

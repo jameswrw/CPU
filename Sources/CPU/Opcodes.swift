@@ -113,23 +113,23 @@ public enum Opcodes6502: UInt8 {
     case AND_IndirectX = 0x21       // Test added
     case AND_IndirectY = 0x31       // Test added
     
-    case ORA_Immediate = 0x09
-    case ORA_ZeroPage = 0x05
-    case ORA_ZeroPageX = 0x15
-    case ORA_Absolute = 0x0D
-    case ORA_AbsoluteX = 0x1D
-    case ORA_AbsoluteY = 0x19
-    case ORA_IndirectX = 0x01
-    case ORA_IndirectY = 0x11
+    case ORA_Immediate = 0x09       // Test added
+    case ORA_ZeroPage = 0x05        // Test added
+    case ORA_ZeroPageX = 0x15       // Test added
+    case ORA_Absolute = 0x0D        // Test added
+    case ORA_AbsoluteX = 0x1D       // Test added
+    case ORA_AbsoluteY = 0x19       // Test added
+    case ORA_IndirectX = 0x01       // Test added
+    case ORA_IndirectY = 0x11       // Test added
     
-    case EOR_Immediate = 0x49
-    case EOR_ZeroPage = 0x45
-    case EOR_ZeroPageX = 0x55
-    case EOR_Absolute = 0x4D
-    case EOR_AbsoluteX = 0x5D
-    case EOR_AbsoluteY = 0x59
-    case EOR_IndirectX = 0x41
-    case EOR_IndirectY = 0x51
+    case EOR_Immediate = 0x49       // Test added
+    case EOR_ZeroPage = 0x45        // Test added
+    case EOR_ZeroPageX = 0x55       // Test added
+    case EOR_Absolute = 0x4D        // Test added
+    case EOR_AbsoluteX = 0x5D       // Test added
+    case EOR_AbsoluteY = 0x59       // Test added
+    case EOR_IndirectX = 0x41       // Test added
+    case EOR_IndirectY = 0x51       // Test added
     
     // MARK: Shifts and rotates
     case ASL_Accumulator = 0x0A     // Test added

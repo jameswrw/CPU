@@ -120,7 +120,7 @@ struct ROLTests {
         defer { memory.deallocate() }
         
         // Simple left rotate
-        cpu.X = 0xA
+        cpu.X = 0x0A
         memory[0xFFFC] = Opcodes6502.ROL_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50
         memory[0x5A] = 0x04
@@ -134,7 +134,7 @@ struct ROLTests {
         
         // Left rotate that sets carry flag.
         cpu.reset()
-        cpu.X = 0xA
+        cpu.X = 0x0A
         memory[0xFFFC] = Opcodes6502.ROL_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50
         memory[0x5A] = 0x80
@@ -148,7 +148,7 @@ struct ROLTests {
         
         // Left rotate that sets negative flag.
         cpu.reset()
-        cpu.X = 0xA
+        cpu.X = 0x0A
         memory[0xFFFC] = Opcodes6502.ASL_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50
         memory[0x5A] = 0x40
@@ -162,7 +162,7 @@ struct ROLTests {
         
         // Left rotate that sets zero flag.
         cpu.reset()
-        cpu.X = 0xA
+        cpu.X = 0x0A
         memory[0xFFFC] = Opcodes6502.ROL_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50
         memory[0x5A] = 0x00

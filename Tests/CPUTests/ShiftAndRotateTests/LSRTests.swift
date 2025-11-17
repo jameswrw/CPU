@@ -15,7 +15,7 @@ struct LSRTests {
         
         // Simple right shift.
         memory[0xFFFC] = Opcodes6502.LSR_Accumulator.rawValue
-        cpu.A = 0x8
+        cpu.A = 0x08
         
         cpu.runForTicks(2)
         #expect(cpu.A == 0x04)
@@ -98,7 +98,7 @@ struct LSRTests {
         defer { memory.deallocate() }
         
         // Simple right shift
-        cpu.X = 0xA
+        cpu.X = 0x0A
         memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50
         memory[0x5A] = 0x04
@@ -112,7 +112,7 @@ struct LSRTests {
         
         // Right shift that sets zero and carry flags.
         cpu.reset()
-        cpu.X = 0xA
+        cpu.X = 0x0A
         memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50
         memory[0x5A] = 0x01
@@ -126,7 +126,7 @@ struct LSRTests {
         
         // Right shift can't set the negative flag but it can clear it.
         cpu.reset()
-        cpu.X = 0xA
+        cpu.X = 0x0A
         cpu.setFlag(flag: .N)
         memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50

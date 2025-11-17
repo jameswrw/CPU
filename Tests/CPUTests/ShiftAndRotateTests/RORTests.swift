@@ -15,7 +15,7 @@ struct RORTests {
         
         // Simple right rotate.
         memory[0xFFFC] = Opcodes6502.ROR_Accumulator.rawValue
-        cpu.A = 0x8
+        cpu.A = 0x08
         
         cpu.runForTicks(2)
         #expect(cpu.A == 0x04)
@@ -96,7 +96,7 @@ struct RORTests {
         defer { memory.deallocate() }
         
         // Simple right shift
-        cpu.X = 0xA
+        cpu.X = 0x0A
         memory[0xFFFC] = Opcodes6502.ROR_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50
         memory[0x5A] = 0x04
@@ -110,7 +110,7 @@ struct RORTests {
         
         // Right rotate that sets negative and carry flags.
         cpu.reset()
-        cpu.X = 0xA
+        cpu.X = 0x0A
         memory[0xFFFC] = Opcodes6502.ROR_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50
         memory[0x5A] = 0x01
@@ -124,7 +124,7 @@ struct RORTests {
         
         // Right rotate that clears the negative flag.
         cpu.reset()
-        cpu.X = 0xA
+        cpu.X = 0x0A
         cpu.setFlag(flag: .N)
         memory[0xFFFC] = Opcodes6502.ROR_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50

@@ -41,7 +41,7 @@ struct StackTests {
         
         cpu.A = 0x73
         memory[0xFFFC] = Opcodes6502.PHA.rawValue
-        memory[0x1FF] = 0x0
+        memory[0x1FF] = 0x00
         
         cpu.runForTicks(3)
         #expect(cpu.A == 0x73)
@@ -67,7 +67,7 @@ struct StackTests {
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.PHP.rawValue
-        memory[0x1FF] = 0x0
+        memory[0x1FF] = 0x00
         
         cpu.runForTicks(3)
         #expect(cpu.SP == 0xFE)

@@ -15,7 +15,7 @@ struct ASLTests {
         
         // Simple left shift.
         memory[0xFFFC] = Opcodes6502.ASL_Accumulator.rawValue
-        cpu.A = 0x1
+        cpu.A = 0x01
         
         cpu.runForTicks(2)
         #expect(cpu.A == 0x02)
@@ -95,7 +95,7 @@ struct ASLTests {
         defer { memory.deallocate() }
         
         // Simple left shift
-        cpu.X = 0xA
+        cpu.X = 0x0A
         memory[0xFFFC] = Opcodes6502.ASL_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50
         memory[0x5A] = 0x04
@@ -109,7 +109,7 @@ struct ASLTests {
         
         // Left shift that sets zero and carry flags.
         cpu.reset()
-        cpu.X = 0xA
+        cpu.X = 0x0A
         memory[0xFFFC] = Opcodes6502.ASL_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50
         memory[0x5A] = 0x80
@@ -123,7 +123,7 @@ struct ASLTests {
         
         // Left shift that sets negative flag.
         cpu.reset()
-        cpu.X = 0xA
+        cpu.X = 0x0A
         memory[0xFFFC] = Opcodes6502.ASL_ZeroPageX.rawValue
         memory[0xFFFD] = 0x50
         memory[0x5A] = 0x40
