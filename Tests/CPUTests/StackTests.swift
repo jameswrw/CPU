@@ -10,7 +10,7 @@ import Testing
 
 struct StackTests {
     @Test func testTSX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         cpu.X = 0x42
@@ -23,7 +23,7 @@ struct StackTests {
     }
     
     @Test func testTXS() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         cpu.X = 0x42
@@ -36,7 +36,7 @@ struct StackTests {
     }
     
     @Test func testPHA() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         cpu.A = 0x73
@@ -50,7 +50,7 @@ struct StackTests {
     }
     
     @Test func testPLA() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         cpu.SP = 0xFE
@@ -63,7 +63,7 @@ struct StackTests {
     }
     
     @Test func testPHP() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.PHP.rawValue
@@ -75,7 +75,7 @@ struct StackTests {
     }
     
     @Test func testPLP() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         cpu.SP = 0xFE

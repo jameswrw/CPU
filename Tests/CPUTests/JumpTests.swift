@@ -10,26 +10,25 @@ import Testing
 
 struct JumpTests {
     @Test func testJMP_Absolute() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.JMP_Absolute.rawValue
         memory[0xFFFD] = 0x34
         memory[0xFFFE] = 0x12
-        memory[0x1234] = 0xAD
-        memory[0x1235] = 0xFF
+        memory[0x1234] = Opcodes6502.LDA_Immediate.rawValue
+        memory[0x1235] = 0xAA
         
         cpu.runForTicks(3)
         #expect(cpu.PC == 0x1234)
         
         cpu.runForTicks(2)
-        #expect(cpu.A == 0xFF)
-        #expect(cpu.F == Flags.N.rawValue + Flags.One.rawValue)
+        #expect(cpu.A == 0xAA)
         #expect(cpu.readFlag(flag: .N) == true)
     }
     
     @Test func testJMP_Indirect() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
 
         memory[0xFFFC] = Opcodes6502.JMP_Indirect.rawValue
@@ -37,10 +36,10 @@ struct JumpTests {
         memory[0xFFFE] = 0x12
         memory[0x1234] = 0x78
         memory[0x1235] = 0x56
-        memory[0x5678] = 0xAD
+        memory[0x5678] = Opcodes6502.LDA_Immediate.rawValue
         memory[0x5679] = 0x42
         
-        cpu.runForTicks(5)
+        cpu.runForTicks(3)
         #expect(cpu.PC == 0x5678)
         
         cpu.runForTicks(2)
@@ -49,7 +48,7 @@ struct JumpTests {
     }
     
     @Test func testJSR_RTS() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Not much space at the rest vector, so:

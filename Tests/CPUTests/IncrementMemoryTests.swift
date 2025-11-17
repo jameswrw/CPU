@@ -10,7 +10,7 @@ import Testing
 
 struct IncrementMemoryTests {
     @Test func testINC_ZeroPage() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple increment.
@@ -50,7 +50,7 @@ struct IncrementMemoryTests {
     }
     
     @Test func testINC_ZeroPageX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple increment.
@@ -107,7 +107,7 @@ struct IncrementMemoryTests {
     }
     
     @Test func testINC_Absolute() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple increment.
@@ -150,7 +150,7 @@ struct IncrementMemoryTests {
     }
     
     @Test func testINC_AbsoluteX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple increment.

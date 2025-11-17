@@ -36,10 +36,102 @@ public extension CPU6502 {
             switch nextOpcode() {
                 
             // MARK: LDAs
-            case .LDA_Absolute:
+            case .LDA_Immediate:
                 A = nextByte()
                 updateNZFlagsFor(newValue: A)
                 tickcount += 2
+            case .LDA_ZeroPage:
+                A = memory[Int(nextByte())]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 3
+            case .LDA_ZeroPageX:
+                A = memory[Int(addingSignedByte(UInt16(nextByte()), X))]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 4
+            case .LDA_Absolute:
+                A = memory[Int(nextWord())]
+                updateNZFlagsFor(newValue: A)
+                tickcount += 4
+            case .LDA_AbsoluteX:
+                let baseAddress = nextWord()
+                let targetAddress = addingSignedByte(baseAddress, X)
+                A = memory[Int(targetAddress)]
+                updateNZFlagsFor(newValue: A)
+                tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
+            case .LDA_AbsoluteY:
+                let baseAddress = nextWord()
+                let targetAddress = addingSignedByte(baseAddress, Y)
+                A = memory[Int(targetAddress)]
+                updateNZFlagsFor(newValue: A)
+                tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
+            case .LDA_IndirectX:
+                let zeroPageAddress = nextByte()
+                A = valueFrom(
+                    zeroPageAddress: zeroPageAddress,
+                    zeroPageOffet: X,
+                    targetOffset: 0,
+                    incrementTickcountIfPageBoundaryCrossed: false
+                )
+                updateNZFlagsFor(newValue: A)
+                tickcount += 6
+            case .LDA_IndirectY:
+                let zeroPageAddress = nextByte()
+                A = valueFrom(
+                    zeroPageAddress: zeroPageAddress,
+                    zeroPageOffet: 0,
+                    targetOffset: Y,
+                    incrementTickcountIfPageBoundaryCrossed: true
+                )
+                updateNZFlagsFor(newValue: A)
+                tickcount += 5
+
+            case .LDX_Immediate:
+                X = nextByte()
+                updateNZFlagsFor(newValue: X)
+                tickcount += 2
+            case .LDX_ZeroPage:
+                X = memory[Int(nextByte())]
+                updateNZFlagsFor(newValue: X)
+                tickcount += 3
+            case .LDX_ZeroPageY:
+                X = memory[Int(addingSignedByte(UInt16(nextByte()), Y))]
+                updateNZFlagsFor(newValue: X)
+                tickcount += 4
+            case .LDX_Absolute:
+                X = memory[Int(nextWord())]
+                updateNZFlagsFor(newValue: X)
+                tickcount += 4
+            case .LDX_AbsoluteY:
+                let baseAddress = nextWord()
+                let targetAddress = addingSignedByte(baseAddress, Y)
+                X = memory[Int(targetAddress)]
+                updateNZFlagsFor(newValue: X)
+                tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 0 : 1
+                tickcount += 4
+            
+            case .LDY_Immediate:
+                Y = nextByte()
+                updateNZFlagsFor(newValue: Y)
+                tickcount += 2
+            case .LDY_ZeroPage:
+                Y = memory[Int(nextByte())]
+                updateNZFlagsFor(newValue: Y)
+                tickcount += 3
+            case .LDY_ZeroPageX:
+                Y = memory[Int(addingSignedByte(UInt16(nextByte()), X))]
+                updateNZFlagsFor(newValue: Y)
+                tickcount += 4
+            case .LDY_Absolute:
+                Y = memory[Int(nextWord())]
+                updateNZFlagsFor(newValue: Y)
+                tickcount += 4
+            case .LDY_AbsoluteX:
+                let baseAddress = nextWord()
+                let targetAddress = addingSignedByte(baseAddress, X)
+                Y = memory[Int(targetAddress)]
+                updateNZFlagsFor(newValue: Y)
+                tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 0 : 1
+                tickcount += 4
                 
             // MARK: JMPs
             case .JMP_Absolute:

@@ -10,7 +10,7 @@ import Testing
 
 struct DecrementRegisterTests {
     @Test func testDEX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.DEX.rawValue
@@ -41,7 +41,7 @@ struct DecrementRegisterTests {
     }
     
     @Test func testDEY() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         cpu.Y = 0x64

@@ -10,7 +10,7 @@ import Testing
 
 struct DecrementMemoryTests {
     @Test func testDEC_ZeroPage() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple decrement.
@@ -50,7 +50,7 @@ struct DecrementMemoryTests {
     }
     
     @Test func testDEC_ZeroPageX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple decrement.
@@ -106,7 +106,7 @@ struct DecrementMemoryTests {
     }
     
     @Test func testDEC_Absolute() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple decrement.
@@ -149,7 +149,7 @@ struct DecrementMemoryTests {
     }
     
     @Test func testDEC_AbsoluteX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple decrement.

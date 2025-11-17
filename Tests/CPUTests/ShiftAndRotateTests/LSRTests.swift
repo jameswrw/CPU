@@ -10,7 +10,7 @@ import Testing
 
 struct LSRTests {
     @Test func testLSR_Accumulator() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple right shift.
@@ -49,7 +49,7 @@ struct LSRTests {
     }
     
     @Test func testLSR_ZeroPage() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple right shift.
@@ -94,7 +94,7 @@ struct LSRTests {
     }
     
     @Test func testLSR_ZeroPageX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple right shift
@@ -141,7 +141,7 @@ struct LSRTests {
     }
     
     @Test func testLSR_Absolute() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple right shift.
@@ -188,7 +188,7 @@ struct LSRTests {
     }
     
     @Test func testLSR_AbsoluteX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple left shift

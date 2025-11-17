@@ -8,7 +8,7 @@ import Foundation
 @testable import CPU
 
 @inline(__always)
-internal func testCPU(assertInitialState: Bool = true) -> (CPU6502, UnsafeMutablePointer<UInt8>) {
+internal func initCPU(assertInitialState: Bool = true) -> (CPU6502, UnsafeMutablePointer<UInt8>) {
     let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
     
     // 0xFF is an invalid opcode, so this should help catch some unitialised memory and tickcount issues.

@@ -21,7 +21,7 @@ struct BranchTests {
     
     // All the flag tests are very similar, so consolidate them into a shared utility function.
     func testBranch(flag: Flags, branchIfFlagSet: Bool, opcode: Opcodes6502) async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple branch forwards.

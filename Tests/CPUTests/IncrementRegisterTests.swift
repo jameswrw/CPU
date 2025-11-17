@@ -10,7 +10,7 @@ import Testing
 
 struct IncrementRegisterTests {
     @Test func testINX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.INX.rawValue
@@ -41,7 +41,7 @@ struct IncrementRegisterTests {
     }
     
     @Test func testINY() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         memory[0xFFFC] = Opcodes6502.INY.rawValue

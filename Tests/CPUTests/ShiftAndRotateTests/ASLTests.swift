@@ -10,7 +10,7 @@ import Testing
 
 struct ASLTests {
     @Test func testASL_Accumulator() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple left shift.
@@ -48,7 +48,7 @@ struct ASLTests {
     }
     
     @Test func testASL_ZeroPage() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple left shift.
@@ -91,7 +91,7 @@ struct ASLTests {
     }
     
     @Test func testASL_ZeroPageX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple left shift
@@ -137,7 +137,7 @@ struct ASLTests {
     }
     
     @Test func testASL_Absolute() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple left shift.
@@ -183,7 +183,7 @@ struct ASLTests {
     }
     
     @Test func testASL_AbsoluteX() async throws {
-        let (cpu, memory) = testCPU()
+        let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
         // Simple left shift

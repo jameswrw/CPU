@@ -12,7 +12,7 @@ struct StoreTests {
     
     struct TestSTA {
         @Test func testSTA_ZeroPage() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.A = 0x00
@@ -25,7 +25,7 @@ struct StoreTests {
         }
         
         @Test func testSTA_ZeroPageX() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.A = 0x00
@@ -39,7 +39,7 @@ struct StoreTests {
         }
         
         @Test func testSTA_Absolute() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.A = 0x00
@@ -53,7 +53,7 @@ struct StoreTests {
         }
         
         @Test func testSTA_AbsoluteX() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.A = 0x00
@@ -68,7 +68,7 @@ struct StoreTests {
         }
         
         @Test func testSTA_AbsoluteY() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.A = 0x00
@@ -83,7 +83,7 @@ struct StoreTests {
         }
         
         @Test func testSTA_IndirectX() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.A = 0x00
@@ -99,7 +99,7 @@ struct StoreTests {
         }
         
         @Test func testSTA_IndirectY() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.A = 0x00
@@ -117,7 +117,7 @@ struct StoreTests {
     
     struct TestSTX {
         @Test func testSTX_Zeropage() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.X = 0x00
@@ -130,7 +130,7 @@ struct StoreTests {
         }
         
         @Test func testSTX_ZeropageY() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.X = 0x00
@@ -144,7 +144,7 @@ struct StoreTests {
         }
         
         @Test func testSTX_Absolute() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.X = 0x00
@@ -160,7 +160,7 @@ struct StoreTests {
     
     struct TestSTY {
         @Test func testSTY_Zeropage() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.Y = 0x00
@@ -173,7 +173,7 @@ struct StoreTests {
         }
         
         @Test func testSTY_ZeropageX() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.X = 0x10
@@ -187,7 +187,7 @@ struct StoreTests {
         }
         
         @Test func testSTY_Absolute() async throws {
-            let (cpu, memory) = testCPU()
+            let (cpu, memory) = initCPU()
             defer { memory.deallocate() }
             
             cpu.Y = 0x00
