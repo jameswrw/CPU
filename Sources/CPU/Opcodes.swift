@@ -94,7 +94,7 @@ public enum Opcodes6502: UInt8 {
     case ADC_IndirectY = 0x71
     
     // MARK: Subtract with carry
-    case SBC_Immidiate = 0xE9
+    case SBC_Immediate = 0xE9
     case SBC_ZeroPage = 0xE5
     case SBC_ZeroPageX = 0xF5
     case SBC_Absolute = 0xED

@@ -6,12 +6,14 @@
 //
 
 extension CPU6502 {
+    
     // MARK: Utilities
     internal func updateNZFlagsFor(newValue: UInt8) {
         (newValue == 0) ? setFlag(flag: .Z) : clearFlag(flag: .Z)
         (newValue & 0x80 != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
     }
     
+    // MARK: Shifts
     internal func LeftShiftShared(address: Int, rotate: Bool) {
         let byte = memory[Int(address)]
         let msb = byte & 0x80
@@ -36,6 +38,8 @@ extension CPU6502 {
         (lsb != 0) ? setFlag(flag: .C) : clearFlag(flag: .C)
     }
     
+    // MARK: Indirect addressing helper
+    
     /// Bit of a messy function, but at least it keeps the mess in one place.
     /// (zeroPageAddress + zeroPageOffet) and (zeroPageAddress + zeroPageOffset + 1) contain another address in memory - the target.
     /// Typically either zeroPageOffet or targetOffset may be set, but not both.
@@ -51,27 +55,112 @@ extension CPU6502 {
         targetOffset: UInt8,
         incrementTickcountIfPageBoundaryCrossed: Bool
     ) -> UInt8 {
-        let offsetZeroPageAddress = addingSignedByte(UInt16(zeroPageAddress), zeroPageOffet)
+        let offsetZeroPageAddress = addSignedByte(UInt16(zeroPageAddress), zeroPageOffet)
         let loByte = memory[Int(offsetZeroPageAddress)]
         let hiByte = memory[Int(offsetZeroPageAddress + 1)]
         let targetAddress = (UInt16(hiByte) << 8) | (UInt16(loByte))
-        let offsetTargetAddress = addingSignedByte(targetAddress, targetOffset)
+        let offsetTargetAddress = addSignedByte(targetAddress, targetOffset)
         if incrementTickcountIfPageBoundaryCrossed {
             tickcount +=  samePage(address1: targetAddress, address2: offsetTargetAddress) ? 0 : 1
         }
         return memory[Int(offsetTargetAddress)]
     }
 
-    internal func addingSignedByte(_ base: UInt16, _ deltaUnsigned: UInt8) -> UInt16 {
+    /// Are address1 and address2 on the same page, where a page is a block of 100 bytes.
+    /// Page 1: 0x0000 -> 0x00FF
+    /// Page 2: 0x0100 -> 0x01FF
+    /// Page 3: 0x0200 -> 0x02FF
+    /// etc.
+    internal func samePage(address1: UInt16, address2: UInt16) -> Bool {
+        address1 & 0x100 == address2 & 0x100
+    }
+    
+    // MARK: Adds and subtracts
+    /// Performs ad addition of deltaUnsigned to base where deltaUnsigned is treated as a signed quantiy. e.g.:
+    ///   0x200 + 0x33 -> 0x233
+    ///   0x 200 + 0xFF -> 0x1FF
+    internal func addSignedByte(_ base: UInt16, _ deltaUnsigned: UInt8) -> UInt16 {
         let deltaSigned = Int8(bitPattern: deltaUnsigned)
         let sumSigned = Int16(bitPattern: base) &+ Int16(deltaSigned)
         return UInt16(bitPattern: sumSigned)
     }
     
-    internal func samePage(address1: UInt16, address2: UInt16) -> Bool {
-        address1 & 0x100 == address2 & 0x100
+    /// Treats the arguments as BCD and returns a BCD value.
+    /// num0 == 0x15, num1 == 0x28 would return 0x43 and not 0x3D as a normal hex addition would yield.
+    /// Any value with any nibble with a value between A-F is undefined behaviour.
+    ///
+    ///  There is some guidance on the undefined bhaviour here: http://www.6502.org/tutorials/decimal_mode.html#A
+    ///  For the time being at least this implementation willl just do something undefined.
+    ///
+    /// From: http://www.6502.org/tutorials/decimal_mode.html#3.2.1
+    /// • When the carry is clear, ADC NUM performs the calculation A = A + NUM
+    /// • When the carry is set, ADC NUM performs the calculation A = A + NUM + 1
+    ///
+    ///  Prerequisite: D flag is set.
+    ///  Side effects: N, Z, C flags are set appropriately. V's behaviour is undefined for decimal mode. This implementation ignores it.
+    internal func addDecimal(_ num0: UInt8, to num1: UInt8) -> UInt8 {
+        assert(readFlag(flag: .D), "Called addDecimal() in hex mode")
+        let loByte0 = num0 & 0x0F
+        let hiByte0 = (num0 & 0xF0) >> 4
+        let loByte1 = num1 & 0x0F
+        let hiByte1 = (num1 & 0xF0) >> 4
+        
+        var internalCarry: UInt16 = 0
+        var loByteResult = UInt16(loByte0) + UInt16(loByte1) + UInt16(readFlag(flag: .C) ? 1 : 0)
+        if loByteResult > 0x09 {
+            loByteResult -= 0x0A
+            internalCarry = 1
+        }
+        
+        var hiByteResult = UInt16(hiByte0) + UInt16(hiByte1) + internalCarry
+        if hiByteResult > 0x09 {
+            hiByteResult -= 0x0A
+            setFlag(flag: .C)
+        } else {
+            clearFlag(flag: .C)
+        }
+        
+        let result = UInt8((hiByteResult << 0x4) | loByteResult)
+        updateNZFlagsFor(newValue: result)
+        return result
     }
     
+    /// Same as addDecimal, including undefined behaviour handling, but performs subtraction.
+    ///
+    /// From: http://www.6502.org/tutorials/decimal_mode.html#3.2.1
+    /// • When the carry is clear, SBC NUM performs the calculation A = A - NUM - 1
+    /// • When the carry is set, SBC NUM performs the calculation A = A - NUM
+    /// 
+    ///  Prerequisite: D flag is set.
+    ///  Side effects: N, Z, C flags are set appropriately. V's behaviour is undefined for decimal mode. This implementation ignores it.
+    internal func subtractDecimal(_ num0: UInt8, from num1: UInt8) -> UInt8 {
+        assert(readFlag(flag: .D), "Called subtractDecimal() in hex mode")
+        let loByte0 = num0 & 0x0F
+        let hiByte0 = (num0 & 0xF0) >> 4
+        let loByte1 = num1 & 0x0F
+        let hiByte1 = (num1 & 0xF0) >> 4
+        
+        var internalCarry: Int16 = 0
+        var loByteResult = Int16(loByte1) - Int16(loByte0) - Int16(readFlag(flag: .C) ? 0 : 1)
+        if loByteResult < 0x0 {
+            loByteResult += 0xA
+            internalCarry = 1
+        }
+        
+        var hiByteResult = Int16(hiByte1) - Int16(hiByte0) - internalCarry
+        if hiByteResult < 0x0 {
+            hiByteResult += 0xA
+            setFlag(flag: .C)
+        } else {
+            clearFlag(flag: .C)
+        }
+        
+        let result = UInt8((hiByteResult << 0x4) | loByteResult)
+        updateNZFlagsFor(newValue: result)
+        return result
+    }
+    
+    // MARK: Branch and compare
     internal func branchOnSet(flag: Flags) {
         branch(flag: flag, branchIfSet: true)
     }
@@ -80,12 +169,13 @@ extension CPU6502 {
         branch(flag: flag, branchIfSet: false, advanceTickcountOnPageChange: advanceTickcountOnPageChange)
     }
     
+    /// Side effect: modifies tickcount and PC.
     internal func branch(flag: Flags, branchIfSet: Bool, advanceTickcountOnPageChange: Bool = true) {
         let delta = nextByte()
         tickcount += 2
         let branch = branchIfSet ? readFlag(flag: flag) : !readFlag(flag: flag)
         if branch {
-            let target = addingSignedByte(PC, delta)
+            let target = addSignedByte(PC, delta)
             if !samePage(address1: PC, address2: target) {
                 if advanceTickcountOnPageChange {
                     tickcount += 1
