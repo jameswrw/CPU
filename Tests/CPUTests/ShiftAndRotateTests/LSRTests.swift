@@ -14,7 +14,7 @@ struct LSRTests {
         defer { memory.deallocate() }
         
         // Simple right shift.
-        memory[0xFFFC] = Opcodes6502.LSR_Accumulator.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_Accumulator.rawValue
         cpu.A = 0x08
         
         cpu.runForTicks(2)
@@ -25,7 +25,7 @@ struct LSRTests {
         
         // Right shift that sets zero and carry flags.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.LSR_Accumulator.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_Accumulator.rawValue
         cpu.A = 0x01
         
         cpu.runForTicks(2)
@@ -36,7 +36,7 @@ struct LSRTests {
         
         // Right shift can't set the negative flag but it can clear it.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.LSR_Accumulator.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_Accumulator.rawValue
         cpu.A = 0xFF
         cpu.setFlag(.N)
         
@@ -53,8 +53,8 @@ struct LSRTests {
         defer { memory.deallocate() }
         
         // Simple right shift.
-        memory[0xFFFC] = Opcodes6502.LSR_ZeroPage.rawValue
-        memory[0xFFFD] = 0xBB
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_ZeroPage.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0xBB
         memory[0xBB] = 0x42
         
         cpu.runForTicks(5)
@@ -66,8 +66,8 @@ struct LSRTests {
         
         // Right shift that sets zero and carry flags.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.LSR_ZeroPage.rawValue
-        memory[0xFFFD] = 0xBB
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_ZeroPage.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0xBB
         memory[0xBB] = 0x01
         cpu.setFlag(.N)
         
@@ -81,8 +81,8 @@ struct LSRTests {
         // Right shift can't set the negative flag but it can clear it.
         cpu.reset()
         cpu.setFlag(.N)
-        memory[0xFFFC] = Opcodes6502.LSR_ZeroPage.rawValue
-        memory[0xFFFD] = 0xBB
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_ZeroPage.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0xBB
         memory[0xBB] = 0xFF
         
         cpu.runForTicks(5)
@@ -99,8 +99,8 @@ struct LSRTests {
         
         // Simple right shift
         cpu.X = 0x0A
-        memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
-        memory[0xFFFD] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_ZeroPageX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
         memory[0x5A] = 0x04
         
         cpu.runForTicks(6)
@@ -113,8 +113,8 @@ struct LSRTests {
         // Right shift that sets zero and carry flags.
         cpu.reset()
         cpu.X = 0x0A
-        memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
-        memory[0xFFFD] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_ZeroPageX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
         memory[0x5A] = 0x01
         
         cpu.runForTicks(6)
@@ -128,8 +128,8 @@ struct LSRTests {
         cpu.reset()
         cpu.X = 0x0A
         cpu.setFlag(.N)
-        memory[0xFFFC] = Opcodes6502.LSR_ZeroPageX.rawValue
-        memory[0xFFFD] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_ZeroPageX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
         memory[0x5A] = 0xFF
         
         cpu.runForTicks(6)
@@ -145,9 +145,9 @@ struct LSRTests {
         defer { memory.deallocate() }
         
         // Simple right shift.
-        memory[0xFFFC] = Opcodes6502.LSR_Absolute.rawValue
-        memory[0xFFFD] = 0x11
-        memory[0xFFFE] = 0x22
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x11
+        memory[Int(cpu.resetVector + 2)] = 0x22
         memory[0x2211] = 0x08
         
         cpu.runForTicks(6)
@@ -159,9 +159,9 @@ struct LSRTests {
         
         // Right shift that sets zero and carry flags.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.LSR_Absolute.rawValue
-        memory[0xFFFD] = 0x11
-        memory[0xFFFE] = 0x22
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x11
+        memory[Int(cpu.resetVector + 2)] = 0x22
         memory[0x2211] = 0x01
         
         cpu.runForTicks(6)
@@ -174,9 +174,9 @@ struct LSRTests {
         // Right shift can't set the negative flag but it can clear it.
         cpu.reset()
         cpu.setFlag(.N)
-        memory[0xFFFC] = Opcodes6502.LSR_Absolute.rawValue
-        memory[0xFFFD] = 0x11
-        memory[0xFFFE] = 0x22
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x11
+        memory[Int(cpu.resetVector + 2)] = 0x22
         memory[0x2211] = 0xFF
         
         cpu.runForTicks(6)
@@ -193,9 +193,9 @@ struct LSRTests {
         
         // Simple left shift
         cpu.X = 0xAA
-        memory[0xFFFC] = Opcodes6502.LSR_AbsoluteX.rawValue
-        memory[0xFFFD] = 0x50
-        memory[0xFFFE] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[Int(cpu.resetVector + 2)] = 0x50
         memory[0x50FA] = 0x04
         
         cpu.runForTicks(7)
@@ -208,9 +208,9 @@ struct LSRTests {
         // Right shift that sets zero and carry flags.
         cpu.reset()
         cpu.X = 0xAA
-        memory[0xFFFC] = Opcodes6502.LSR_AbsoluteX.rawValue
-        memory[0xFFFD] = 0x50
-        memory[0xFFFE] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[Int(cpu.resetVector + 2)] = 0x50
         memory[0x50FA] = 0x01
         
         cpu.runForTicks(7)
@@ -224,9 +224,9 @@ struct LSRTests {
         cpu.reset()
         cpu.X = 0xAA
         cpu.setFlag(.N)
-        memory[0xFFFC] = Opcodes6502.LSR_AbsoluteX.rawValue
-        memory[0xFFFD] = 0x50
-        memory[0xFFFE] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[Int(cpu.resetVector + 2)] = 0x50
         memory[0x50FA] = 0xFF
         
         cpu.runForTicks(7)

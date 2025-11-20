@@ -16,8 +16,8 @@ struct CMPTests {
         for (i, CompareTestInput) in compareTestInputs.enumerated() {
             cpu.reset()
             cpu.A = CompareTestInput.registerValue
-            memory[0xFFFC] = Opcodes6502.CMP_Immediate.rawValue
-            memory[0xFFFD] = CompareTestInput.value
+            memory[Int(cpu.resetVector)] = Opcodes6502.CMP_Immediate.rawValue
+            memory[Int(cpu.resetVector + 1)] = CompareTestInput.value
             
             cpu.runForTicks(2)
             testCMP(cpu: cpu, CompareTestOutput: compareTestOutputs[i])
@@ -31,8 +31,8 @@ struct CMPTests {
         for (i, CompareTestInput) in compareTestInputs.enumerated() {
             cpu.reset()
             cpu.A = CompareTestInput.registerValue
-            memory[0xFFFC] = Opcodes6502.CMP_ZeroPage.rawValue
-            memory[0xFFFD] = 0x55
+            memory[Int(cpu.resetVector)] = Opcodes6502.CMP_ZeroPage.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x55
             memory[0x55] = CompareTestInput.value
             
             cpu.runForTicks(3)
@@ -48,8 +48,8 @@ struct CMPTests {
             cpu.reset()
             cpu.A = CompareTestInput.registerValue
             cpu.X = 0x10
-            memory[0xFFFC] = Opcodes6502.CMP_ZeroPageX.rawValue
-            memory[0xFFFD] = 0x55
+            memory[Int(cpu.resetVector)] = Opcodes6502.CMP_ZeroPageX.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x55
             memory[0x65] = CompareTestInput.value
             
             cpu.runForTicks(4)
@@ -64,9 +64,9 @@ struct CMPTests {
         for (i, CompareTestInput) in compareTestInputs.enumerated() {
             cpu.reset()
             cpu.A = CompareTestInput.registerValue
-            memory[0xFFFC] = Opcodes6502.CMP_Absolute.rawValue
-            memory[0xFFFD] = 0x34
-            memory[0xFFFE] = 0x12
+            memory[Int(cpu.resetVector)] = Opcodes6502.CMP_Absolute.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x34
+            memory[Int(cpu.resetVector + 2)] = 0x12
             memory[0x1234] = CompareTestInput.value
             
             cpu.runForTicks(4)
@@ -84,9 +84,9 @@ struct CMPTests {
             cpu.A = CompareTestInput.registerValue
             cpu.X = 0x10
             
-            memory[0xFFFC] = Opcodes6502.CMP_AbsoluteX.rawValue
-            memory[0xFFFD] = 0x78
-            memory[0xFFFE] = 0x56
+            memory[Int(cpu.resetVector)] = Opcodes6502.CMP_AbsoluteX.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x78
+            memory[Int(cpu.resetVector + 2)] = 0x56
             memory[0x5688] = CompareTestInput.value
             
             cpu.runForTicks(4)
@@ -98,9 +98,9 @@ struct CMPTests {
             cpu.reset()
             cpu.A = CompareTestInput.registerValue
             cpu.X = 0x10
-            memory[0xFFFC] = Opcodes6502.CMP_AbsoluteX.rawValue
-            memory[0xFFFD] = 0xF0
-            memory[0xFFFE] = 0xA0
+            memory[Int(cpu.resetVector)] = Opcodes6502.CMP_AbsoluteX.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0xF0
+            memory[Int(cpu.resetVector + 2)] = 0xA0
             memory[0xA100] = CompareTestInput.value
             
             let oldTickcount = cpu.tickcount
@@ -119,9 +119,9 @@ struct CMPTests {
             cpu.reset()
             cpu.A = CompareTestInput.registerValue
             cpu.Y = 0x10
-            memory[0xFFFC] = Opcodes6502.CMP_AbsoluteY.rawValue
-            memory[0xFFFD] = 0x73
-            memory[0xFFFE] = 0x19
+            memory[Int(cpu.resetVector)] = Opcodes6502.CMP_AbsoluteY.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x73
+            memory[Int(cpu.resetVector + 2)] = 0x19
             memory[0x1983] = CompareTestInput.value
             
             let oldTickcount = cpu.tickcount
@@ -135,9 +135,9 @@ struct CMPTests {
             cpu.reset()
             cpu.A = CompareTestInput.registerValue
             cpu.Y = 0x10
-            memory[0xFFFC] = Opcodes6502.CMP_AbsoluteY.rawValue
-            memory[0xFFFD] = 0xF0
-            memory[0xFFFE] = 0x40
+            memory[Int(cpu.resetVector)] = Opcodes6502.CMP_AbsoluteY.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0xF0
+            memory[Int(cpu.resetVector + 2)] = 0x40
             memory[0x4100] = CompareTestInput.value
             
             let oldTickcount = cpu.tickcount
@@ -155,8 +155,8 @@ struct CMPTests {
             cpu.reset()
             cpu.A = CompareTestInput.registerValue
             cpu.X = 0x10
-            memory[0xFFFC] = Opcodes6502.CMP_IndirectX.rawValue
-            memory[0xFFFD] = 0x42
+            memory[Int(cpu.resetVector)] = Opcodes6502.CMP_IndirectX.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x42
             memory[0x52] = 0x73
             memory[0x53] = 0x19
             memory[0x1973] = CompareTestInput.value
@@ -175,8 +175,8 @@ struct CMPTests {
             cpu.reset()
             cpu.A = CompareTestInput.registerValue
             cpu.Y = 0x10
-            memory[0xFFFC] = Opcodes6502.CMP_IndirectY.rawValue
-            memory[0xFFFD] = 0x22
+            memory[Int(cpu.resetVector)] = Opcodes6502.CMP_IndirectY.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x22
             memory[0x22] = 0x04
             memory[0x23] = 0x20
             memory[0x2014] = CompareTestInput.value
@@ -192,8 +192,8 @@ struct CMPTests {
             cpu.reset()
             cpu.A = CompareTestInput.registerValue
             cpu.Y = 0x40
-            memory[0xFFFC] = Opcodes6502.CMP_IndirectY.rawValue
-            memory[0xFFFD] = 0x22
+            memory[Int(cpu.resetVector)] = Opcodes6502.CMP_IndirectY.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x22
             memory[0x22] = 0xF0
             memory[0x23] = 0x30
             memory[0x3130] = CompareTestInput.value

@@ -13,7 +13,7 @@ struct IncrementRegisterTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[0xFFFC] = Opcodes6502.INX.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.INX.rawValue
         cpu.X = 0x64
 
         cpu.runForTicks(2)
@@ -22,7 +22,7 @@ struct IncrementRegisterTests {
         #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INX.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.INX.rawValue
         cpu.X = 0xFF
 
         cpu.runForTicks(2)
@@ -31,7 +31,7 @@ struct IncrementRegisterTests {
         #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INX.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.INX.rawValue
         cpu.X = 0x7F
 
         cpu.runForTicks(2)
@@ -44,7 +44,7 @@ struct IncrementRegisterTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[0xFFFC] = Opcodes6502.INY.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.INY.rawValue
         cpu.Y = 0x64
 
         cpu.runForTicks(2)
@@ -53,7 +53,7 @@ struct IncrementRegisterTests {
         #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INY.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.INY.rawValue
         cpu.Y = 0xFF
 
         cpu.runForTicks(2)
@@ -62,7 +62,7 @@ struct IncrementRegisterTests {
         #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INY.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.INY.rawValue
         cpu.Y = 0x7F
 
         cpu.runForTicks(2)

@@ -13,7 +13,7 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[0xFFFC] = Opcodes6502.CLC.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.CLC.rawValue
         cpu.setFlag(.C)
         #expect(cpu.readFlag(.C) == true)
         
@@ -26,7 +26,7 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[0xFFFC] = Opcodes6502.CLD.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.CLD.rawValue
         cpu.setFlag(.D)
         #expect(cpu.readFlag(.D) == true)
         
@@ -39,7 +39,8 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
     
-        memory[0xFFFC] = Opcodes6502.CLI.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.CLI.rawValue
+        #expect(cpu.readFlag(.I) == true)
         cpu.setFlag(.I)
         #expect(cpu.readFlag(.I) == true)
         
@@ -52,7 +53,7 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[0xFFFC] = Opcodes6502.CLV.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.CLV.rawValue
         cpu.setFlag(.V)
         #expect(cpu.readFlag(.V) == true)
         
@@ -65,7 +66,7 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[0xFFFC] = Opcodes6502.SEC.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.SEC.rawValue
         #expect(cpu.readFlag(.C) == false)
         
         cpu.runForTicks(2)
@@ -77,7 +78,7 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[0xFFFC] = Opcodes6502.SED.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.SED.rawValue
         #expect(cpu.readFlag(.D) == false)
 
         cpu.runForTicks(2)
@@ -89,8 +90,8 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[0xFFFC] = Opcodes6502.SEI.rawValue
-        #expect(cpu.readFlag(.I) == false)
+        memory[Int(cpu.resetVector)] = Opcodes6502.SEI.rawValue
+        #expect(cpu.readFlag(.I) == true)
         
         cpu.runForTicks(2)
         #expect(cpu.PC == 0xFFFD)

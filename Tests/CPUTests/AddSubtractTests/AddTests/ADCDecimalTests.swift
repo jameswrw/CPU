@@ -36,8 +36,8 @@ struct ADCDecimalTests {
                 useCarry ? cpu.setFlag(.C) : cpu.clearFlag(.C)
                 cpu.setFlag(.D)
                 cpu.A = payload.initialA
-                memory[0xFFFC] = Opcodes6502.ADC_Immediate.rawValue
-                memory[0xFFFD] = payload.operand
+                memory[Int(cpu.resetVector)] = Opcodes6502.ADC_Immediate.rawValue
+                memory[Int(cpu.resetVector + 1)] = payload.operand
                 
                 cpu.runForTicks(2)
                 #expect(cpu.A == payload.result)
@@ -62,8 +62,8 @@ struct ADCDecimalTests {
                 useCarry ? cpu.setFlag(.C) : cpu.clearFlag(.C)
                 cpu.setFlag(.D)
                 cpu.A = payload.initialA
-                memory[0xFFFC] = Opcodes6502.ADC_ZeroPage.rawValue
-                memory[0xFFFD] = 0x42
+                memory[Int(cpu.resetVector)] = Opcodes6502.ADC_ZeroPage.rawValue
+                memory[Int(cpu.resetVector + 1)] = 0x42
                 memory[0x42] = payload.operand
                 
                 cpu.runForTicks(3)
@@ -91,8 +91,8 @@ struct ADCDecimalTests {
                 cpu.setFlag(.D)
                 cpu.A = payload.initialA
                 cpu.X = 0x20
-                memory[0xFFFC] = Opcodes6502.ADC_ZeroPageX.rawValue
-                memory[0xFFFD] = 0x42
+                memory[Int(cpu.resetVector)] = Opcodes6502.ADC_ZeroPageX.rawValue
+                memory[Int(cpu.resetVector + 1)] = 0x42
                 memory[0x62] = payload.operand
                 
                 cpu.runForTicks(4)
@@ -119,9 +119,9 @@ struct ADCDecimalTests {
                 useCarry ? cpu.setFlag(.C) : cpu.clearFlag(.C)
                 cpu.setFlag(.D)
                 cpu.A = payload.initialA
-                memory[0xFFFC] = Opcodes6502.ADC_Absolute.rawValue
-                memory[0xFFFD] = 0x34
-                memory[0xFFFE] = 0x12
+                memory[Int(cpu.resetVector)] = Opcodes6502.ADC_Absolute.rawValue
+                memory[Int(cpu.resetVector + 1)] = 0x34
+                memory[Int(cpu.resetVector + 2)] = 0x12
                 memory[0x1234] = payload.operand
                 
                 cpu.runForTicks(4)
@@ -149,9 +149,9 @@ struct ADCDecimalTests {
                 cpu.setFlag(.D)
                 cpu.A = payload.initialA
                 cpu.X = 0x20
-                memory[0xFFFC] = Opcodes6502.ADC_AbsoluteX.rawValue
-                memory[0xFFFD] = 0x34
-                memory[0xFFFE] = 0x12
+                memory[Int(cpu.resetVector)] = Opcodes6502.ADC_AbsoluteX.rawValue
+                memory[Int(cpu.resetVector + 1)] = 0x34
+                memory[Int(cpu.resetVector + 2)] = 0x12
                 memory[0x1254] = payload.operand
                 
                 cpu.runForTicks(4)
@@ -170,9 +170,9 @@ struct ADCDecimalTests {
         cpu.setFlag(.D)
         cpu.A = 0x25
         cpu.X = 0x20
-        memory[0xFFFC] = Opcodes6502.ADC_AbsoluteX.rawValue
-        memory[0xFFFD] = 0xF0
-        memory[0xFFFE] = 0x56
+        memory[Int(cpu.resetVector)] = Opcodes6502.ADC_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0xF0
+        memory[Int(cpu.resetVector + 2)] = 0x56
         memory[0x5710] = 0x32
         
         cpu.runForTicks(5)
@@ -197,9 +197,9 @@ struct ADCDecimalTests {
                 cpu.setFlag(.D)
                 cpu.A = payload.initialA
                 cpu.Y = 0x20
-                memory[0xFFFC] = Opcodes6502.ADC_AbsoluteY.rawValue
-                memory[0xFFFD] = 0x34
-                memory[0xFFFE] = 0x12
+                memory[Int(cpu.resetVector)] = Opcodes6502.ADC_AbsoluteY.rawValue
+                memory[Int(cpu.resetVector + 1)] = 0x34
+                memory[Int(cpu.resetVector + 2)] = 0x12
                 memory[0x1254] = payload.operand
                 
                 cpu.runForTicks(4)
@@ -218,9 +218,9 @@ struct ADCDecimalTests {
         cpu.setFlag(.D)
         cpu.A = 0x25
         cpu.Y = 0x20
-        memory[0xFFFC] = Opcodes6502.ADC_AbsoluteY.rawValue
-        memory[0xFFFD] = 0xF0
-        memory[0xFFFE] = 0x56
+        memory[Int(cpu.resetVector)] = Opcodes6502.ADC_AbsoluteY.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0xF0
+        memory[Int(cpu.resetVector + 2)] = 0x56
         memory[0x5710] = 0x32
         
         cpu.runForTicks(5)
@@ -245,8 +245,8 @@ struct ADCDecimalTests {
                 cpu.setFlag(.D)
                 cpu.A = payload.initialA
                 cpu.X = 0x20
-                memory[0xFFFC] = Opcodes6502.ADC_IndirectX.rawValue
-                memory[0xFFFD] = 0x34
+                memory[Int(cpu.resetVector)] = Opcodes6502.ADC_IndirectX.rawValue
+                memory[Int(cpu.resetVector + 1)] = 0x34
                 memory[0x54] = 0x78
                 memory[0x55] = 0x56
                 memory[0x5678] = payload.operand
@@ -276,13 +276,13 @@ struct ADCDecimalTests {
                 cpu.setFlag(.D)
                 cpu.A = payload.initialA
                 cpu.Y = 0x20
-                memory[0xFFFC] = Opcodes6502.ADC_IndirectY.rawValue
-                memory[0xFFFD] = 0x34
+                memory[Int(cpu.resetVector)] = Opcodes6502.ADC_IndirectY.rawValue
+                memory[Int(cpu.resetVector + 1)] = 0x34
                 memory[0x34] = 0x78
                 memory[0x35] = 0x56
                 memory[0x5698] = payload.operand
                 
-                cpu.runForTicks(6)
+                cpu.runForTicks(5)
                 #expect(cpu.A == payload.result)
                 #expect(cpu.readFlag(.Z) == payload.Z)
                 #expect(cpu.readFlag(.N) == payload.N)
@@ -298,8 +298,8 @@ struct ADCDecimalTests {
         cpu.setFlag(.D)
         cpu.A = 0x56
         cpu.Y = 0x20
-        memory[0xFFFC] = Opcodes6502.ADC_IndirectY.rawValue
-        memory[0xFFFD] = 0x55
+        memory[Int(cpu.resetVector)] = Opcodes6502.ADC_IndirectY.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x55
         memory[0x55] = 0xF0
         memory[0x56] = 0x88
         memory[0x8910] = 0x42

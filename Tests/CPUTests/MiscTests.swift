@@ -13,7 +13,7 @@ struct MiscTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[0xFFFC] = Opcodes6502.NOP.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.NOP.rawValue
 
         cpu.runForTicks(2)
         #expect(cpu.A == 0)
@@ -21,6 +21,6 @@ struct MiscTests {
         #expect(cpu.Y == 0)
         #expect(cpu.SP == 0xFF)
         #expect(cpu.PC == 0xFFFD)
-        #expect(cpu.F == Flags.One.rawValue)
+        #expect(cpu.F == Flags.One.rawValue | Flags.I.rawValue)
     }
 }

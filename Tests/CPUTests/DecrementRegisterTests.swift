@@ -13,7 +13,7 @@ struct DecrementRegisterTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[0xFFFC] = Opcodes6502.DEX.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.DEX.rawValue
         cpu.X = 0x64
 
         cpu.runForTicks(2)
@@ -22,7 +22,7 @@ struct DecrementRegisterTests {
         #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.DEX.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.DEX.rawValue
         cpu.X = 0x00
 
         cpu.runForTicks(2)
@@ -31,7 +31,7 @@ struct DecrementRegisterTests {
         #expect(cpu.readFlag(.N) == true)
         
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.DEX.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.DEX.rawValue
         cpu.X = 0x01
 
         cpu.runForTicks(2)
@@ -45,7 +45,7 @@ struct DecrementRegisterTests {
         defer { memory.deallocate() }
         
         cpu.Y = 0x64
-        memory[0xFFFC] = Opcodes6502.DEY.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.DEY.rawValue
 
         cpu.runForTicks(2)
         #expect(cpu.Y == 0x63)
@@ -53,7 +53,7 @@ struct DecrementRegisterTests {
         #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.DEY.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.DEY.rawValue
         cpu.Y = 0x00
 
         cpu.runForTicks(2)
@@ -62,7 +62,7 @@ struct DecrementRegisterTests {
         #expect(cpu.readFlag(.N) == true)
         
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.DEY.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.DEY.rawValue
         cpu.Y = 0x01
 
         cpu.runForTicks(2)

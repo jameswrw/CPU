@@ -14,8 +14,8 @@ struct IncrementMemoryTests {
         defer { memory.deallocate() }
         
         // Simple increment.
-        memory[0xFFFC] = Opcodes6502.INC_ZeroPage.rawValue
-        memory[0xFFFD] = 0x42
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_ZeroPage.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x42
         memory[0x42] = 0x00
         
         cpu.runForTicks(5)
@@ -26,8 +26,8 @@ struct IncrementMemoryTests {
 
         // Increment that sets the N flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INC_ZeroPage.rawValue
-        memory[0xFFFD] = 0x42
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_ZeroPage.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x42
         memory[0x42] = 0x7F
 
         cpu.runForTicks(5)
@@ -38,8 +38,8 @@ struct IncrementMemoryTests {
         
         // Increment that sets the Z flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INC_ZeroPage.rawValue
-        memory[0xFFFD] = 0x42
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_ZeroPage.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x42
         memory[0x42] = 0xFF
 
         cpu.runForTicks(5)
@@ -54,8 +54,8 @@ struct IncrementMemoryTests {
         defer { memory.deallocate() }
         
         // Simple increment.
-        memory[0xFFFC] = Opcodes6502.INC_ZeroPageX.rawValue
-        memory[0xFFFD] = 0x70
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_ZeroPageX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x70
         cpu.X = 0x03
         memory[0x73] = 0x00
         
@@ -67,8 +67,8 @@ struct IncrementMemoryTests {
 
         // Increment that sets the N flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INC_ZeroPageX.rawValue
-        memory[0xFFFD] = 0x70
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_ZeroPageX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x70
         cpu.X = 0x03
         memory[0x73] = 0x7F
 
@@ -80,8 +80,8 @@ struct IncrementMemoryTests {
         
         // Increment that sets the Z flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INC_ZeroPageX.rawValue
-        memory[0xFFFD] = 0x70
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_ZeroPageX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x70
         cpu.X = 0x03
         memory[0x73] = 0xFF
 
@@ -93,8 +93,8 @@ struct IncrementMemoryTests {
         
         // Increment that checks that (opcode argument + X) wraps around.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INC_ZeroPageX.rawValue
-        memory[0xFFFD] = 0xFF
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_ZeroPageX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0xFF
         cpu.X = 0x74
         memory[0x73] = 0x00
         
@@ -111,9 +111,9 @@ struct IncrementMemoryTests {
         defer { memory.deallocate() }
         
         // Simple increment.
-        memory[0xFFFC] = Opcodes6502.INC_Absolute.rawValue
-        memory[0xFFFD] = 0x73
-        memory[0xFFFE] = 0x19
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x73
+        memory[Int(cpu.resetVector + 2)] = 0x19
         memory[0x1973] = 0x00
         
         cpu.runForTicks(6)
@@ -124,9 +124,9 @@ struct IncrementMemoryTests {
 
         // Increment that sets the N flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INC_Absolute.rawValue
-        memory[0xFFFD] = 0x73
-        memory[0xFFFE] = 0x19
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x73
+        memory[Int(cpu.resetVector + 2)] = 0x19
         memory[0x1973] = 0x7F
 
         cpu.runForTicks(6)
@@ -137,9 +137,9 @@ struct IncrementMemoryTests {
         
         // Increment that sets the Z flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INC_Absolute.rawValue
-        memory[0xFFFD] = 0x73
-        memory[0xFFFE] = 0x19
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x73
+        memory[Int(cpu.resetVector + 2)] = 0x19
         memory[0x1973] = 0xFF
 
         cpu.runForTicks(6)
@@ -154,9 +154,9 @@ struct IncrementMemoryTests {
         defer { memory.deallocate() }
         
         // Simple increment.
-        memory[0xFFFC] = Opcodes6502.INC_AbsoluteX.rawValue
-        memory[0xFFFD] = 0x00
-        memory[0xFFFE] = 0xF0
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x00
+        memory[Int(cpu.resetVector + 2)] = 0xF0
         cpu.X = 0x0D
         memory[0xF00D] = 0x00
         
@@ -168,9 +168,9 @@ struct IncrementMemoryTests {
 
         // Increment that sets the N flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INC_AbsoluteX.rawValue
-        memory[0xFFFD] = 0x00
-        memory[0xFFFE] = 0xF0
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x00
+        memory[Int(cpu.resetVector + 2)] = 0xF0
         cpu.X = 0x0D
         memory[0xF00D] = 0x7F
 
@@ -182,9 +182,9 @@ struct IncrementMemoryTests {
         
         // Increment that sets the Z flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INC_AbsoluteX.rawValue
-        memory[0xFFFD] = 0x00
-        memory[0xFFFE] = 0xF0
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x00
+        memory[Int(cpu.resetVector + 2)] = 0xF0
         cpu.X = 0x0D
         memory[0xF00D] = 0xFF
 
@@ -196,9 +196,9 @@ struct IncrementMemoryTests {
         
         // Increment that checks that (opcode argument + X) wraps around.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.INC_AbsoluteX.rawValue
-        memory[0xFFFD] = 0xFF
-        memory[0xFFFE] = 0xFF
+        memory[Int(cpu.resetVector)] = Opcodes6502.INC_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0xFF
+        memory[Int(cpu.resetVector + 2)] = 0xFF
         cpu.X = 0x12
         memory[0x11] = 0x00
         

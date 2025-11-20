@@ -25,9 +25,9 @@ struct BranchTests {
         defer { memory.deallocate() }
         
         // Simple branch forwards.
-        memory[0xFFFC] = Opcodes6502.JMP_Absolute.rawValue
-        memory[0xFFFD] = 0x34
-        memory[0xFFFE] = 0x12
+        memory[Int(cpu.resetVector)] = Opcodes6502.JMP_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x34
+        memory[Int(cpu.resetVector + 2)] = 0x12
         memory[0x1234] = opcode.rawValue
         memory[0x1235] = 0x10
         branchIfFlagSet ? cpu.setFlag(flag) : cpu.clearFlag(flag)
@@ -43,9 +43,9 @@ struct BranchTests {
 
         // Simple branch backwards.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.JMP_Absolute.rawValue
-        memory[0xFFFD] = 0x34
-        memory[0xFFFE] = 0x12
+        memory[Int(cpu.resetVector)] = Opcodes6502.JMP_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x34
+        memory[Int(cpu.resetVector + 2)] = 0x12
         memory[0x1234] = opcode.rawValue
         memory[0x1235] = 0xF0   // -0x10
         branchIfFlagSet ? cpu.setFlag(flag) : cpu.clearFlag(flag)
@@ -61,9 +61,9 @@ struct BranchTests {
         
         // Branch forwards with a page change.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.JMP_Absolute.rawValue
-        memory[0xFFFD] = 0xF0
-        memory[0xFFFE] = 0x10
+        memory[Int(cpu.resetVector)] = Opcodes6502.JMP_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0xF0
+        memory[Int(cpu.resetVector + 2)] = 0x10
         memory[0x10F0] = opcode.rawValue
         memory[0x10F1] = 0x10
         branchIfFlagSet ? cpu.setFlag(flag) : cpu.clearFlag(flag)
@@ -80,9 +80,9 @@ struct BranchTests {
         
         // Branch backwards with a page change.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.JMP_Absolute.rawValue
-        memory[0xFFFD] = 0x10
-        memory[0xFFFE] = 0x10
+        memory[Int(cpu.resetVector)] = Opcodes6502.JMP_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x10
+        memory[Int(cpu.resetVector + 2)] = 0x10
         memory[0x1010] = opcode.rawValue
         memory[0x1011] = 0xE0   // -0x20
         branchIfFlagSet ? cpu.setFlag(flag) : cpu.clearFlag(flag)
@@ -98,9 +98,9 @@ struct BranchTests {
         
         // Test no branch if flag state is different from branchIfFlagSet.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.JMP_Absolute.rawValue
-        memory[0xFFFD] = 0x34
-        memory[0xFFFE] = 0x12
+        memory[Int(cpu.resetVector)] = Opcodes6502.JMP_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x34
+        memory[Int(cpu.resetVector + 2)] = 0x12
         memory[0x1234] = opcode.rawValue
         memory[0x1235] = 0x10
         branchIfFlagSet ? cpu.clearFlag(flag) : cpu.setFlag(flag)

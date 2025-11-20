@@ -22,8 +22,8 @@ struct BitTests {
         defer { memory.deallocate() }
         
         // Z = 0, N == 0, V == 0
-        memory[0xFFFC] = Opcodes6502.BIT_ZeroPage.rawValue
-        memory[0xFFFD] = 0x55
+        memory[Int(cpu.resetVector)] = Opcodes6502.BIT_ZeroPage.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x55
         memory[0x55] = value
         cpu.A = 0x06
         
@@ -39,9 +39,9 @@ struct BitTests {
         defer { memory.deallocate() }
         
         // Z = 0, N == 0, V == 0
-        memory[0xFFFC] = Opcodes6502.BIT_Absolute.rawValue
-        memory[0xFFFD] = 0x34
-        memory[0xFFFE] = 0x12
+        memory[Int(cpu.resetVector)] = Opcodes6502.BIT_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x34
+        memory[Int(cpu.resetVector + 2)] = 0x12
 
         memory[0x1234] = value
         cpu.A = 0x06

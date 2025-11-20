@@ -15,8 +15,8 @@ struct LDXTests {
         
         for testOutput in loadTestOutputs {
             cpu.reset()
-            memory[0xFFFC] = Opcodes6502.LDX_Immediate.rawValue
-            memory[0xFFFD] = testOutput.value
+            memory[Int(cpu.resetVector)] = Opcodes6502.LDX_Immediate.rawValue
+            memory[Int(cpu.resetVector + 1)] = testOutput.value
             
             cpu.runForTicks(2)
             #expect(cpu.X == testOutput.value)
@@ -31,8 +31,8 @@ struct LDXTests {
         
         for testOutput in loadTestOutputs {
             cpu.reset()
-            memory[0xFFFC] = Opcodes6502.LDX_ZeroPage.rawValue
-            memory[0xFFFD] = 0x42
+            memory[Int(cpu.resetVector)] = Opcodes6502.LDX_ZeroPage.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x42
             memory[0x42] = testOutput.value
             
             cpu.runForTicks(3)
@@ -49,8 +49,8 @@ struct LDXTests {
         for testOutput in loadTestOutputs {
             cpu.reset()
             cpu.Y = 0x10
-            memory[0xFFFC] = Opcodes6502.LDX_ZeroPageY.rawValue
-            memory[0xFFFD] = 0x42
+            memory[Int(cpu.resetVector)] = Opcodes6502.LDX_ZeroPageY.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x42
             memory[0x52] = testOutput.value
             
             cpu.runForTicks(4)
@@ -66,9 +66,9 @@ struct LDXTests {
         
         for testOutput in loadTestOutputs {
             cpu.reset()
-            memory[0xFFFC] = Opcodes6502.LDX_Absolute.rawValue
-            memory[0xFFFD] = 0x73
-            memory[0xFFFE] = 0x19
+            memory[Int(cpu.resetVector)] = Opcodes6502.LDX_Absolute.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x73
+            memory[Int(cpu.resetVector + 2)] = 0x19
             memory[0x1973] = testOutput.value
             
             cpu.runForTicks(4)
@@ -85,9 +85,9 @@ struct LDXTests {
         for testOutput in loadTestOutputs {
             cpu.reset()
             cpu.Y = 0x20
-            memory[0xFFFC] = Opcodes6502.LDX_AbsoluteY.rawValue
-            memory[0xFFFD] = 0x73
-            memory[0xFFFE] = 0x19
+            memory[Int(cpu.resetVector)] = Opcodes6502.LDX_AbsoluteY.rawValue
+            memory[Int(cpu.resetVector + 1)] = 0x73
+            memory[Int(cpu.resetVector + 2)] = 0x19
             memory[0x1993] = testOutput.value
             
             let oldTickcount = cpu.tickcount
@@ -101,9 +101,9 @@ struct LDXTests {
         // Bonus page boundary crossing test.
         cpu.reset()
         cpu.Y = 0x20
-        memory[0xFFFC] = Opcodes6502.LDX_AbsoluteY.rawValue
-        memory[0xFFFD] = 0xF0
-        memory[0xFFFE] = 0x19
+        memory[Int(cpu.resetVector)] = Opcodes6502.LDX_AbsoluteY.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0xF0
+        memory[Int(cpu.resetVector + 2)] = 0x19
         memory[0x1A10] = 0x99
         
         let oldTickcount = cpu.tickcount

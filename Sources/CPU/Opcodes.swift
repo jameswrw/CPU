@@ -196,9 +196,9 @@ public enum Opcodes6502: UInt8 {
     case SEI = 0x78                 // Test added
     
     // MARK: Misc.
-    case BRK = 0x00
+    case BRK = 0x00                 // Test added
     case NOP = 0xEA                 // Test added
     case BIT_ZeroPage = 0x24        // Test added
     case BIT_Absolute = 0x2C        // Test added
-    case RTI = 0x40
+    case RTI = 0x40                 // Test added
 }

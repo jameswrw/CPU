@@ -15,20 +15,20 @@ public class CPU {
         self.memory = memory
     }
     
-    public let wordSize: Int = 8
-    public let endianness = Endianness.little
-    public var tickcount: Int = 0
+    internal let endianness = Endianness.little
+    internal var tickcount: Int = 0
     internal var memory: UnsafeMutablePointer<UInt8>
     
-    public func writeByte(addr: Int, value: UInt8) {
+    // Made internal so extensions (e.g. CPU6502+ExecuteUtils.swift) can call it
+    internal func writeByte(addr: Int, value: UInt8) {
         memory[addr] = value
     }
     
-    public func readByte(addr: Int) -> UInt8 {
+    internal func readByte(addr: Int) -> UInt8 {
         memory[addr]
     }
     
-    public func writeWord16(addr: Int, value: UInt16) {
+    internal func writeWord(addr: Int, value: UInt16) {
         
         let hi = (value | 0xFF00) >> 8
         let lo = value & 0x00FF
@@ -42,7 +42,7 @@ public class CPU {
         }
     }
     
-    public func readWord16(addr: Int) -> UInt16 {
+    internal func readWord(addr: Int) -> UInt16 {
         
         var word: UInt16
         if endianness == .little {
@@ -56,6 +56,4 @@ public class CPU {
         }
         return word
     }
-    
 }
-

@@ -14,7 +14,7 @@ struct ROLTests {
         defer { memory.deallocate() }
         
         // Simple left rotate.
-        memory[0xFFFC] = Opcodes6502.ROL_Accumulator.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_Accumulator.rawValue
         cpu.A = 0x01
         
         cpu.runForTicks(2)
@@ -25,7 +25,7 @@ struct ROLTests {
         
         // Left rotate that sets carry flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.ROL_Accumulator.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_Accumulator.rawValue
         cpu.A = 0x80
         
         cpu.runForTicks(2)
@@ -36,7 +36,7 @@ struct ROLTests {
         
         // Left rotate that sets negative flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.ROL_Accumulator.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_Accumulator.rawValue
         cpu.A = 0x42
         
         cpu.runForTicks(2)
@@ -48,7 +48,7 @@ struct ROLTests {
         
         // Left rotate that sets zero flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.ROL_Accumulator.rawValue
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_Accumulator.rawValue
         cpu.A = 0x00
         
         cpu.runForTicks(2)
@@ -64,8 +64,8 @@ struct ROLTests {
         defer { memory.deallocate() }
         
         // Simple left rotate.
-        memory[0xFFFC] = Opcodes6502.ROL_ZeroPage.rawValue
-        memory[0xFFFD] = 0x11
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_ZeroPage.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x11
         memory[0x11] = 0x21
         
         cpu.runForTicks(5)
@@ -77,8 +77,8 @@ struct ROLTests {
         
         // Left rorate that sets zero and carry flags.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.ROL_ZeroPage.rawValue
-        memory[0xFFFD] = 0x11
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_ZeroPage.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x11
         memory[0x11] = 0x80
         
         cpu.runForTicks(5)
@@ -90,8 +90,8 @@ struct ROLTests {
         
         // Left rotate that sets negative flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.ROL_ZeroPage.rawValue
-        memory[0xFFFD] = 0x11
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_ZeroPage.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x11
         memory[0x11] = 0x40
         
         cpu.runForTicks(5)
@@ -103,8 +103,8 @@ struct ROLTests {
         
         // Left rotate that sets zero flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.ROL_ZeroPage.rawValue
-        memory[0xFFFD] = 0xAA
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_ZeroPage.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0xAA
         memory[0xAA] = 0x00
         
         cpu.runForTicks(2)
@@ -121,8 +121,8 @@ struct ROLTests {
         
         // Simple left rotate
         cpu.X = 0x0A
-        memory[0xFFFC] = Opcodes6502.ROL_ZeroPageX.rawValue
-        memory[0xFFFD] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_ZeroPageX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
         memory[0x5A] = 0x04
         
         cpu.runForTicks(6)
@@ -135,8 +135,8 @@ struct ROLTests {
         // Left rotate that sets carry flag.
         cpu.reset()
         cpu.X = 0x0A
-        memory[0xFFFC] = Opcodes6502.ROL_ZeroPageX.rawValue
-        memory[0xFFFD] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_ZeroPageX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
         memory[0x5A] = 0x80
         
         cpu.runForTicks(6)
@@ -149,8 +149,8 @@ struct ROLTests {
         // Left rotate that sets negative flag.
         cpu.reset()
         cpu.X = 0x0A
-        memory[0xFFFC] = Opcodes6502.ASL_ZeroPageX.rawValue
-        memory[0xFFFD] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_ZeroPageX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
         memory[0x5A] = 0x40
         
         cpu.runForTicks(6)
@@ -163,8 +163,8 @@ struct ROLTests {
         // Left rotate that sets zero flag.
         cpu.reset()
         cpu.X = 0x0A
-        memory[0xFFFC] = Opcodes6502.ROL_ZeroPageX.rawValue
-        memory[0xFFFD] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_ZeroPageX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
         memory[0x5A] = 0x00
         
         cpu.runForTicks(2)
@@ -180,9 +180,9 @@ struct ROLTests {
         defer { memory.deallocate() }
         
         // Simple left rotate.
-        memory[0xFFFC] = Opcodes6502.ROL_Absolute.rawValue
-        memory[0xFFFD] = 0x11
-        memory[0xFFFE] = 0x22
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x11
+        memory[Int(cpu.resetVector + 2)] = 0x22
         memory[0x2211] = 0x15
         
         cpu.runForTicks(6)
@@ -194,9 +194,9 @@ struct ROLTests {
         
         // Left rotate that sets carry flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.ROL_Absolute.rawValue
-        memory[0xFFFD] = 0x11
-        memory[0xFFFE] = 0x22
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x11
+        memory[Int(cpu.resetVector + 2)] = 0x22
         memory[0x2211] = 0x80
         
         cpu.runForTicks(6)
@@ -208,9 +208,9 @@ struct ROLTests {
         
         // Left rotate that sets negative flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.ROL_Absolute.rawValue
-        memory[0xFFFD] = 0x11
-        memory[0xFFFE] = 0x22
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x11
+        memory[Int(cpu.resetVector + 2)] = 0x22
         memory[0x2211] = 0x40
         
         cpu.runForTicks(6)
@@ -222,9 +222,9 @@ struct ROLTests {
         
         // Left rotate that sets zero flag.
         cpu.reset()
-        memory[0xFFFC] = Opcodes6502.ROL_Absolute.rawValue
-        memory[0xFFFD] = 0x50
-        memory[0xFFFE] = 0x60
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_Absolute.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[Int(cpu.resetVector + 2)] = 0x60
         memory[0x6050] = 0x00
         
         cpu.runForTicks(2)
@@ -241,9 +241,9 @@ struct ROLTests {
         
         // Simple left rotate
         cpu.X = 0xAA
-        memory[0xFFFC] = Opcodes6502.ROL_AbsoluteX.rawValue
-        memory[0xFFFD] = 0x50
-        memory[0xFFFE] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[Int(cpu.resetVector + 2)] = 0x50
         memory[0x50FA] = 0x04
         
         cpu.runForTicks(7)
@@ -256,9 +256,9 @@ struct ROLTests {
         // Left rotate that sets carry flag.
         cpu.reset()
         cpu.X = 0xAA
-        memory[0xFFFC] = Opcodes6502.ROL_AbsoluteX.rawValue
-        memory[0xFFFD] = 0x50
-        memory[0xFFFE] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[Int(cpu.resetVector + 2)] = 0x50
         memory[0x50FA] = 0x80
         
         cpu.runForTicks(7)
@@ -271,9 +271,9 @@ struct ROLTests {
         // Left rotate that sets negative flag.
         cpu.reset()
         cpu.X = 0xAA
-        memory[0xFFFC] = Opcodes6502.ASL_AbsoluteX.rawValue
-        memory[0xFFFD] = 0x50
-        memory[0xFFFE] = 0x50
+        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[Int(cpu.resetVector + 2)] = 0x50
         memory[0x50FA] = 0x40
         
         cpu.runForTicks(7)
@@ -286,9 +286,9 @@ struct ROLTests {
         // Left rotate that sets zero flag.
         cpu.reset()
         cpu.X = 0xAA
-        memory[0xFFFC] = Opcodes6502.ROL_AbsoluteX.rawValue
-        memory[0xFFFD] = 0x50
-        memory[0xFFFE] = 0x60
+        memory[Int(cpu.resetVector)] = Opcodes6502.ROL_AbsoluteX.rawValue
+        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[Int(cpu.resetVector + 2)] = 0x60
         memory[0x60FA] = 0x00
         
         cpu.runForTicks(2)

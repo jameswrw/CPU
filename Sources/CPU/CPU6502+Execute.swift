@@ -5,7 +5,38 @@
 //  Created by James Weatherley on 30/10/2025.
 //
 
+import Foundation
+
 public extension CPU6502 {
+    
+    // MARK: Interupts
+    internal func requestIRQ() {
+        waitingForIRQHandler = true
+    }
+    
+    internal func requestNMI() {
+        waitingForNMIHandler = true
+    }
+
+    internal func handleIRQ() {
+        if !readFlag(.I) && !waitingForNMIHandler {
+            waitingForIRQHandler = false
+            pushWord(PC)
+            pushByte(F)
+            setFlag(.I)
+            PC = readWord(addr: Int(irqVector))
+            tickcount += 7
+        }
+    }
+    
+    internal func handleNMI() {
+        waitingForNMIHandler = false
+        pushWord(PC)
+        pushByte(F)
+        setFlag(.I)
+        PC = readWord(addr: Int(nmiVector))
+        tickcount += 6
+    }
     
     // MARK: Reset and run
     func reset() {
@@ -25,17 +56,37 @@ public extension CPU6502 {
         Y = 0
     }
     
-    func run() {
-        runForTicks(-1)
-    }
     
-    func runForTicks(_ ticks: Int) {
+    /// Run for the length of a frame. The idea being that clients call this in a loop - something like
+    /// :
+    ///    while true {
+    ///        cpu.runForFrame(clockspeed: 1.0, fps: 50)
+    ///        updateScreen()
+    ///        performIO()
+    ///        ...
+    ///    }
+    ///
+    /// - Parameters:
+    ///   - clockspeed: Clock speed in MHz
+    ///   - fps: Screen refresh in Hz (50 for PAL, 60 for NTSC)
+    func runForFrame(clockspeed: Double, fps: Int) {
+        let ticksPerFrame = Int(ceil(clockspeed * 1_000_000 / Double(fps)))
+        runForTicks(ticksPerFrame)
+    }
+
+    internal func runForTicks(_ ticks: Int) {
         let startTicks = tickcount
         
         while true {
+            if waitingForNMIHandler {
+                handleNMI()
+            }
+            if waitingForIRQHandler {
+                handleIRQ()
+            }
+            
             switch nextOpcode() {
-                
-                // MARK: LDAs
+                // MARK: LDA
             case .LDA_Immediate:
                 A = nextByte()
                 updateNZFlagsFor(newValue: A)
@@ -85,6 +136,7 @@ public extension CPU6502 {
                 updateNZFlagsFor(newValue: A)
                 tickcount += 5
                 
+                // MARK: LDX
             case .LDX_Immediate:
                 X = nextByte()
                 updateNZFlagsFor(newValue: X)
@@ -109,6 +161,7 @@ public extension CPU6502 {
                 tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 0 : 1
                 tickcount += 4
                 
+                // MARK: LDY
             case .LDY_Immediate:
                 Y = nextByte()
                 updateNZFlagsFor(newValue: Y)
@@ -146,7 +199,7 @@ public extension CPU6502 {
                 // OF A PAGE
                 // For example if address $3000 contains $40, $30FF contains $80, and $3100 contains $50, the result of JMP ($30FF) will be a transfer of control to $4080 rather than $5080 as you intended i.e. the 6502 took the low byte of the address from $30FF and the high byte from $3000.
                 
-                PC = readWord16(addr: Int(nextWord()))
+                PC = readWord(addr: Int(nextWord()))
                 tickcount += 5
                 
                 // MARK: Branches
@@ -376,8 +429,8 @@ public extension CPU6502 {
                     A = addHex(operand, to: A)
                 }
                 tickcount += 5
-
-
+                
+                
                 // MARK: Subtract with carry
                 // From: http://www.6502.org/tutorials/decimal_mode.html#3.2.1
                 // • When the carry is clear, SBC NUM performs the calculation A = A - NUM - 1
@@ -471,7 +524,7 @@ public extension CPU6502 {
                         zeroPageAddress: nextByte(),
                         zeroPageOffet: 0,
                         targetOffset: Y,
-                        incrementTickcountIfPageBoundaryCrossed: false
+                        incrementTickcountIfPageBoundaryCrossed: true
                     )
                     A = subtractDecimal(operand, from: A)
                 } else {
@@ -479,7 +532,7 @@ public extension CPU6502 {
                         zeroPageAddress: nextByte(),
                         zeroPageOffet: 0,
                         targetOffset: Y,
-                        incrementTickcountIfPageBoundaryCrossed: false
+                        incrementTickcountIfPageBoundaryCrossed: true
                     )
                     A = subtractHex(operand, from: A)
                 }
@@ -774,7 +827,7 @@ public extension CPU6502 {
                     incrementTickcountIfPageBoundaryCrossed: false
                 )
                 compare(value, withRegister: A)
-                tickcount += 5
+                tickcount += 6
             case .CMP_IndirectY:
                 let value = valueFrom(
                     zeroPageAddress: nextByte(),
@@ -917,8 +970,17 @@ public extension CPU6502 {
                 N ? setFlag(.N) : clearFlag(.N)
                 V ? setFlag(.V) : clearFlag(.V)
                 tickcount += 4
-            default:
-                fatalError("Unimplemented opcode")
+            case .BRK:
+                PC &+= 1
+                pushWord(PC)
+                pushByte(F)
+                setFlag(.I)
+                PC = readWord(addr: Int(irqVector))
+                tickcount += 7
+            case .RTI:
+                F = popByte()
+                PC = popWord()
+                tickcount += 6
             }
             if ticks > 0 && tickcount >= startTicks + ticks { break }
         }

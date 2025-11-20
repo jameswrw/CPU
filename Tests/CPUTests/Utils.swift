@@ -21,7 +21,7 @@ internal func initCPU(assertInitialState: Bool = true) -> (CPU6502, UnsafeMutabl
         #expect(cpu.Y == 0)
         #expect(cpu.SP == 0xFF)
         #expect(cpu.PC == 0xFFFC)
-        #expect(cpu.F == Flags.One.rawValue)
+        #expect(cpu.F == Flags.One.rawValue | Flags.I.rawValue)
     }
 
     return (cpu, memory)
