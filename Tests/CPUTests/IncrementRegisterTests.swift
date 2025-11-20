@@ -18,8 +18,8 @@ struct IncrementRegisterTests {
 
         cpu.runForTicks(2)
         #expect(cpu.X == 0x65)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         memory[0xFFFC] = Opcodes6502.INX.rawValue
@@ -27,8 +27,8 @@ struct IncrementRegisterTests {
 
         cpu.runForTicks(2)
         #expect(cpu.X == 0x00)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         memory[0xFFFC] = Opcodes6502.INX.rawValue
@@ -36,8 +36,8 @@ struct IncrementRegisterTests {
 
         cpu.runForTicks(2)
         #expect(cpu.X == 0x80)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
     }
     
     @Test func testINY() async throws {
@@ -49,8 +49,8 @@ struct IncrementRegisterTests {
 
         cpu.runForTicks(2)
         #expect(cpu.Y == 0x65)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         memory[0xFFFC] = Opcodes6502.INY.rawValue
@@ -58,8 +58,8 @@ struct IncrementRegisterTests {
 
         cpu.runForTicks(2)
         #expect(cpu.Y == 0x00)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         memory[0xFFFC] = Opcodes6502.INY.rawValue
@@ -67,7 +67,7 @@ struct IncrementRegisterTests {
 
         cpu.runForTicks(2)
         #expect(cpu.Y == 0x80)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
     }
 }

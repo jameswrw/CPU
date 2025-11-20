@@ -9,8 +9,8 @@ extension CPU6502 {
     
     // MARK: Utilities
     internal func updateNZFlagsFor(newValue: UInt8) {
-        (newValue == 0) ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-        (newValue & 0x80 != 0) ? setFlag(flag: .N) : clearFlag(flag: .N)
+        (newValue == 0) ? setFlag(.Z) : clearFlag(.Z)
+        (newValue & 0x80 != 0) ? setFlag(.N) : clearFlag(.N)
     }
     
     // MARK: Shifts
@@ -23,7 +23,7 @@ extension CPU6502 {
         }
         writeByte(addr: Int(address), value: newValue)
         updateNZFlagsFor(newValue: newValue)
-        (msb != 0) ? setFlag(flag: .C) : clearFlag(flag: .C)
+        (msb != 0) ? setFlag(.C) : clearFlag(.C)
     }
     
     internal func RightShiftShared(address: Int, rotate: Bool) {
@@ -35,7 +35,7 @@ extension CPU6502 {
         }
         writeByte(addr: Int(address), value: newValue)
         updateNZFlagsFor(newValue: newValue)
-        (lsb != 0) ? setFlag(flag: .C) : clearFlag(flag: .C)
+        (lsb != 0) ? setFlag(.C) : clearFlag(.C)
     }
     
     // MARK: Indirect addressing helper
@@ -89,7 +89,7 @@ extension CPU6502 {
     /// num0 == 0x15, num1 == 0x28 would return 0x43 and not 0x3D as a normal hex addition would yield.
     /// Any value with any nibble with a value between A-F is undefined behaviour.
     ///
-    ///  There is some guidance on the undefined bhaviour here: http://www.6502.org/tutorials/decimal_mode.html#A
+    ///  There is some guidance on the undefined behaviour here: http://www.6502.org/tutorials/decimal_mode.html#A
     ///  For the time being at least this implementation willl just do something undefined.
     ///
     /// From: http://www.6502.org/tutorials/decimal_mode.html#3.2.1
@@ -99,14 +99,14 @@ extension CPU6502 {
     ///  Prerequisite: D flag is set.
     ///  Side effects: N, Z, C flags are set appropriately. V's behaviour is undefined for decimal mode. This implementation ignores it.
     internal func addDecimal(_ num0: UInt8, to num1: UInt8) -> UInt8 {
-        assert(readFlag(flag: .D), "Called addDecimal() in hex mode")
+        assert(readFlag(.D), "Called addDecimal() in hex mode")
         let loByte0 = num0 & 0x0F
         let hiByte0 = (num0 & 0xF0) >> 4
         let loByte1 = num1 & 0x0F
         let hiByte1 = (num1 & 0xF0) >> 4
         
         var internalCarry: UInt16 = 0
-        var loByteResult = UInt16(loByte0) + UInt16(loByte1) + UInt16(readFlag(flag: .C) ? 1 : 0)
+        var loByteResult = UInt16(loByte0) + UInt16(loByte1) + UInt16(readFlag(.C) ? 1 : 0)
         if loByteResult > 0x09 {
             loByteResult -= 0x0A
             internalCarry = 1
@@ -115,9 +115,9 @@ extension CPU6502 {
         var hiByteResult = UInt16(hiByte0) + UInt16(hiByte1) + internalCarry
         if hiByteResult > 0x09 {
             hiByteResult -= 0x0A
-            setFlag(flag: .C)
+            setFlag(.C)
         } else {
-            clearFlag(flag: .C)
+            clearFlag(.C)
         }
         
         let result = UInt8((hiByteResult << 0x4) | loByteResult)
@@ -134,14 +134,14 @@ extension CPU6502 {
     ///  Prerequisite: D flag is set.
     ///  Side effects: N, Z, C flags are set appropriately. V's behaviour is undefined for decimal mode. This implementation ignores it.
     internal func subtractDecimal(_ num0: UInt8, from num1: UInt8) -> UInt8 {
-        assert(readFlag(flag: .D), "Called subtractDecimal() in hex mode")
+        assert(readFlag(.D), "Called subtractDecimal() in hex mode")
         let loByte0 = num0 & 0x0F
         let hiByte0 = (num0 & 0xF0) >> 4
         let loByte1 = num1 & 0x0F
         let hiByte1 = (num1 & 0xF0) >> 4
         
         var internalCarry: Int16 = 0
-        var loByteResult = Int16(loByte1) - Int16(loByte0) - Int16(readFlag(flag: .C) ? 0 : 1)
+        var loByteResult = Int16(loByte1) - Int16(loByte0) - Int16(readFlag(.C) ? 0 : 1)
         if loByteResult < 0x0 {
             loByteResult += 0xA
             internalCarry = 1
@@ -150,13 +150,62 @@ extension CPU6502 {
         var hiByteResult = Int16(hiByte1) - Int16(hiByte0) - internalCarry
         if hiByteResult < 0x0 {
             hiByteResult += 0xA
-            setFlag(flag: .C)
+            setFlag(.C)
         } else {
-            clearFlag(flag: .C)
+            clearFlag(.C)
         }
         
         let result = UInt8((hiByteResult << 0x4) | loByteResult)
         updateNZFlagsFor(newValue: result)
+        return result
+    }
+    
+    /// The hex add and subtract functions are simpler than their decimal counterparts.
+    /// They mostly concern themselves with setting the N, Z, C and V flags.
+    ///
+    /// Prerequisite: D flag is clear.
+    /// Side effects: N, Z, C, V  flags are set appropriately.
+    internal func addHex(_ num0: UInt8, to num1: UInt8) -> UInt8 {
+        
+        let result = num0 &+ num1
+        
+        updateNZFlagsFor(newValue: result)
+        
+        if UInt16(num0) + UInt16(num1) > 0xFF {
+            setFlag(.C)
+        } else {
+            clearFlag(.C)
+        }
+        
+        // The logic sets V if:
+        //  • num0 and num1 are positive and result is negative
+        //  • num0 and num1 are negative and result is positive
+        if (num0 ^ result) & (num1 ^ result) & 0x80 != 0 {
+            setFlag(.V)
+        } else {
+            clearFlag(.V)
+        }
+        
+        return result
+    }
+    
+    /// The hex add and subtract functions are simpler than their decimal counterparts.
+    /// They mostly concern themselves with setting the N, Z, C and V flags.
+    ///
+    /// Prerequisite: D flag is clear.
+    /// Side effects: N, Z, C, V  flags are set appropriately.
+    internal func subtractHex(_ num0: UInt8, from num1: UInt8) -> UInt8 {
+        
+        let result = num1 &- num0
+        
+        updateNZFlagsFor(newValue: result)
+        
+        if Int16(num1) - Int16(num0) < 0 {
+            setFlag(.C)
+        } else {
+            clearFlag(.C)
+        }
+        
         return result
     }
     
@@ -173,7 +222,7 @@ extension CPU6502 {
     internal func branch(flag: Flags, branchIfSet: Bool, advanceTickcountOnPageChange: Bool = true) {
         let delta = nextByte()
         tickcount += 2
-        let branch = branchIfSet ? readFlag(flag: flag) : !readFlag(flag: flag)
+        let branch = branchIfSet ? readFlag(flag) : !readFlag(flag)
         if branch {
             let target = addSignedByte(PC, delta)
             if !samePage(address1: PC, address2: target) {
@@ -187,8 +236,8 @@ extension CPU6502 {
     }
 
     internal func compare(_ value: UInt8, withRegister register: UInt8) {
-        register >= value ? setFlag(flag: .C) : clearFlag(flag: .C)
-        register == value ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-        (register & 0x80) != 0 ? setFlag(flag: .N) : clearFlag(flag: .N)
+        register >= value ? setFlag(.C) : clearFlag(.C)
+        register == value ? setFlag(.Z) : clearFlag(.Z)
+        (register & 0x80) != 0 ? setFlag(.N) : clearFlag(.N)
     }
 }

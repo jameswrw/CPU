@@ -20,8 +20,8 @@ struct LDXTests {
             
             cpu.runForTicks(2)
             #expect(cpu.X == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
     }
     
@@ -37,8 +37,8 @@ struct LDXTests {
             
             cpu.runForTicks(3)
             #expect(cpu.X == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
     }
     
@@ -55,8 +55,8 @@ struct LDXTests {
             
             cpu.runForTicks(4)
             #expect(cpu.X == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
     }
     
@@ -73,8 +73,8 @@ struct LDXTests {
             
             cpu.runForTicks(4)
             #expect(cpu.X == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
     }
     
@@ -94,8 +94,8 @@ struct LDXTests {
             cpu.runForTicks(4)
             #expect(cpu.tickcount - oldTickcount == 4)
             #expect(cpu.X == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
         
         // Bonus page boundary crossing test.
@@ -110,7 +110,7 @@ struct LDXTests {
         cpu.runForTicks(5)
         #expect(cpu.tickcount - oldTickcount == 5)
         #expect(cpu.X == 0x99)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
     }
 }

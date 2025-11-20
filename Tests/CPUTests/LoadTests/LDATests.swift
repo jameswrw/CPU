@@ -20,8 +20,8 @@ struct LDATests {
             
             cpu.runForTicks(2)
             #expect(cpu.A == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
     }
     
@@ -37,8 +37,8 @@ struct LDATests {
             
             cpu.runForTicks(3)
             #expect(cpu.A == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
     }
     
@@ -55,8 +55,8 @@ struct LDATests {
             
             cpu.runForTicks(4)
             #expect(cpu.A == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
     }
     
@@ -73,8 +73,8 @@ struct LDATests {
             
             cpu.runForTicks(4)
             #expect(cpu.A == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
     }
     
@@ -94,8 +94,8 @@ struct LDATests {
             cpu.runForTicks(4)
             #expect(cpu.tickcount - oldTickcount == 4)
             #expect(cpu.A == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
         
         // Bonus page boundary crossing test.
@@ -110,8 +110,8 @@ struct LDATests {
         cpu.runForTicks(5)
         #expect(cpu.tickcount - oldTickcount == 5)
         #expect(cpu.A == 0x42)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
     }
     
     @Test func testLDA_AbsoluteY() async throws {
@@ -130,8 +130,8 @@ struct LDATests {
             cpu.runForTicks(4)
             #expect(cpu.tickcount - oldTickcount == 4)
             #expect(cpu.A == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
         
         // Bonus page boundary crossing test.
@@ -146,8 +146,8 @@ struct LDATests {
         cpu.runForTicks(5)
         #expect(cpu.tickcount - oldTickcount == 5)
         #expect(cpu.A == 0x99)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
     }
     
     @Test func testLDA_IndirectX() async throws {
@@ -165,8 +165,8 @@ struct LDATests {
             
             cpu.runForTicks(6)
             #expect(cpu.A == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
     }
     
@@ -187,8 +187,8 @@ struct LDATests {
             cpu.runForTicks(5)
             #expect(cpu.tickcount - oldTickcount == 5)
             #expect(cpu.A == testOutput.value)
-            #expect(cpu.readFlag(flag: .Z) == testOutput.Z)
-            #expect(cpu.readFlag(flag: .N) == testOutput.N)
+            #expect(cpu.readFlag(.Z) == testOutput.Z)
+            #expect(cpu.readFlag(.N) == testOutput.N)
         }
         
         // Bonus page boundary crossing test.
@@ -204,7 +204,7 @@ struct LDATests {
         cpu.runForTicks(6)
         #expect(cpu.tickcount - oldTickcount == 6)
         #expect(cpu.A == 0x34)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
     }
 }

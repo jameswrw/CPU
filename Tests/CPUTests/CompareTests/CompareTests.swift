@@ -40,7 +40,7 @@ internal let compareTestOutputs = [
 ]
 
 internal func testCMP(cpu: CPU6502, CompareTestOutput: CompareTestOutput) {
-    #expect(cpu.readFlag(flag: .C) == CompareTestOutput.C)
-    #expect(cpu.readFlag(flag: .Z) == CompareTestOutput.Z)
-    #expect(cpu.readFlag(flag: .N) == CompareTestOutput.N)
+    #expect(cpu.readFlag(.C) == CompareTestOutput.C)
+    #expect(cpu.readFlag(.Z) == CompareTestOutput.Z)
+    #expect(cpu.readFlag(.N) == CompareTestOutput.N)
 }

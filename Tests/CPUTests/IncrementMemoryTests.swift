@@ -21,8 +21,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(5)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x42] == 1)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
 
         // Increment that sets the N flag.
         cpu.reset()
@@ -33,8 +33,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(5)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x42] == 0x80)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
         
         // Increment that sets the Z flag.
         cpu.reset()
@@ -45,8 +45,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(5)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x42] == 0x00)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
     }
     
     @Test func testINC_ZeroPageX() async throws {
@@ -62,8 +62,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x73] == 0x1)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
 
         // Increment that sets the N flag.
         cpu.reset()
@@ -75,8 +75,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x73] == 0x80)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
         
         // Increment that sets the Z flag.
         cpu.reset()
@@ -88,8 +88,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x73] == 0x00)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         
         // Increment that checks that (opcode argument + X) wraps around.
         cpu.reset()
@@ -101,8 +101,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x73] == 0x01)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
         
     }
     
@@ -119,8 +119,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0x1973] == 1)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
 
         // Increment that sets the N flag.
         cpu.reset()
@@ -132,8 +132,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0x1973] == 0x80)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
         
         // Increment that sets the Z flag.
         cpu.reset()
@@ -145,8 +145,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0x1973] == 0x00)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
     }
     
     @Test func testINC_AbsoluteX() async throws {
@@ -163,8 +163,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(7)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0xF00D] == 1)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
 
         // Increment that sets the N flag.
         cpu.reset()
@@ -177,8 +177,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(7)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0xF00D] == 0x80)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
         
         // Increment that sets the Z flag.
         cpu.reset()
@@ -191,8 +191,8 @@ struct IncrementMemoryTests {
         cpu.runForTicks(7)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0xF00D] == 0x00)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         
         // Increment that checks that (opcode argument + X) wraps around.
         cpu.reset()
@@ -205,7 +205,7 @@ struct IncrementMemoryTests {
         cpu.runForTicks(7)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0x11] == 0x01)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
     }
 }

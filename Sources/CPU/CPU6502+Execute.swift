@@ -9,14 +9,14 @@ public extension CPU6502 {
     
     // MARK: Reset and run
     func reset() {
-        clearFlag(flag: .C)
-        clearFlag(flag: .Z)
-        clearFlag(flag: .I)
-        clearFlag(flag: .D)
-        clearFlag(flag: .B)
-        setFlag(flag: .One)
-        clearFlag(flag: .V)
-        clearFlag(flag: .N)
+        clearFlag(.C)
+        clearFlag(.Z)
+        clearFlag(.I)
+        clearFlag(.D)
+        clearFlag(.B)
+        setFlag(.One)
+        clearFlag(.V)
+        clearFlag(.N)
         
         SP = 0xFF
         PC = 0xFFFC
@@ -273,49 +273,49 @@ public extension CPU6502 {
                 // • When the carry is clear, ADC NUM performs the calculation A = A + NUM
                 // • When the carry is set, ADC NUM performs the calculation A = A + NUM + 1
             case .ADC_Immediate:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .ADC_ZeroPage:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .ADC_ZeroPageX:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .ADC_Absolute:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .ADC_AbsoluteX:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .ADC_AbsoluteY:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .ADC_IndirectX:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .ADC_IndirectY:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
@@ -326,49 +326,49 @@ public extension CPU6502 {
                 // • When the carry is clear, SBC NUM performs the calculation A = A - NUM - 1
                 // • When the carry is set, SBC NUM performs the calculation A = A - NUM
             case .SBC_Immediate:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .SBC_ZeroPage:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .SBC_ZeroPageX:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .SBC_Absolute:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .SBC_AbsoluteX:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .SBC_AbsoluteY:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .SBC_IndirectX:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                     
                 }
             case .SBC_IndirectY:
-                if readFlag(flag: .D) {
+                if readFlag(.D) {
                     
                 } else {
                 }
@@ -379,7 +379,7 @@ public extension CPU6502 {
                 let newValue = A << 1
                 A = newValue
                 updateNZFlagsFor(newValue: A)
-                (msb != 0) ? setFlag(flag: .C) : clearFlag(flag: .C)
+                (msb != 0) ? setFlag(.C) : clearFlag(.C)
                 tickcount += 2
             case .ASL_ZeroPage:
                 let address = nextByte()
@@ -403,7 +403,7 @@ public extension CPU6502 {
                 let newValue = A >> 1
                 A = newValue
                 updateNZFlagsFor(newValue: A)
-                (lsb != 0) ? setFlag(flag: .C) : clearFlag(flag: .C)
+                (lsb != 0) ? setFlag(.C) : clearFlag(.C)
                 tickcount += 2
             case .LSR_ZeroPage:
                 let address = nextByte()
@@ -427,7 +427,7 @@ public extension CPU6502 {
                 let newValue = (A << 1) | (msb >> 7)
                 A = newValue
                 updateNZFlagsFor(newValue: A)
-                (msb != 0) ? setFlag(flag: .C) : clearFlag(flag: .C)
+                (msb != 0) ? setFlag(.C) : clearFlag(.C)
                 tickcount += 2
             case .ROL_ZeroPage:
                 let address = nextByte()
@@ -451,7 +451,7 @@ public extension CPU6502 {
                 let newValue = (A >> 1) | (lsb << 7)
                 A = newValue
                 updateNZFlagsFor(newValue: A)
-                (lsb != 0) ? setFlag(flag: .C) : clearFlag(flag: .C)
+                (lsb != 0) ? setFlag(.C) : clearFlag(.C)
                 tickcount += 2
             case .ROR_ZeroPage:
                 let address = nextByte()
@@ -745,27 +745,27 @@ public extension CPU6502 {
                 
                 // MARK: Clear flags
             case .CLC:
-                clearFlag(flag: .C)
+                clearFlag(.C)
                 tickcount += 2
             case .CLD:
-                clearFlag(flag: .D)
+                clearFlag(.D)
                 tickcount += 2
             case .CLI:
-                clearFlag(flag: .I)
+                clearFlag(.I)
                 tickcount += 2
             case .CLV:
-                clearFlag(flag: .V)
+                clearFlag(.V)
                 tickcount += 2
                 
                 // MARK: Set flags
             case .SEC:
-                setFlag(flag: .C)
+                setFlag(.C)
                 tickcount += 2
             case .SED:
-                setFlag(flag: .D)
+                setFlag(.D)
                 tickcount += 2
             case .SEI:
-                setFlag(flag: .I)
+                setFlag(.I)
                 tickcount += 2
                 
                 // MARK: Subroutines
@@ -789,9 +789,9 @@ public extension CPU6502 {
                 let N = (value & 0x80) != 0
                 let V = (value & 0x40) != 0
                 
-                Z ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                N ? setFlag(flag: .N) : clearFlag(flag: .N)
-                V ? setFlag(flag: .V) : clearFlag(flag: .V)
+                Z ? setFlag(.Z) : clearFlag(.Z)
+                N ? setFlag(.N) : clearFlag(.N)
+                V ? setFlag(.V) : clearFlag(.V)
                 
                 tickcount += 3
             case .BIT_Absolute:
@@ -801,9 +801,9 @@ public extension CPU6502 {
                 let N = (value & 0x80) != 0
                 let V = (value & 0x40) != 0
                 
-                Z ? setFlag(flag: .Z) : clearFlag(flag: .Z)
-                N ? setFlag(flag: .N) : clearFlag(flag: .N)
-                V ? setFlag(flag: .V) : clearFlag(flag: .V)
+                Z ? setFlag(.Z) : clearFlag(.Z)
+                N ? setFlag(.N) : clearFlag(.N)
+                V ? setFlag(.V) : clearFlag(.V)
                 tickcount += 4
             default:
                 fatalError("Unimplemented opcode")
