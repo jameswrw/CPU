@@ -276,14 +276,14 @@ public extension CPU6502 {
                 if readFlag(.D) {
                     A = addDecimal(nextByte(), to: A)
                 } else {
-                    
+                    A = addHex(nextByte(), to: A)
                 }
                 tickcount += 2
             case .ADC_ZeroPage:
                 if readFlag(.D) {
                     A = addDecimal(memory[Int(nextByte())], to: A)
                 } else {
-                    
+                    A = addHex(memory[Int(nextByte())], to: A)
                 }
                 tickcount += 3
             case .ADC_ZeroPageX:
@@ -291,14 +291,15 @@ public extension CPU6502 {
                     let address = nextByte() &+ X
                     A = addDecimal(memory[Int(address)], to: A)
                 } else {
-                    
+                    let address = nextByte() &+ X
+                    A = addHex(memory[Int(address)], to: A)
                 }
                 tickcount += 4
             case .ADC_Absolute:
                 if readFlag(.D) {
                     A = addDecimal(memory[Int(nextWord())], to: A)
                 } else {
-                    
+                    A = addHex(memory[Int(nextWord())], to: A)
                 }
                 tickcount += 4
             case .ADC_AbsoluteX:
@@ -310,7 +311,12 @@ public extension CPU6502 {
                         tickcount += 1
                     }
                 } else {
-                    
+                    let baseAddress = nextWord()
+                    let targetAddress = addSignedByte(baseAddress, X)
+                    A = addHex(memory[Int(targetAddress)], to: A)
+                    if !samePage(address1: baseAddress, address2: targetAddress) {
+                        tickcount += 1
+                    }
                 }
                 tickcount += 4
             case .ADC_AbsoluteY:
@@ -322,7 +328,12 @@ public extension CPU6502 {
                         tickcount += 1
                     }
                 } else {
-                    
+                    let baseAddress = nextWord()
+                    let targetAddress = addSignedByte(baseAddress, Y)
+                    A = addHex(memory[Int(targetAddress)], to: A)
+                    if !samePage(address1: baseAddress, address2: targetAddress) {
+                        tickcount += 1
+                    }
                 }
                 tickcount += 4
             case .ADC_IndirectX:
@@ -335,7 +346,13 @@ public extension CPU6502 {
                     )
                     A = addDecimal(operand, to: A)
                 } else {
-                    
+                    let operand = valueFrom(
+                        zeroPageAddress: nextByte(),
+                        zeroPageOffet: X,
+                        targetOffset: 0,
+                        incrementTickcountIfPageBoundaryCrossed: false
+                    )
+                    A = addHex(operand, to: A)
                 }
                 tickcount += 6
             case .ADC_IndirectY:
@@ -349,7 +366,14 @@ public extension CPU6502 {
                     )
                     A = addDecimal(operand, to: A)
                 } else {
-                    
+                    let operand =
+                    valueFrom(
+                        zeroPageAddress: nextByte(),
+                        zeroPageOffet: 0,
+                        targetOffset: Y,
+                        incrementTickcountIfPageBoundaryCrossed: true
+                    )
+                    A = addHex(operand, to: A)
                 }
                 tickcount += 6
 

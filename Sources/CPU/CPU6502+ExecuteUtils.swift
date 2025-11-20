@@ -168,10 +168,10 @@ extension CPU6502 {
     internal func addHex(_ num0: UInt8, to num1: UInt8) -> UInt8 {
         assert(!readFlag(.D), "Called addHex() in decimal mode")
 
-        let result = num0 &+ num1
+        let result = num0 &+ num1 &+ (readFlag(.C) ? 1 : 0)
         updateNZFlagsFor(newValue: result)
         
-        if UInt16(num0) + UInt16(num1) > 0xFF {
+        if UInt16(num0) + UInt16(num1) + (readFlag(.C) ? 1 : 0) > 0xFF {
             setFlag(.C)
         } else {
             clearFlag(.C)
@@ -197,10 +197,10 @@ extension CPU6502 {
     internal func subtractHex(_ num0: UInt8, from num1: UInt8) -> UInt8 {
         assert(!readFlag(.D), "Called subtractHex() in decimal mode")
 
-        let result = num1 &- num0
+        let result = num1 &- num0 &- (readFlag(.C) ? 0 : 1)
         updateNZFlagsFor(newValue: result)
         
-        if Int16(num1) - Int16(num0) < 0 {
+        if Int16(num1) - Int16(num0) &- (readFlag(.C) ? 0 : 1) < 0 {
             setFlag(.C)
         } else {
             clearFlag(.C)

@@ -27,12 +27,12 @@ struct SubtractHexTests {
                 setCarryFlag ? cpu.setFlag(.C) : cpu.clearFlag(.C)
 
                 // The expectations are fairly trivial for hex as compared to decimal, in that
-                // they basically replicte the flag setting algorithms in addHex().
+                // they basically replicate the flag setting algorithms in addHex().
                 let result = cpu.subtractHex(i, from: j)
-                #expect(result == j &- i)
+                #expect(result == j &- i &- (setCarryFlag ? 0 : 1))
                 
                 // It's tempting to do something like 'cpu.readFlag(.Z) && (hex_ij == 0x00)'
-                // It doesn't work because short ciruiting leads to 'false == <not evaluated>', and
+                // It doesn't work because short circuiting leads to 'false == <not evaluated>', and
                 // #expected doesn't like that.
                 if result == 0x00 {
                     #expect(cpu.readFlag(.Z))
@@ -46,7 +46,7 @@ struct SubtractHexTests {
                     #expect(!cpu.readFlag(.N))
                 }
                 
-                if Int16(j) - Int16(i) < 0 {
+                if Int16(j) - Int16(i) - (setCarryFlag ? 0 : 1) < 0 {
                     #expect(cpu.readFlag(.C))
                 } else {
                     #expect(!cpu.readFlag(.C))
