@@ -84,14 +84,14 @@ public enum Opcodes6502: UInt8 {
     case RTS = 0x60                 // Test added
     
     // MARK: Add with carry
-    case ADC_Immediate = 0x69
-    case ADC_ZeroPage = 0x65
-    case ADC_ZeroPageX = 0x75
-    case ADC_Absolute = 0x6D
-    case ADC_AbsoluteX = 0x7D
-    case ADC_AbsoluteY = 0x79
-    case ADC_IndirectX = 0x61
-    case ADC_IndirectY = 0x71
+    case ADC_Immediate = 0x69       // Test added
+    case ADC_ZeroPage = 0x65        // Test added
+    case ADC_ZeroPageX = 0x75       // Test added
+    case ADC_Absolute = 0x6D        // Test added
+    case ADC_AbsoluteX = 0x7D       // Test added
+    case ADC_AbsoluteY = 0x79       // Test added
+    case ADC_IndirectX = 0x61       // Test added
+    case ADC_IndirectY = 0x71       // Test added
     
     // MARK: Subtract with carry
     case SBC_Immediate = 0xE9

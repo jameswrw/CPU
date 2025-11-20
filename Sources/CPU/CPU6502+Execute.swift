@@ -274,53 +274,86 @@ public extension CPU6502 {
                 // • When the carry is set, ADC NUM performs the calculation A = A + NUM + 1
             case .ADC_Immediate:
                 if readFlag(.D) {
-                    
+                    A = addDecimal(nextByte(), to: A)
                 } else {
                     
                 }
+                tickcount += 2
             case .ADC_ZeroPage:
                 if readFlag(.D) {
-                    
+                    A = addDecimal(memory[Int(nextByte())], to: A)
                 } else {
                     
                 }
+                tickcount += 3
             case .ADC_ZeroPageX:
                 if readFlag(.D) {
-                    
+                    let address = nextByte() &+ X
+                    A = addDecimal(memory[Int(address)], to: A)
                 } else {
                     
                 }
+                tickcount += 4
             case .ADC_Absolute:
                 if readFlag(.D) {
-                    
+                    A = addDecimal(memory[Int(nextWord())], to: A)
                 } else {
                     
                 }
+                tickcount += 4
             case .ADC_AbsoluteX:
                 if readFlag(.D) {
-                    
+                    let baseAddress = nextWord()
+                    let targetAddress = addSignedByte(baseAddress, X)
+                    A = addDecimal(memory[Int(targetAddress)], to: A)
+                    if !samePage(address1: baseAddress, address2: targetAddress) {
+                        tickcount += 1
+                    }
                 } else {
                     
                 }
+                tickcount += 4
             case .ADC_AbsoluteY:
                 if readFlag(.D) {
-                    
+                    let baseAddress = nextWord()
+                    let targetAddress = addSignedByte(baseAddress, Y)
+                    A = addDecimal(memory[Int(targetAddress)], to: A)
+                    if !samePage(address1: baseAddress, address2: targetAddress) {
+                        tickcount += 1
+                    }
                 } else {
                     
                 }
+                tickcount += 4
             case .ADC_IndirectX:
                 if readFlag(.D) {
-                    
+                    let operand = valueFrom(
+                        zeroPageAddress: nextByte(),
+                        zeroPageOffet: X,
+                        targetOffset: 0,
+                        incrementTickcountIfPageBoundaryCrossed: false
+                    )
+                    A = addDecimal(operand, to: A)
                 } else {
                     
                 }
+                tickcount += 6
             case .ADC_IndirectY:
                 if readFlag(.D) {
-                    
+                    let operand =
+                    valueFrom(
+                        zeroPageAddress: nextByte(),
+                        zeroPageOffet: 0,
+                        targetOffset: Y,
+                        incrementTickcountIfPageBoundaryCrossed: true
+                    )
+                    A = addDecimal(operand, to: A)
                 } else {
                     
                 }
-                
+                tickcount += 6
+
+
                 // MARK: Subtract with carry
                 // From: http://www.6502.org/tutorials/decimal_mode.html#3.2.1
                 // • When the carry is clear, SBC NUM performs the calculation A = A - NUM - 1
