@@ -166,9 +166,9 @@ extension CPU6502 {
     /// Prerequisite: D flag is clear.
     /// Side effects: N, Z, C, V  flags are set appropriately.
     internal func addHex(_ num0: UInt8, to num1: UInt8) -> UInt8 {
-        
+        assert(!readFlag(.D), "Called addHex() in decimal mode")
+
         let result = num0 &+ num1
-        
         updateNZFlagsFor(newValue: result)
         
         if UInt16(num0) + UInt16(num1) > 0xFF {
@@ -177,9 +177,9 @@ extension CPU6502 {
             clearFlag(.C)
         }
         
-        // The logic sets V if:
-        //  • num0 and num1 are positive and result is negative
-        //  • num0 and num1 are negative and result is positive
+        // The logic sets V if adding two numbers with the same sign bit produces a result with a different sign bit.
+        // e.g. 0xFF + 0xFF = 0xFE then V is clear and C is set.
+        //      0xFF + 0x02 = 0x01 then V and C are set.
         if (num0 ^ result) & (num1 ^ result) & 0x80 != 0 {
             setFlag(.V)
         } else {
@@ -195,15 +195,24 @@ extension CPU6502 {
     /// Prerequisite: D flag is clear.
     /// Side effects: N, Z, C, V  flags are set appropriately.
     internal func subtractHex(_ num0: UInt8, from num1: UInt8) -> UInt8 {
-        
+        assert(!readFlag(.D), "Called subtractHex() in decimal mode")
+
         let result = num1 &- num0
-        
         updateNZFlagsFor(newValue: result)
         
         if Int16(num1) - Int16(num0) < 0 {
             setFlag(.C)
         } else {
             clearFlag(.C)
+        }
+        
+        // The logic sets V if subtracting numbers with different signs yields a result whose sign indicates wrap.
+        // e.g. 0x00 - 0x01 = 0xFE then V and C are set.
+        //      0x80 - 0x81 = 0xFF then V is clear and C is set.
+        if (num1 ^ result) & (num1 ^ num0) & 0x80 != 0 {
+            setFlag(.V)
+        } else {
+            clearFlag(.V)
         }
         
         return result

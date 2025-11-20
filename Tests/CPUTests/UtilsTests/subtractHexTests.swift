@@ -51,6 +51,12 @@ struct SubtractHexTests {
                 } else {
                     #expect(!cpu.readFlag(.C))
                 }
+                
+                if (j ^ result) & (j ^ i) & 0x80 != 0 {
+                    #expect(cpu.readFlag(.V))
+                } else {
+                    #expect(!cpu.readFlag(.V))
+                }
             }
         }
     }
