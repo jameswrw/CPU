@@ -19,9 +19,9 @@ struct ASLTests {
         
         cpu.runForTicks(2)
         #expect(cpu.A == 0x02)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left shift that sets zero and carry flags.
         cpu.reset()
@@ -30,9 +30,9 @@ struct ASLTests {
         
         cpu.runForTicks(2)
         #expect(cpu.A == 0x00)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == true)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == true)
         
         // Left shift that sets negative flag.
         cpu.reset()
@@ -42,9 +42,9 @@ struct ASLTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0x84)
         #expect(cpu.PC == 0xFFFD)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.C) == false)
     }
     
     @Test func testASL_ZeroPage() async throws {
@@ -59,9 +59,9 @@ struct ASLTests {
         cpu.runForTicks(5)
         #expect(memory[0x11] == 0x42)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left shift that sets zero and carry flags.
         cpu.reset()
@@ -72,9 +72,9 @@ struct ASLTests {
         cpu.runForTicks(5)
         #expect(memory[0x11] == 0x00)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == true)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == true)
         
         // Left shift that sets negative flag.
         cpu.reset()
@@ -85,9 +85,9 @@ struct ASLTests {
         cpu.runForTicks(5)
         #expect(memory[0x11] == 0x80)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.C) == false)
     }
     
     @Test func testASL_ZeroPageX() async throws {
@@ -103,9 +103,9 @@ struct ASLTests {
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x08)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left shift that sets zero and carry flags.
         cpu.reset()
@@ -117,9 +117,9 @@ struct ASLTests {
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x00)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == true)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == true)
         
         // Left shift that sets negative flag.
         cpu.reset()
@@ -131,9 +131,9 @@ struct ASLTests {
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x80)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.C) == false)
     }
     
     @Test func testASL_Absolute() async throws {
@@ -149,9 +149,9 @@ struct ASLTests {
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x2A)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left shift that sets zero and carry flags.
         cpu.reset()
@@ -163,9 +163,9 @@ struct ASLTests {
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x00)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == true)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == true)
         
         // Left shift that sets negative flag.
         cpu.reset()
@@ -177,9 +177,9 @@ struct ASLTests {
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x80)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.C) == false)
     }
     
     @Test func testASL_AbsoluteX() async throws {
@@ -196,9 +196,9 @@ struct ASLTests {
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x08)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left shift that sets zero and carry flags.
         cpu.reset()
@@ -211,9 +211,9 @@ struct ASLTests {
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x00)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == true)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == true)
         
         // Left shift that sets negative flag.
         cpu.reset()
@@ -226,8 +226,8 @@ struct ASLTests {
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x80)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.C) == false)
     }
 }

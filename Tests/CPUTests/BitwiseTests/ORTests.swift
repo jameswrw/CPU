@@ -29,8 +29,8 @@ struct ORTests {
             
             cpu.runForTicks(2)
             #expect(cpu.A == payload.result)
-            #expect(cpu.readFlag(flag: .Z) == payload.Z)
-            #expect(cpu.readFlag(flag: .N) == payload.N)
+            #expect(cpu.readFlag(.Z) == payload.Z)
+            #expect(cpu.readFlag(.N) == payload.N)
         }
     }
     
@@ -47,8 +47,8 @@ struct ORTests {
             
             cpu.runForTicks(2)
             #expect(cpu.A == payload.result)
-            #expect(cpu.readFlag(flag: .Z) == payload.Z)
-            #expect(cpu.readFlag(flag: .N) == payload.N)
+            #expect(cpu.readFlag(.Z) == payload.Z)
+            #expect(cpu.readFlag(.N) == payload.N)
         }
     }
     
@@ -66,8 +66,8 @@ struct ORTests {
             
             cpu.runForTicks(4)
             #expect(cpu.A == payload.result)
-            #expect(cpu.readFlag(flag: .Z) == payload.Z)
-            #expect(cpu.readFlag(flag: .N) == payload.N)
+            #expect(cpu.readFlag(.Z) == payload.Z)
+            #expect(cpu.readFlag(.N) == payload.N)
         }
     }
     
@@ -85,8 +85,8 @@ struct ORTests {
             
             cpu.runForTicks(4)
             #expect(cpu.A == payload.result)
-            #expect(cpu.readFlag(flag: .Z) == payload.Z)
-            #expect(cpu.readFlag(flag: .N) == payload.N)
+            #expect(cpu.readFlag(.Z) == payload.Z)
+            #expect(cpu.readFlag(.N) == payload.N)
         }
     }
     
@@ -105,8 +105,8 @@ struct ORTests {
             
             cpu.runForTicks(4)
             #expect(cpu.A == payload.result)
-            #expect(cpu.readFlag(flag: .Z) == payload.Z)
-            #expect(cpu.readFlag(flag: .N) == payload.N)
+            #expect(cpu.readFlag(.Z) == payload.Z)
+            #expect(cpu.readFlag(.N) == payload.N)
         }
         
         // Test crossing a page boundary takes five ticks instead of four.
@@ -122,8 +122,8 @@ struct ORTests {
         cpu.runForTicks(5)
         #expect(cpu.tickcount - oldTickcount == 5)
         #expect(cpu.A == 0x37)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
     }
     
     @Test func testORA_AbsoluteY() async throws {
@@ -141,8 +141,8 @@ struct ORTests {
             
             cpu.runForTicks(4)
             #expect(cpu.A == payload.result)
-            #expect(cpu.readFlag(flag: .Z) == payload.Z)
-            #expect(cpu.readFlag(flag: .N) == payload.N)
+            #expect(cpu.readFlag(.Z) == payload.Z)
+            #expect(cpu.readFlag(.N) == payload.N)
         }
         
         // Test crossing a page boundary takes five ticks instead of four.
@@ -158,8 +158,8 @@ struct ORTests {
         cpu.runForTicks(5)
         #expect(cpu.tickcount - oldTickcount == 5)
         #expect(cpu.A == 0x37)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
     }
     
     @Test func testORA_IndirectX() async throws {
@@ -178,8 +178,8 @@ struct ORTests {
             
             cpu.runForTicks(6)
             #expect(cpu.A == payload.result)
-            #expect(cpu.readFlag(flag: .Z) == payload.Z)
-            #expect(cpu.readFlag(flag: .N) == payload.N)
+            #expect(cpu.readFlag(.Z) == payload.Z)
+            #expect(cpu.readFlag(.N) == payload.N)
         }
     }
     
@@ -199,8 +199,8 @@ struct ORTests {
             
             cpu.runForTicks(5)
             #expect(cpu.A == payload.result)
-            #expect(cpu.readFlag(flag: .Z) == payload.Z)
-            #expect(cpu.readFlag(flag: .N) == payload.N)
+            #expect(cpu.readFlag(.Z) == payload.Z)
+            #expect(cpu.readFlag(.N) == payload.N)
         }
         
         // Test crossing a page boundary takes five ticks instead of four.
@@ -215,7 +215,7 @@ struct ORTests {
         
         cpu.runForTicks(5)
         #expect(cpu.A == 0xFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
     }
 }

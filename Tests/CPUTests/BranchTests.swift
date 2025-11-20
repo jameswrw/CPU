@@ -30,7 +30,7 @@ struct BranchTests {
         memory[0xFFFE] = 0x12
         memory[0x1234] = opcode.rawValue
         memory[0x1235] = 0x10
-        branchIfFlagSet ? cpu.setFlag(flag: flag) : cpu.clearFlag(flag: flag)
+        branchIfFlagSet ? cpu.setFlag(flag) : cpu.clearFlag(flag)
 
         // JMP to 0x1234
         cpu.runForTicks(3)
@@ -48,7 +48,7 @@ struct BranchTests {
         memory[0xFFFE] = 0x12
         memory[0x1234] = opcode.rawValue
         memory[0x1235] = 0xF0   // -0x10
-        branchIfFlagSet ? cpu.setFlag(flag: flag) : cpu.clearFlag(flag: flag)
+        branchIfFlagSet ? cpu.setFlag(flag) : cpu.clearFlag(flag)
         
         // JMP to 0x1234
         cpu.runForTicks(3)
@@ -66,7 +66,7 @@ struct BranchTests {
         memory[0xFFFE] = 0x10
         memory[0x10F0] = opcode.rawValue
         memory[0x10F1] = 0x10
-        branchIfFlagSet ? cpu.setFlag(flag: flag) : cpu.clearFlag(flag: flag)
+        branchIfFlagSet ? cpu.setFlag(flag) : cpu.clearFlag(flag)
 
         // JMP to 0x10F0
         cpu.runForTicks(3)
@@ -85,7 +85,7 @@ struct BranchTests {
         memory[0xFFFE] = 0x10
         memory[0x1010] = opcode.rawValue
         memory[0x1011] = 0xE0   // -0x20
-        branchIfFlagSet ? cpu.setFlag(flag: flag) : cpu.clearFlag(flag: flag)
+        branchIfFlagSet ? cpu.setFlag(flag) : cpu.clearFlag(flag)
 
         // JMP to 0x1010
         cpu.runForTicks(3)
@@ -103,7 +103,7 @@ struct BranchTests {
         memory[0xFFFE] = 0x12
         memory[0x1234] = opcode.rawValue
         memory[0x1235] = 0x10
-        branchIfFlagSet ? cpu.clearFlag(flag: flag) : cpu.setFlag(flag: flag)
+        branchIfFlagSet ? cpu.clearFlag(flag) : cpu.setFlag(flag)
 
         // JMP to 0x1234
         cpu.runForTicks(3)

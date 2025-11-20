@@ -34,15 +34,15 @@ public class CPU6502: CPU {
 
     public var F: UInt8 = Flags.One.rawValue
     
-    public func setFlag(flag: Flags) {
+    public func setFlag(_ flag: Flags) {
         F |= flag.rawValue
     }
     
-    public func clearFlag(flag: Flags) {
+    public func clearFlag(_ flag: Flags) {
         F &= ~flag.rawValue
     }
     
-    public func readFlag(flag: Flags) -> Bool {
+    public func readFlag(_ flag: Flags) -> Bool {
         F & flag.rawValue != 0
     }
     

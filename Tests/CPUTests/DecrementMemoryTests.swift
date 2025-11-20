@@ -21,8 +21,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(5)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x42] == 0x09)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
 
         // Decrement that sets the N flag.
         cpu.reset()
@@ -33,8 +33,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(5)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x42] == 0x87)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
         
         // Decrement that sets the Z flag.
         cpu.reset()
@@ -45,8 +45,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(5)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x42] == 0x00)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
     }
     
     @Test func testDEC_ZeroPageX() async throws {
@@ -62,8 +62,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x73] == 0x09)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
 
         // Decrement that sets the N flag.
         cpu.reset()
@@ -75,8 +75,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x73] == 0x87)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
         
         // Decrement that sets the Z flag.
         cpu.reset()
@@ -88,8 +88,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x73] == 0x00)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         
         // Decrement that checks that (opcode argument + X) wraps around.
         cpu.reset()
@@ -101,8 +101,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFE)
         #expect(memory[0x73] == 0xFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
     }
     
     @Test func testDEC_Absolute() async throws {
@@ -118,8 +118,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0x1973] == 0x09)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
 
         // Decrement that sets the N flag.
         cpu.reset()
@@ -131,8 +131,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0x1973] == 0x87)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
         
         // Decrement that sets the Z flag.
         cpu.reset()
@@ -144,8 +144,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(6)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0x1973] == 0x00)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
     }
     
     @Test func testDEC_AbsoluteX() async throws {
@@ -162,8 +162,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(7)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0xF00D] == 0x65)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
 
         // Decrement that sets the N flag.
         cpu.reset()
@@ -176,8 +176,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(7)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0xF00D] == 0x98)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
         
         // Decrement that sets the Z flag.
         cpu.reset()
@@ -190,8 +190,8 @@ struct DecrementMemoryTests {
         cpu.runForTicks(7)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0xF00D] == 0x00)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         
         // Decrement that checks that (opcode argument + X) wraps around.
         cpu.reset()
@@ -204,7 +204,7 @@ struct DecrementMemoryTests {
         cpu.runForTicks(7)
         #expect(cpu.PC == 0xFFFF)
         #expect(memory[0x11] == 0x35)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
     }
 }

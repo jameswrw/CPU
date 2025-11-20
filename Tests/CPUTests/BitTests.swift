@@ -28,9 +28,9 @@ struct BitTests {
         cpu.A = 0x06
         
         cpu.runForTicks(3)
-        #expect(cpu.readFlag(flag: .Z) == expectedFlags.Z)
-        #expect(cpu.readFlag(flag: .N) == expectedFlags.N)
-        #expect(cpu.readFlag(flag: .V) == expectedFlags.V)
+        #expect(cpu.readFlag(.Z) == expectedFlags.Z)
+        #expect(cpu.readFlag(.N) == expectedFlags.N)
+        #expect(cpu.readFlag(.V) == expectedFlags.V)
     }
     
     func testBIT_Absolute(value: UInt8, expectedFlags: ExpectedFlags) {
@@ -47,9 +47,9 @@ struct BitTests {
         cpu.A = 0x06
         
         cpu.runForTicks(4)
-        #expect(cpu.readFlag(flag: .Z) == expectedFlags.Z)
-        #expect(cpu.readFlag(flag: .N) == expectedFlags.N)
-        #expect(cpu.readFlag(flag: .V) == expectedFlags.V)
+        #expect(cpu.readFlag(.Z) == expectedFlags.Z)
+        #expect(cpu.readFlag(.N) == expectedFlags.N)
+        #expect(cpu.readFlag(.V) == expectedFlags.V)
     }
     
     @Test func testBIT_ZeroPage() async throws {

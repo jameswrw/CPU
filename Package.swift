@@ -21,7 +21,7 @@ let package = Package(
     targets: [
         .target(
             name: "CPU",
-            swiftSettings: [.unsafeFlags(["-strict-concurrency=complete"])]
+            swiftSettings: [.unsafeFlags(["-strict-concurrency=complete", "-warnings-as-errors"])]
         ),
         .macro(
             name: "CPUMacros",
@@ -36,7 +36,8 @@ let package = Package(
         ),
         .testTarget(
             name: "CPUTests",
-            dependencies: ["CPU"] // removed "CPUMacroDecls"
+            dependencies: ["CPU"], // removed "CPUMacroDecls",
+            swiftSettings: [.unsafeFlags(["-strict-concurrency=complete", "-warnings-as-errors"])]
         )
     ]
 )

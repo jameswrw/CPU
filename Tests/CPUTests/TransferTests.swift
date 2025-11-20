@@ -20,8 +20,8 @@ struct TransferTests {
         #expect(cpu.A == 0x64)
         #expect(cpu.X == 0x64)
         #expect(cpu.F == Flags.One.rawValue)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         cpu.A = 0x00
@@ -31,8 +31,8 @@ struct TransferTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0)
         #expect(cpu.X == 0)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         cpu.A = 0xFF
@@ -41,8 +41,8 @@ struct TransferTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0xFF)
         #expect(cpu.X == 0xFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
     }
     
     @Test func testTXA() async throws {
@@ -56,8 +56,8 @@ struct TransferTests {
         #expect(cpu.A == 0x64)
         #expect(cpu.X == 0x64)
         #expect(cpu.F == Flags.One.rawValue)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         cpu.X = 0x00
@@ -67,8 +67,8 @@ struct TransferTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0)
         #expect(cpu.X == 0)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         cpu.A = 0x12
@@ -78,8 +78,8 @@ struct TransferTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0xFF)
         #expect(cpu.X == 0xFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
     }
     
     @Test func testTAY() async throws {
@@ -93,8 +93,8 @@ struct TransferTests {
         #expect(cpu.A == 0x64)
         #expect(cpu.Y == 0x64)
         #expect(cpu.F == Flags.One.rawValue)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         cpu.A = 0x00
@@ -104,8 +104,8 @@ struct TransferTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0)
         #expect(cpu.Y == 0)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         cpu.A = 0xFF
@@ -114,8 +114,8 @@ struct TransferTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0xFF)
         #expect(cpu.Y == 0xFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
     }
     
     @Test func testTYA() async throws {
@@ -129,8 +129,8 @@ struct TransferTests {
         #expect(cpu.A == 0x64)
         #expect(cpu.Y == 0x64)
         #expect(cpu.F == Flags.One.rawValue)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         cpu.Y = 0x00
@@ -140,8 +140,8 @@ struct TransferTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0)
         #expect(cpu.Y == 0)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         
         cpu.reset()
         cpu.A = 0x12
@@ -151,7 +151,7 @@ struct TransferTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0xFF)
         #expect(cpu.Y == 0xFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
     }
 }

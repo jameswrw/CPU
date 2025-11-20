@@ -19,9 +19,9 @@ struct ROLTests {
         
         cpu.runForTicks(2)
         #expect(cpu.A == 0x02)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left rotate that sets carry flag.
         cpu.reset()
@@ -30,9 +30,9 @@ struct ROLTests {
         
         cpu.runForTicks(2)
         #expect(cpu.A == 0x01)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == true)
         
         // Left rotate that sets negative flag.
         cpu.reset()
@@ -42,9 +42,9 @@ struct ROLTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0x84)
         #expect(cpu.PC == 0xFFFD)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left rotate that sets zero flag.
         cpu.reset()
@@ -54,9 +54,9 @@ struct ROLTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0x00)
         #expect(cpu.PC == 0xFFFD)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
     }
     
     @Test func testROL_ZeroPage() async throws {
@@ -71,9 +71,9 @@ struct ROLTests {
         cpu.runForTicks(5)
         #expect(memory[0x11] == 0x42)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left rorate that sets zero and carry flags.
         cpu.reset()
@@ -84,9 +84,9 @@ struct ROLTests {
         cpu.runForTicks(5)
         #expect(memory[0x11] == 0x01)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == true)
         
         // Left rotate that sets negative flag.
         cpu.reset()
@@ -97,9 +97,9 @@ struct ROLTests {
         cpu.runForTicks(5)
         #expect(memory[0x11] == 0x80)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left rotate that sets zero flag.
         cpu.reset()
@@ -110,9 +110,9 @@ struct ROLTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0x00)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
     }
     
     @Test func testROL_ZeroPageX() async throws {
@@ -128,9 +128,9 @@ struct ROLTests {
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x08)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left rotate that sets carry flag.
         cpu.reset()
@@ -142,9 +142,9 @@ struct ROLTests {
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x01)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == true)
         
         // Left rotate that sets negative flag.
         cpu.reset()
@@ -156,9 +156,9 @@ struct ROLTests {
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x80)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left rotate that sets zero flag.
         cpu.reset()
@@ -170,9 +170,9 @@ struct ROLTests {
         cpu.runForTicks(2)
         #expect(cpu.A == 0x00)
         #expect(cpu.PC == 0xFFFE)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
     }
     
     @Test func testROL_Absolute() async throws {
@@ -188,9 +188,9 @@ struct ROLTests {
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x2A)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left rotate that sets carry flag.
         cpu.reset()
@@ -202,9 +202,9 @@ struct ROLTests {
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x01)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == true)
         
         // Left rotate that sets negative flag.
         cpu.reset()
@@ -216,9 +216,9 @@ struct ROLTests {
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x80)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left rotate that sets zero flag.
         cpu.reset()
@@ -230,9 +230,9 @@ struct ROLTests {
         cpu.runForTicks(2)
         #expect(memory[0x6050] == 0x00)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
     }
     
     @Test func testROL_AbsoluteX() async throws {
@@ -249,9 +249,9 @@ struct ROLTests {
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x08)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left rotate that sets carry flag.
         cpu.reset()
@@ -264,9 +264,9 @@ struct ROLTests {
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x01)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == true)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == true)
         
         // Left rotate that sets negative flag.
         cpu.reset()
@@ -279,9 +279,9 @@ struct ROLTests {
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x80)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == false)
-        #expect(cpu.readFlag(flag: .N) == true)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == false)
+        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.C) == false)
         
         // Left rotate that sets zero flag.
         cpu.reset()
@@ -294,8 +294,8 @@ struct ROLTests {
         cpu.runForTicks(2)
         #expect(memory[0x60FA] == 0x00)
         #expect(cpu.PC == 0xFFFF)
-        #expect(cpu.readFlag(flag: .Z) == true)
-        #expect(cpu.readFlag(flag: .N) == false)
-        #expect(cpu.readFlag(flag: .C) == false)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
     }
 }
