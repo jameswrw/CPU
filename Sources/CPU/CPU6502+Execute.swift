@@ -375,7 +375,7 @@ public extension CPU6502 {
                     )
                     A = addHex(operand, to: A)
                 }
-                tickcount += 6
+                tickcount += 5
 
 
                 // MARK: Subtract with carry
@@ -384,51 +384,106 @@ public extension CPU6502 {
                 // • When the carry is set, SBC NUM performs the calculation A = A - NUM
             case .SBC_Immediate:
                 if readFlag(.D) {
-                    
+                    A = subtractDecimal(nextByte(), from: A)
                 } else {
-                    
+                    A = subtractHex(nextByte(), from: A)
                 }
+                tickcount += 2
             case .SBC_ZeroPage:
                 if readFlag(.D) {
-                    
+                    A = subtractDecimal(memory[Int(nextByte())], from: A)
                 } else {
-                    
+                    A = subtractHex(memory[Int(nextByte())], from: A)
                 }
+                tickcount += 3
             case .SBC_ZeroPageX:
                 if readFlag(.D) {
-                    
+                    let address = nextByte() &+ X
+                    A = subtractDecimal(memory[Int(address)], from: A)
                 } else {
-                    
+                    let address = nextByte() &+ X
+                    A = subtractHex(memory[Int(address)], from: A)
                 }
+                tickcount += 4
             case .SBC_Absolute:
                 if readFlag(.D) {
-                    
+                    A = subtractDecimal(memory[Int(nextWord())], from: A)
                 } else {
-                    
+                    A = subtractHex(memory[Int(nextWord())], from: A)
                 }
+                tickcount += 4
             case .SBC_AbsoluteX:
                 if readFlag(.D) {
-                    
+                    let baseAddress = nextWord()
+                    let targetAddress = addSignedByte(baseAddress, X)
+                    A = subtractDecimal(memory[Int(targetAddress)], from: A)
+                    if !samePage(address1: baseAddress, address2: targetAddress) {
+                        tickcount += 1
+                    }
                 } else {
-                    
+                    let baseAddress = nextWord()
+                    let targetAddress = addSignedByte(baseAddress, X)
+                    A = subtractHex(memory[Int(targetAddress)], from: A)
+                    if !samePage(address1: baseAddress, address2: targetAddress) {
+                        tickcount += 1
+                    }
                 }
+                tickcount += 4
             case .SBC_AbsoluteY:
                 if readFlag(.D) {
-                    
+                    let baseAddress = nextWord()
+                    let targetAddress = addSignedByte(baseAddress, Y)
+                    A = subtractDecimal(memory[Int(targetAddress)], from: A)
+                    if !samePage(address1: baseAddress, address2: targetAddress) {
+                        tickcount += 1
+                    }
                 } else {
-                    
+                    let baseAddress = nextWord()
+                    let targetAddress = addSignedByte(baseAddress, Y)
+                    A = subtractHex(memory[Int(targetAddress)], from: A)
+                    if !samePage(address1: baseAddress, address2: targetAddress) {
+                        tickcount += 1
+                    }
                 }
+                tickcount += 4
             case .SBC_IndirectX:
                 if readFlag(.D) {
-                    
+                    let operand = valueFrom(
+                        zeroPageAddress: nextByte(),
+                        zeroPageOffet: X,
+                        targetOffset: 0,
+                        incrementTickcountIfPageBoundaryCrossed: false
+                    )
+                    A = subtractDecimal(operand, from: A)
                 } else {
-                    
+                    let operand = valueFrom(
+                        zeroPageAddress: nextByte(),
+                        zeroPageOffet: X,
+                        targetOffset: 0,
+                        incrementTickcountIfPageBoundaryCrossed: false
+                    )
+                    A = subtractHex(operand, from: A)
                 }
+                tickcount += 6
             case .SBC_IndirectY:
                 if readFlag(.D) {
-                    
+                    let operand = valueFrom(
+                        zeroPageAddress: nextByte(),
+                        zeroPageOffet: 0,
+                        targetOffset: Y,
+                        incrementTickcountIfPageBoundaryCrossed: false
+                    )
+                    A = subtractDecimal(operand, from: A)
                 } else {
+                    let operand = valueFrom(
+                        zeroPageAddress: nextByte(),
+                        zeroPageOffet: 0,
+                        targetOffset: Y,
+                        incrementTickcountIfPageBoundaryCrossed: false
+                    )
+                    A = subtractHex(operand, from: A)
                 }
+                tickcount += 5
                 
                 // MARK: Shifts and rotates
             case .ASL_Accumulator:

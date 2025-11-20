@@ -94,14 +94,14 @@ public enum Opcodes6502: UInt8 {
     case ADC_IndirectY = 0x71       // Test added
     
     // MARK: Subtract with carry
-    case SBC_Immediate = 0xE9
-    case SBC_ZeroPage = 0xE5
-    case SBC_ZeroPageX = 0xF5
-    case SBC_Absolute = 0xED
-    case SBC_AbsoluteX = 0xFD
-    case SBC_AbsoluteY = 0xF9
-    case SBC_IndirectX = 0xE1
-    case SBC_IndirectY = 0xF1
+    case SBC_Immediate = 0xE9       // Test added
+    case SBC_ZeroPage = 0xE5        // Test added
+    case SBC_ZeroPageX = 0xF5       // Test added
+    case SBC_Absolute = 0xED        // Test added
+    case SBC_AbsoluteX = 0xFD       // Test added
+    case SBC_AbsoluteY = 0xF9       // Test added
+    case SBC_IndirectX = 0xE1       // Test added
+    case SBC_IndirectY = 0xF1       // Test added
     
     // MARK: Logical operations
     case AND_Immediate = 0x29       // Test added

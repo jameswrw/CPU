@@ -96,14 +96,16 @@ extension CPU6502 {
     /// • When the carry is clear, ADC NUM performs the calculation A = A + NUM
     /// • When the carry is set, ADC NUM performs the calculation A = A + NUM + 1
     ///
-    ///  Prerequisite: D flag is set.
-    ///  Side effects: N, Z, C flags are set appropriately. V's behaviour is undefined for decimal mode. This implementation ignores it.
+    ///  Prerequisite: D flag is set, all nibbles of num0 and num1 are in the range 0-9. Anything in A-F will lead to undefined behaviour.
+    ///  Side effects: N, Z, C flags are set appropriately. V's behaviour is undefined for decimal mode. This implementation ignores it., 0x9)
     internal func addDecimal(_ num0: UInt8, to num1: UInt8) -> UInt8 {
         assert(readFlag(.D), "Called addDecimal() in hex mode")
-        let loByte0 = num0 & 0x0F
-        let hiByte0 = (num0 & 0xF0) >> 4
-        let loByte1 = num1 & 0x0F
-        let hiByte1 = (num1 & 0xF0) >> 4
+        
+        // Pull illegal values A-F down to 9.
+        let loByte0 = min(num0 & 0x0F, 0x9)
+        let hiByte0 = min((num0 & 0xF0) >> 4, 0x9)
+        let loByte1 = min(num1 & 0x0F, 0x9)
+        let hiByte1 = min((num1 & 0xF0) >> 4, 0x9)
         
         var internalCarry: UInt16 = 0
         var loByteResult = UInt16(loByte0) + UInt16(loByte1) + UInt16(readFlag(.C) ? 1 : 0)
@@ -131,14 +133,16 @@ extension CPU6502 {
     /// • When the carry is clear, SBC NUM performs the calculation A = A - NUM - 1
     /// • When the carry is set, SBC NUM performs the calculation A = A - NUM
     /// 
-    ///  Prerequisite: D flag is set.
+    ///  Prerequisite: D flag is set, all nibbles of num0 and num1 are in the range 0-9. Anything in A-F will lead to undefined behaviour.
     ///  Side effects: N, Z, C flags are set appropriately. V's behaviour is undefined for decimal mode. This implementation ignores it.
     internal func subtractDecimal(_ num0: UInt8, from num1: UInt8) -> UInt8 {
         assert(readFlag(.D), "Called subtractDecimal() in hex mode")
-        let loByte0 = num0 & 0x0F
-        let hiByte0 = (num0 & 0xF0) >> 4
-        let loByte1 = num1 & 0x0F
-        let hiByte1 = (num1 & 0xF0) >> 4
+        
+        // Pull illegal values A-F down to 9.
+        let loByte0 = min(num0 & 0x0F, 0x9)
+        let hiByte0 = min((num0 & 0xF0) >> 4, 0x9)
+        let loByte1 = min(num1 & 0x0F, 0x9)
+        let hiByte1 = min((num1 & 0xF0) >> 4, 0x9)
         
         var internalCarry: Int16 = 0
         var loByteResult = Int16(loByte1) - Int16(loByte0) - Int16(readFlag(.C) ? 0 : 1)
@@ -207,8 +211,8 @@ extension CPU6502 {
         }
         
         // The logic sets V if subtracting numbers with different signs yields a result whose sign indicates wrap.
-        // e.g. 0x00 - 0x01 = 0xFE then V and C are set.
-        //      0x80 - 0x81 = 0xFF then V is clear and C is set.
+        // e.g. 0x00 - 0x01 = 0xFE then V is clear and C are set.
+        //      0x80 - 0x01 = 0x7F then V is clear and C is clear.
         if (num1 ^ result) & (num1 ^ num0) & 0x80 != 0 {
             setFlag(.V)
         } else {
