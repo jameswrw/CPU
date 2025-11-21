@@ -1,6 +1,6 @@
 //
 //  Opcodes.swift
-//  CPU
+//  CPU6502
 //
 //  Created by James Weatherley on 29/10/2025.
 //

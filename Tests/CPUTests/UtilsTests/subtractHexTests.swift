@@ -1,6 +1,6 @@
 //
 //  subtractHexTests.swift
-//  CPU
+//  CPU6502
 //
 //  Created by James Weatherley on 19/11/2025.
 //

@@ -1,6 +1,6 @@
 //
 //  CPU6502+Execute.swift
-//  CPU
+//  CPU6502
 //
 //  Created by James Weatherley on 30/10/2025.
 //

@@ -1,6 +1,6 @@
 //
 //  CPU6502.swift
-//  CPU
+//  CPU6502
 //
 //  Created by James Weatherley on 28/10/2025.
 //

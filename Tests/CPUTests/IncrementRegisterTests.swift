@@ -1,6 +1,6 @@
 //
 //  IncrementRegisterTests.swift
-//  CPU
+//  CPU6502
 //
 //  Created by James Weatherley on 13/11/2025.
 //

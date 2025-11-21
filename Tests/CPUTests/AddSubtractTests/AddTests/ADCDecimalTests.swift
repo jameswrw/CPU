@@ -1,6 +1,6 @@
 //
 //  ADCDecimalTests.swift
-//  CPU
+//  CPU6502
 //
 //  Created by James Weatherley on 20/11/2025.
 //
