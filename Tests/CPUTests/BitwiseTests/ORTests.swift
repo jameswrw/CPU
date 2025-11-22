@@ -24,8 +24,8 @@ struct ORTests {
         for payload in payloads {
             cpu.reset()
             cpu.A = payload.initialA
-            memory[Int(cpu.resetVector)] = Opcodes6502.ORA_Immediate.rawValue
-            memory[Int(cpu.resetVector + 1)] = payload.operand
+            memory[0xA000] = Opcodes6502.ORA_Immediate.rawValue
+            memory[0xA001] = payload.operand
             
             cpu.runForTicks(2)
             #expect(cpu.A == payload.result)
@@ -41,8 +41,8 @@ struct ORTests {
         for payload in payloads {
             cpu.reset()
             cpu.A = payload.initialA
-            memory[Int(cpu.resetVector)] = Opcodes6502.ORA_ZeroPage.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x06
+            memory[0xA000] = Opcodes6502.ORA_ZeroPage.rawValue
+            memory[0xA001] = 0x06
             memory[0x06] = payload.operand
             
             cpu.runForTicks(2)
@@ -60,8 +60,8 @@ struct ORTests {
             cpu.reset()
             cpu.A = payload.initialA
             cpu.X = 0x10
-            memory[Int(cpu.resetVector)] = Opcodes6502.ORA_ZeroPageX.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x32
+            memory[0xA000] = Opcodes6502.ORA_ZeroPageX.rawValue
+            memory[0xA001] = 0x32
             memory[0x42] = payload.operand
             
             cpu.runForTicks(4)
@@ -78,9 +78,9 @@ struct ORTests {
         for payload in payloads {
             cpu.reset()
             cpu.A = payload.initialA
-            memory[Int(cpu.resetVector)] = Opcodes6502.ORA_Absolute.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x34
-            memory[Int(cpu.resetVector + 2)] = 0x12
+            memory[0xA000] = Opcodes6502.ORA_Absolute.rawValue
+            memory[0xA001] = 0x34
+            memory[0xA002] = 0x12
             memory[0x1234] = payload.operand
             
             cpu.runForTicks(4)
@@ -98,9 +98,9 @@ struct ORTests {
             cpu.reset()
             cpu.A = payload.initialA
             cpu.X = 0x10
-            memory[Int(cpu.resetVector)] = Opcodes6502.ORA_AbsoluteX.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x78
-            memory[Int(cpu.resetVector + 2)] = 0x56
+            memory[0xA000] = Opcodes6502.ORA_AbsoluteX.rawValue
+            memory[0xA001] = 0x78
+            memory[0xA002] = 0x56
             memory[0x5688] = payload.operand
             
             cpu.runForTicks(4)
@@ -113,9 +113,9 @@ struct ORTests {
         cpu.reset()
         cpu.A = 0x33
         cpu.X = 0x20
-        memory[Int(cpu.resetVector)] = Opcodes6502.ORA_AbsoluteX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0xF0
-        memory[Int(cpu.resetVector + 2)] = 0x56
+        memory[0xA000] = Opcodes6502.ORA_AbsoluteX.rawValue
+        memory[0xA001] = 0xF0
+        memory[0xA002] = 0x56
         memory[0x5710] = 0x17
         
         let oldTickcount = cpu.tickcount
@@ -134,9 +134,9 @@ struct ORTests {
             cpu.reset()
             cpu.A = payload.initialA
             cpu.Y = 0x10
-            memory[Int(cpu.resetVector)] = Opcodes6502.ORA_AbsoluteY.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x78
-            memory[Int(cpu.resetVector + 2)] = 0x56
+            memory[0xA000] = Opcodes6502.ORA_AbsoluteY.rawValue
+            memory[0xA001] = 0x78
+            memory[0xA002] = 0x56
             memory[0x5688] = payload.operand
             
             cpu.runForTicks(4)
@@ -149,9 +149,9 @@ struct ORTests {
         cpu.reset()
         cpu.A = 0x33
         cpu.Y = 0x20
-        memory[Int(cpu.resetVector)] = Opcodes6502.ORA_AbsoluteY.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0xF0
-        memory[Int(cpu.resetVector + 2)] = 0x56
+        memory[0xA000] = Opcodes6502.ORA_AbsoluteY.rawValue
+        memory[0xA001] = 0xF0
+        memory[0xA002] = 0x56
         memory[0x5710] = 0x17
         
         let oldTickcount = cpu.tickcount
@@ -170,8 +170,8 @@ struct ORTests {
             cpu.reset()
             cpu.A = payload.initialA
             cpu.X = 0x20
-            memory[Int(cpu.resetVector)] = Opcodes6502.ORA_IndirectX.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x66
+            memory[0xA000] = Opcodes6502.ORA_IndirectX.rawValue
+            memory[0xA001] = 0x66
             memory[0x86] = 0x73
             memory[0x87] = 0x19
             memory[0x1973] = payload.operand
@@ -191,8 +191,8 @@ struct ORTests {
             cpu.reset()
             cpu.A = payload.initialA
             cpu.Y = 0x20
-            memory[Int(cpu.resetVector)] = Opcodes6502.ORA_IndirectY.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x66
+            memory[0xA000] = Opcodes6502.ORA_IndirectY.rawValue
+            memory[0xA001] = 0x66
             memory[0x66] = 0x73
             memory[0x67] = 0x19
             memory[0x1993] = payload.operand
@@ -207,8 +207,8 @@ struct ORTests {
         cpu.reset()
         cpu.A = 0x7F
         cpu.Y = 0x20
-        memory[Int(cpu.resetVector)] = Opcodes6502.ORA_IndirectY.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x66
+        memory[0xA000] = Opcodes6502.ORA_IndirectY.rawValue
+        memory[0xA001] = 0x66
         memory[0x66] = 0xF0
         memory[0x67] = 0x19
         memory[0x1A10] = 0x87

@@ -30,9 +30,9 @@ struct MemoryControllerTests {
         // Note: Memory accesses are via cpu.memoryController sees them.
         //       Directly reading from memory is, well, a DMA and the ioCallbacks will not be called.
         
-        cpu.memory[cpu.resetVector] = Opcodes6502.JMP_Absolute.rawValue
-        cpu.memory[cpu.resetVector + 1] = 0x00
-        cpu.memory[cpu.resetVector + 2] = 0x10
+        cpu.memory[0xA000] = Opcodes6502.JMP_Absolute.rawValue
+        cpu.memory[0xA001] = 0x00
+        cpu.memory[0xA002] = 0x10
         cpu.memory[0x1000] = Opcodes6502.LDA_Absolute.rawValue
         cpu.memory[0x1001] = 0x00
         cpu.memory[0x1002] = 0x20
@@ -78,9 +78,9 @@ struct MemoryControllerTests {
         // Note: Memory accesses are via cpu.memoryController sees them.
         //       Directly reading from memory is, well, a DMA and the ioCallbacks will not be called.
         
-        cpu.memory[cpu.resetVector] = Opcodes6502.JMP_Absolute.rawValue
-        cpu.memory[cpu.resetVector + 1] = 0x00
-        cpu.memory[cpu.resetVector + 2] = 0x10
+        cpu.memory[0xA000] = Opcodes6502.JMP_Absolute.rawValue
+        cpu.memory[0xA001] = 0x00
+        cpu.memory[0xA002] = 0x10
         cpu.memory[0x1000] = Opcodes6502.STA_Absolute.rawValue
         cpu.memory[0x1001] = 0x00
         cpu.memory[0x1002] = 0x20

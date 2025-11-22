@@ -13,6 +13,10 @@ internal func initCPU(assertInitialState: Bool = true, ioAddresses: Set<UInt16> 
     
     // 0xFF is an invalid opcode, so this should help catch some unitialised memory and tickcount issues.
     memset(memory, 0xFF, 0x10000)
+    
+    // Start all tests from 0xA000
+    memory[0xFFFC] = 0x00
+    memory[0xFFFD] = 0xA0
     let cpu = CPU6502(memory: memory, ioAddresses: ioAddresses)
 
     if assertInitialState {
@@ -20,7 +24,7 @@ internal func initCPU(assertInitialState: Bool = true, ioAddresses: Set<UInt16> 
         #expect(cpu.X == 0)
         #expect(cpu.Y == 0)
         #expect(cpu.SP == 0xFF)
-        #expect(cpu.PC == 0xFFFC)
+        #expect(cpu.PC == cpu.readWord(addr: cpu.resetVector))
         #expect(cpu.F == Flags.One.rawValue | Flags.I.rawValue)
     }
 

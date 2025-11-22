@@ -13,9 +13,9 @@ struct JumpTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[Int(cpu.resetVector)] = Opcodes6502.JMP_Absolute.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x34
-        memory[Int(cpu.resetVector + 2)] = 0x12
+        memory[0xA000] = Opcodes6502.JMP_Absolute.rawValue
+        memory[0xA001] = 0x34
+        memory[0xA002] = 0x12
         memory[0x1234] = Opcodes6502.LDA_Immediate.rawValue
         memory[0x1235] = 0xAA
         
@@ -31,9 +31,9 @@ struct JumpTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
 
-        memory[Int(cpu.resetVector)] = Opcodes6502.JMP_Indirect.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x34
-        memory[Int(cpu.resetVector + 2)] = 0x12
+        memory[0xA000] = Opcodes6502.JMP_Indirect.rawValue
+        memory[0xA001] = 0x34
+        memory[0xA002] = 0x12
         memory[0x1234] = 0x78
         memory[0x1235] = 0x56
         memory[0x5678] = Opcodes6502.LDA_Immediate.rawValue
@@ -55,9 +55,9 @@ struct JumpTests {
         // • JMP to 0x1234
         // • JSR to 0x5578
         // • RTS should take us to 0x1237 - i.e. an advance of one from where we jumped from.
-        memory[Int(cpu.resetVector)] = Opcodes6502.JMP_Absolute.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x34
-        memory[Int(cpu.resetVector + 2)] = 0x12
+        memory[0xA000] = Opcodes6502.JMP_Absolute.rawValue
+        memory[0xA001] = 0x34
+        memory[0xA002] = 0x12
         memory[0x1234] = Opcodes6502.JSR.rawValue
         memory[0x1235] = 0x78
         memory[0x1236] = 0x56

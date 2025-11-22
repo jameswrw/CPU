@@ -50,7 +50,7 @@ public extension CPU6502 {
         clearFlag(.N)
         
         SP = 0xFF
-        PC = 0xFFFC
+        PC = readWord(addr: 0xFFFC)
         A = 0
         X = 0
         Y = 0

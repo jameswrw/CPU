@@ -14,7 +14,7 @@ struct RORTests {
         defer { memory.deallocate() }
         
         // Simple right rotate.
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_Accumulator.rawValue
+        memory[0xA000] = Opcodes6502.ROR_Accumulator.rawValue
         cpu.A = 0x08
         
         cpu.runForTicks(2)
@@ -25,7 +25,7 @@ struct RORTests {
         
         // Right rotate that sets negative and carry flag.
         cpu.reset()
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_Accumulator.rawValue
+        memory[0xA000] = Opcodes6502.ROR_Accumulator.rawValue
         cpu.A = 0x01
         
         cpu.runForTicks(2)
@@ -36,12 +36,12 @@ struct RORTests {
         
         // Right rotate that sets the zero flag.
         cpu.reset()
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_Accumulator.rawValue
+        memory[0xA000] = Opcodes6502.ROR_Accumulator.rawValue
         cpu.A = 0x00
         
         cpu.runForTicks(2)
         #expect(cpu.A == 0x00)
-        #expect(cpu.PC == 0xFFFD)
+        #expect(cpu.PC == 0xA001)
         #expect(cpu.readFlag(.Z) == true)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
@@ -52,26 +52,26 @@ struct RORTests {
         defer { memory.deallocate() }
         
         // Simple right rotate.
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_ZeroPage.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0xBB
+        memory[0xA000] = Opcodes6502.ROR_ZeroPage.rawValue
+        memory[0xA001] = 0xBB
         memory[0xBB] = 0x42
         
         cpu.runForTicks(5)
         #expect(memory[0xBB] == 0x21)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
         
         // Right rotate that sets negative and carry flag.
         cpu.reset()
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_ZeroPage.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0xBB
+        memory[0xA000] = Opcodes6502.ROR_ZeroPage.rawValue
+        memory[0xA001] = 0xBB
         memory[0xBB] = 0x01
         
         cpu.runForTicks(5)
         #expect(memory[0xBB] == 0x80)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == true)
         #expect(cpu.readFlag(.C) == true)
@@ -79,13 +79,13 @@ struct RORTests {
         // Right rotate that clears the negative flag.
         cpu.reset()
         cpu.setFlag(.N)
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_ZeroPage.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0xBB
+        memory[0xA000] = Opcodes6502.ROR_ZeroPage.rawValue
+        memory[0xA001] = 0xBB
         memory[0xBB] = 0xFE
         
         cpu.runForTicks(5)
         #expect(memory[0xBB] == 0x7F)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
@@ -97,13 +97,13 @@ struct RORTests {
         
         // Simple right shift
         cpu.X = 0x0A
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_ZeroPageX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[0xA000] = Opcodes6502.ROR_ZeroPageX.rawValue
+        memory[0xA001] = 0x50
         memory[0x5A] = 0x04
         
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x02)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
@@ -111,13 +111,13 @@ struct RORTests {
         // Right rotate that sets negative and carry flags.
         cpu.reset()
         cpu.X = 0x0A
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_ZeroPageX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[0xA000] = Opcodes6502.ROR_ZeroPageX.rawValue
+        memory[0xA001] = 0x50
         memory[0x5A] = 0x01
         
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x80)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == true)
         #expect(cpu.readFlag(.C) == true)
@@ -126,13 +126,13 @@ struct RORTests {
         cpu.reset()
         cpu.X = 0x0A
         cpu.setFlag(.N)
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_ZeroPageX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[0xA000] = Opcodes6502.ROR_ZeroPageX.rawValue
+        memory[0xA001] = 0x50
         memory[0x5A] = 0xFE
         
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x7F)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
@@ -143,28 +143,28 @@ struct RORTests {
         defer { memory.deallocate() }
         
         // Simple right rotate.
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_Absolute.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x11
-        memory[Int(cpu.resetVector + 2)] = 0x22
+        memory[0xA000] = Opcodes6502.ROR_Absolute.rawValue
+        memory[0xA001] = 0x11
+        memory[0xA002] = 0x22
         memory[0x2211] = 0x08
         
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x04)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
         
         // Right rotate that sets negative and carry flags.
         cpu.reset()
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_Absolute.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x11
-        memory[Int(cpu.resetVector + 2)] = 0x22
+        memory[0xA000] = Opcodes6502.ROR_Absolute.rawValue
+        memory[0xA001] = 0x11
+        memory[0xA002] = 0x22
         memory[0x2211] = 0x01
         
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x80)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == true)
         #expect(cpu.readFlag(.C) == true)
@@ -172,14 +172,14 @@ struct RORTests {
         // Right rotate that clears the negative flag.
         cpu.reset()
         cpu.setFlag(.N)
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_Absolute.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x11
-        memory[Int(cpu.resetVector + 2)] = 0x22
+        memory[0xA000] = Opcodes6502.ROR_Absolute.rawValue
+        memory[0xA001] = 0x11
+        memory[0xA002] = 0x22
         memory[0x2211] = 0xFE
         
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x7F)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
@@ -191,14 +191,14 @@ struct RORTests {
         
         // Simple left rotate
         cpu.X = 0xAA
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_AbsoluteX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
-        memory[Int(cpu.resetVector + 2)] = 0x50
+        memory[0xA000] = Opcodes6502.ROR_AbsoluteX.rawValue
+        memory[0xA001] = 0x50
+        memory[0xA002] = 0x50
         memory[0x50FA] = 0x04
         
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x02)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
@@ -206,14 +206,14 @@ struct RORTests {
         // Right rotate that sets negative and carry flags.
         cpu.reset()
         cpu.X = 0xAA
-        memory[Int(cpu.resetVector)] = Opcodes6502.ROR_AbsoluteX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
-        memory[Int(cpu.resetVector + 2)] = 0x50
+        memory[0xA000] = Opcodes6502.ROR_AbsoluteX.rawValue
+        memory[0xA001] = 0x50
+        memory[0xA002] = 0x50
         memory[0x50FA] = 0x01
         
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x80)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == true)
         #expect(cpu.readFlag(.C) == true)
@@ -222,14 +222,14 @@ struct RORTests {
         cpu.reset()
         cpu.X = 0xAA
         cpu.setFlag(.N)
-        memory[Int(cpu.resetVector)] = Opcodes6502.LSR_AbsoluteX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
-        memory[Int(cpu.resetVector + 2)] = 0x50
+        memory[0xA000] = Opcodes6502.LSR_AbsoluteX.rawValue
+        memory[0xA001] = 0x50
+        memory[0xA002] = 0x50
         memory[0x50FA] = 0xFE
         
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x7F)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)

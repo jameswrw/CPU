@@ -13,12 +13,12 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[Int(cpu.resetVector)] = Opcodes6502.CLC.rawValue
+        memory[0xA000] = Opcodes6502.CLC.rawValue
         cpu.setFlag(.C)
         #expect(cpu.readFlag(.C) == true)
         
         cpu.runForTicks(2)
-        #expect(cpu.PC == 0xFFFD)
+        #expect(cpu.PC == 0xA001)
         #expect(cpu.readFlag(.C) == false)
     }
     
@@ -26,12 +26,12 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[Int(cpu.resetVector)] = Opcodes6502.CLD.rawValue
+        memory[0xA000] = Opcodes6502.CLD.rawValue
         cpu.setFlag(.D)
         #expect(cpu.readFlag(.D) == true)
         
         cpu.runForTicks(2)
-        #expect(cpu.PC == 0xFFFD)
+        #expect(cpu.PC == 0xA001)
         #expect(cpu.readFlag(.D) == false)
     }
     
@@ -39,13 +39,13 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
     
-        memory[Int(cpu.resetVector)] = Opcodes6502.CLI.rawValue
+        memory[0xA000] = Opcodes6502.CLI.rawValue
         #expect(cpu.readFlag(.I) == true)
         cpu.setFlag(.I)
         #expect(cpu.readFlag(.I) == true)
         
         cpu.runForTicks(2)
-        #expect(cpu.PC == 0xFFFD)
+        #expect(cpu.PC == 0xA001)
         #expect(cpu.readFlag(.I) == false)
     }
     
@@ -53,12 +53,12 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[Int(cpu.resetVector)] = Opcodes6502.CLV.rawValue
+        memory[0xA000] = Opcodes6502.CLV.rawValue
         cpu.setFlag(.V)
         #expect(cpu.readFlag(.V) == true)
         
         cpu.runForTicks(2)
-        #expect(cpu.PC == 0xFFFD)
+        #expect(cpu.PC == 0xA001)
         #expect(cpu.readFlag(.V) == false)
     }
     
@@ -66,11 +66,11 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[Int(cpu.resetVector)] = Opcodes6502.SEC.rawValue
+        memory[0xA000] = Opcodes6502.SEC.rawValue
         #expect(cpu.readFlag(.C) == false)
         
         cpu.runForTicks(2)
-        #expect(cpu.PC == 0xFFFD)
+        #expect(cpu.PC == 0xA001)
         #expect(cpu.readFlag(.C) == true)
     }
     
@@ -78,11 +78,11 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[Int(cpu.resetVector)] = Opcodes6502.SED.rawValue
+        memory[0xA000] = Opcodes6502.SED.rawValue
         #expect(cpu.readFlag(.D) == false)
 
         cpu.runForTicks(2)
-        #expect(cpu.PC == 0xFFFD)
+        #expect(cpu.PC == 0xA001)
         #expect(cpu.readFlag(.D) == true)
     }
     
@@ -90,11 +90,11 @@ struct FlagTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[Int(cpu.resetVector)] = Opcodes6502.SEI.rawValue
+        memory[0xA000] = Opcodes6502.SEI.rawValue
         #expect(cpu.readFlag(.I) == true)
         
         cpu.runForTicks(2)
-        #expect(cpu.PC == 0xFFFD)
+        #expect(cpu.PC == 0xA001)
         #expect(cpu.readFlag(.I) == true)
 
     }

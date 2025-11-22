@@ -14,7 +14,7 @@ struct ASLTests {
         defer { memory.deallocate() }
         
         // Simple left shift.
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_Accumulator.rawValue
+        memory[0xA000] = Opcodes6502.ASL_Accumulator.rawValue
         cpu.A = 0x01
         
         cpu.runForTicks(2)
@@ -25,7 +25,7 @@ struct ASLTests {
         
         // Left shift that sets zero and carry flags.
         cpu.reset()
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_Accumulator.rawValue
+        memory[0xA000] = Opcodes6502.ASL_Accumulator.rawValue
         cpu.A = 0x80
         
         cpu.runForTicks(2)
@@ -36,12 +36,12 @@ struct ASLTests {
         
         // Left shift that sets negative flag.
         cpu.reset()
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_Accumulator.rawValue
+        memory[0xA000] = Opcodes6502.ASL_Accumulator.rawValue
         cpu.A = 0x42
         
         cpu.runForTicks(2)
         #expect(cpu.A == 0x84)
-        #expect(cpu.PC == 0xFFFD)
+        #expect(cpu.PC == 0xA001)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == true)
         #expect(cpu.readFlag(.C) == false)
@@ -52,39 +52,39 @@ struct ASLTests {
         defer { memory.deallocate() }
         
         // Simple left shift.
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_ZeroPage.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x11
+        memory[0xA000] = Opcodes6502.ASL_ZeroPage.rawValue
+        memory[0xA001] = 0x11
         memory[0x11] = 0x21
         
         cpu.runForTicks(5)
         #expect(memory[0x11] == 0x42)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
         
         // Left shift that sets zero and carry flags.
         cpu.reset()
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_ZeroPage.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x11
+        memory[0xA000] = Opcodes6502.ASL_ZeroPage.rawValue
+        memory[0xA001] = 0x11
         memory[0x11] = 0x80
         
         cpu.runForTicks(5)
         #expect(memory[0x11] == 0x00)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == true)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == true)
         
         // Left shift that sets negative flag.
         cpu.reset()
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_ZeroPage.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x11
+        memory[0xA000] = Opcodes6502.ASL_ZeroPage.rawValue
+        memory[0xA001] = 0x11
         memory[0x11] = 0x40
         
         cpu.runForTicks(5)
         #expect(memory[0x11] == 0x80)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == true)
         #expect(cpu.readFlag(.C) == false)
@@ -96,13 +96,13 @@ struct ASLTests {
         
         // Simple left shift
         cpu.X = 0x0A
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_ZeroPageX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[0xA000] = Opcodes6502.ASL_ZeroPageX.rawValue
+        memory[0xA001] = 0x50
         memory[0x5A] = 0x04
         
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x08)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
@@ -110,13 +110,13 @@ struct ASLTests {
         // Left shift that sets zero and carry flags.
         cpu.reset()
         cpu.X = 0x0A
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_ZeroPageX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[0xA000] = Opcodes6502.ASL_ZeroPageX.rawValue
+        memory[0xA001] = 0x50
         memory[0x5A] = 0x80
         
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x00)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == true)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == true)
@@ -124,13 +124,13 @@ struct ASLTests {
         // Left shift that sets negative flag.
         cpu.reset()
         cpu.X = 0x0A
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_ZeroPageX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
+        memory[0xA000] = Opcodes6502.ASL_ZeroPageX.rawValue
+        memory[0xA001] = 0x50
         memory[0x5A] = 0x40
         
         cpu.runForTicks(6)
         #expect(memory[0x5A] == 0x80)
-        #expect(cpu.PC == 0xFFFE)
+        #expect(cpu.PC == 0xA002)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == true)
         #expect(cpu.readFlag(.C) == false)
@@ -141,42 +141,42 @@ struct ASLTests {
         defer { memory.deallocate() }
         
         // Simple left shift.
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_Absolute.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x11
-        memory[Int(cpu.resetVector + 2)] = 0x22
+        memory[0xA000] = Opcodes6502.ASL_Absolute.rawValue
+        memory[0xA001] = 0x11
+        memory[0xA002] = 0x22
         memory[0x2211] = 0x15
         
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x2A)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
         
         // Left shift that sets zero and carry flags.
         cpu.reset()
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_Absolute.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x11
-        memory[Int(cpu.resetVector + 2)] = 0x22
+        memory[0xA000] = Opcodes6502.ASL_Absolute.rawValue
+        memory[0xA001] = 0x11
+        memory[0xA002] = 0x22
         memory[0x2211] = 0x80
         
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x00)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == true)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == true)
         
         // Left shift that sets negative flag.
         cpu.reset()
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_Absolute.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x11
-        memory[Int(cpu.resetVector + 2)] = 0x22
+        memory[0xA000] = Opcodes6502.ASL_Absolute.rawValue
+        memory[0xA001] = 0x11
+        memory[0xA002] = 0x22
         memory[0x2211] = 0x40
         
         cpu.runForTicks(6)
         #expect(memory[0x2211] == 0x80)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == true)
         #expect(cpu.readFlag(.C) == false)
@@ -188,14 +188,14 @@ struct ASLTests {
         
         // Simple left shift
         cpu.X = 0xAA
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_AbsoluteX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
-        memory[Int(cpu.resetVector + 2)] = 0x50
+        memory[0xA000] = Opcodes6502.ASL_AbsoluteX.rawValue
+        memory[0xA001] = 0x50
+        memory[0xA002] = 0x50
         memory[0x50FA] = 0x04
         
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x08)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
@@ -203,14 +203,14 @@ struct ASLTests {
         // Left shift that sets zero and carry flags.
         cpu.reset()
         cpu.X = 0xAA
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_AbsoluteX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
-        memory[Int(cpu.resetVector + 2)] = 0x50
+        memory[0xA000] = Opcodes6502.ASL_AbsoluteX.rawValue
+        memory[0xA001] = 0x50
+        memory[0xA002] = 0x50
         memory[0x50FA] = 0x80
         
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x00)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == true)
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == true)
@@ -218,14 +218,14 @@ struct ASLTests {
         // Left shift that sets negative flag.
         cpu.reset()
         cpu.X = 0xAA
-        memory[Int(cpu.resetVector)] = Opcodes6502.ASL_AbsoluteX.rawValue
-        memory[Int(cpu.resetVector + 1)] = 0x50
-        memory[Int(cpu.resetVector + 2)] = 0x50
+        memory[0xA000] = Opcodes6502.ASL_AbsoluteX.rawValue
+        memory[0xA001] = 0x50
+        memory[0xA002] = 0x50
         memory[0x50FA] = 0x40
         
         cpu.runForTicks(7)
         #expect(memory[0x50FA] == 0x80)
-        #expect(cpu.PC == 0xFFFF)
+        #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == false)
         #expect(cpu.readFlag(.N) == true)
         #expect(cpu.readFlag(.C) == false)

@@ -35,7 +35,7 @@ public struct CPUFixtureMacro: ExpressionMacro {
             bodyLines.append("#expect(cpu.X == 0)")
             bodyLines.append("#expect(cpu.Y == 0)")
             bodyLines.append("#expect(cpu.SP == 0xFF)")
-            bodyLines.append("#expect(cpu.PC == 0xFFFC)")
+            bodyLines.append("#expect(cpu.PC == cpu.readWord(addr: cpu.resetVector))")
             bodyLines.append("#expect(cpu.F == Flags.One.rawValue)")
         }
 

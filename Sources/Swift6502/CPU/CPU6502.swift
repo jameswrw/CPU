@@ -34,11 +34,15 @@
 // be used anywhere else. This seems a waste of time.
 //
 // The best I came up with for testing is to make this a class before running the tests.
-public actor CPU6502 {
+public class CPU6502 {
     
     public init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
         self.memory = MemoryController(memory: memory, ioAddresses: ioAddresses)
-        PC = UInt16(resetVector)
+        
+        // Can't call readWord() here.
+        let startAddressLo = UInt16(memory[resetVector])
+        let startAddressHi = UInt16(memory[resetVector + 1]) << 8
+        PC = startAddressHi | startAddressLo
     }
     
     internal let endianness = Endianness.little

@@ -14,7 +14,7 @@ struct StackTests {
         defer { memory.deallocate() }
         
         cpu.X = 0x42
-        memory[Int(cpu.resetVector)] = Opcodes6502.TSX.rawValue
+        memory[0xA000] = Opcodes6502.TSX.rawValue
         
         cpu.runForTicks(2)
         #expect(cpu.X == 0xFF)
@@ -27,7 +27,7 @@ struct StackTests {
         defer { memory.deallocate() }
         
         cpu.X = 0x42
-        memory[Int(cpu.resetVector)] = Opcodes6502.TXS.rawValue
+        memory[0xA000] = Opcodes6502.TXS.rawValue
 
         cpu.runForTicks(2)
         #expect(cpu.X == 0x42)
@@ -40,7 +40,7 @@ struct StackTests {
         defer { memory.deallocate() }
         
         cpu.A = 0x73
-        memory[Int(cpu.resetVector)] = Opcodes6502.PHA.rawValue
+        memory[0xA000] = Opcodes6502.PHA.rawValue
         memory[0x1FF] = 0x00
         
         cpu.runForTicks(3)
@@ -54,7 +54,7 @@ struct StackTests {
         defer { memory.deallocate() }
         
         cpu.SP = 0xFE
-        memory[Int(cpu.resetVector)] = Opcodes6502.PLA.rawValue
+        memory[0xA000] = Opcodes6502.PLA.rawValue
         memory[0x1FF] = 0xFF
         
         cpu.runForTicks(4)
@@ -66,7 +66,7 @@ struct StackTests {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         
-        memory[Int(cpu.resetVector)] = Opcodes6502.PHP.rawValue
+        memory[0xA000] = Opcodes6502.PHP.rawValue
         memory[0x1FF] = 0x00
         
         cpu.runForTicks(3)
@@ -79,7 +79,7 @@ struct StackTests {
         defer { memory.deallocate() }
         
         cpu.SP = 0xFE
-        memory[Int(cpu.resetVector)] = Opcodes6502.PLP.rawValue
+        memory[0xA000] = Opcodes6502.PLP.rawValue
         memory[0x1FF] = 0xAA
         
         cpu.runForTicks(4)

@@ -16,8 +16,8 @@ struct StoreTests {
             defer { memory.deallocate() }
             
             cpu.A = 0x66
-            memory[Int(cpu.resetVector)] = Opcodes6502.STA_ZeroPage.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x42
+            memory[0xA000] = Opcodes6502.STA_ZeroPage.rawValue
+            memory[0xA001] = 0x42
             
             #expect(memory[0x42] == 0xFF)
             cpu.runForTicks(3)
@@ -30,8 +30,8 @@ struct StoreTests {
             
             cpu.A = 0x22
             cpu.X = 0x10
-            memory[Int(cpu.resetVector)] = Opcodes6502.STA_ZeroPageX.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x55
+            memory[0xA000] = Opcodes6502.STA_ZeroPageX.rawValue
+            memory[0xA001] = 0x55
 
             #expect(memory[0x65] == 0xFF)
             cpu.runForTicks(4)
@@ -43,9 +43,9 @@ struct StoreTests {
             defer { memory.deallocate() }
             
             cpu.A = 0x28
-            memory[Int(cpu.resetVector)] = Opcodes6502.STA_Absolute.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x73
-            memory[Int(cpu.resetVector + 2)] = 0x19
+            memory[0xA000] = Opcodes6502.STA_Absolute.rawValue
+            memory[0xA001] = 0x73
+            memory[0xA002] = 0x19
             
             #expect(memory[0x1973] == 0xFF)
             cpu.runForTicks(4)
@@ -58,9 +58,9 @@ struct StoreTests {
             
             cpu.A = 0x32
             cpu.X = 0x20
-            memory[Int(cpu.resetVector)] = Opcodes6502.STA_AbsoluteX.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x73
-            memory[Int(cpu.resetVector + 2)] = 0x19
+            memory[0xA000] = Opcodes6502.STA_AbsoluteX.rawValue
+            memory[0xA001] = 0x73
+            memory[0xA002] = 0x19
             
             #expect(memory[0x1993] == 0xFF)
             cpu.runForTicks(5)
@@ -73,9 +73,9 @@ struct StoreTests {
             
             cpu.A = 0x64
             cpu.Y = 0x10
-            memory[Int(cpu.resetVector)] = Opcodes6502.STA_AbsoluteY.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x04
-            memory[Int(cpu.resetVector + 2)] = 0x20
+            memory[0xA000] = Opcodes6502.STA_AbsoluteY.rawValue
+            memory[0xA001] = 0x04
+            memory[0xA002] = 0x20
             
             #expect(memory[0x2014] == 0xFF)
             cpu.runForTicks(5)
@@ -88,8 +88,8 @@ struct StoreTests {
             
             cpu.A = 0xBC
             cpu.X = 0x10
-            memory[Int(cpu.resetVector)] = Opcodes6502.STA_IndirectX.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x50
+            memory[0xA000] = Opcodes6502.STA_IndirectX.rawValue
+            memory[0xA001] = 0x50
             memory[0x60] = 0x80
             memory[0x61] = 0x19
             
@@ -104,8 +104,8 @@ struct StoreTests {
             
             cpu.A = 0x40
             cpu.Y = 0x20
-            memory[Int(cpu.resetVector)] = Opcodes6502.STA_IndirectY.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x84
+            memory[0xA000] = Opcodes6502.STA_IndirectY.rawValue
+            memory[0xA001] = 0x84
             memory[0x84] = 0x89
             memory[0x85] = 0x20
 
@@ -121,8 +121,8 @@ struct StoreTests {
             defer { memory.deallocate() }
             
             cpu.X = 0x66
-            memory[Int(cpu.resetVector)] = Opcodes6502.STX_ZeroPage.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x42
+            memory[0xA000] = Opcodes6502.STX_ZeroPage.rawValue
+            memory[0xA001] = 0x42
             
             #expect(memory[0x42] == 0xFF)
             cpu.runForTicks(3)
@@ -135,8 +135,8 @@ struct StoreTests {
             
             cpu.X = 0x22
             cpu.Y = 0x10
-            memory[Int(cpu.resetVector)] = Opcodes6502.STX_ZeroPageY.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x55
+            memory[0xA000] = Opcodes6502.STX_ZeroPageY.rawValue
+            memory[0xA001] = 0x55
 
             #expect(memory[0x65] == 0xFF)
             cpu.runForTicks(4)
@@ -148,9 +148,9 @@ struct StoreTests {
             defer { memory.deallocate() }
             
             cpu.X = 0x28
-            memory[Int(cpu.resetVector)] = Opcodes6502.STX_Absolute.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x73
-            memory[Int(cpu.resetVector + 2)] = 0x19
+            memory[0xA000] = Opcodes6502.STX_Absolute.rawValue
+            memory[0xA001] = 0x73
+            memory[0xA002] = 0x19
             
             #expect(memory[0x1973] == 0xFF)
             cpu.runForTicks(4)
@@ -164,8 +164,8 @@ struct StoreTests {
             defer { memory.deallocate() }
             
             cpu.Y = 0x66
-            memory[Int(cpu.resetVector)] = Opcodes6502.STY_ZeroPage.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x42
+            memory[0xA000] = Opcodes6502.STY_ZeroPage.rawValue
+            memory[0xA001] = 0x42
             
             #expect(memory[0x42] == 0xFF)
             cpu.runForTicks(3)
@@ -178,8 +178,8 @@ struct StoreTests {
             
             cpu.X = 0x10
             cpu.Y = 0x22
-            memory[Int(cpu.resetVector)] = Opcodes6502.STY_ZeroPageX.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x55
+            memory[0xA000] = Opcodes6502.STY_ZeroPageX.rawValue
+            memory[0xA001] = 0x55
 
             #expect(memory[0x65] == 0xFF)
             cpu.runForTicks(4)
@@ -191,9 +191,9 @@ struct StoreTests {
             defer { memory.deallocate() }
             
             cpu.Y = 0x28
-            memory[Int(cpu.resetVector)] = Opcodes6502.STY_Absolute.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x73
-            memory[Int(cpu.resetVector + 2)] = 0x19
+            memory[0xA000] = Opcodes6502.STY_Absolute.rawValue
+            memory[0xA001] = 0x73
+            memory[0xA002] = 0x19
             
             #expect(memory[0x1973] == 0xFF)
             cpu.runForTicks(4)

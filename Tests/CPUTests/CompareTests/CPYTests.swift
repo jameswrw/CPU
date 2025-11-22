@@ -16,8 +16,8 @@ struct CPYTests {
         for (i, CompareTestInput) in compareTestInputs.enumerated() {
             cpu.reset()
             cpu.Y = CompareTestInput.registerValue
-            memory[Int(cpu.resetVector)] = Opcodes6502.CPY_Immediate.rawValue
-            memory[Int(cpu.resetVector + 1)] = CompareTestInput.value
+            memory[0xA000] = Opcodes6502.CPY_Immediate.rawValue
+            memory[0xA001] = CompareTestInput.value
             
             cpu.runForTicks(2)
             testCMP(cpu: cpu, CompareTestOutput: compareTestOutputs[i])
@@ -31,8 +31,8 @@ struct CPYTests {
         for (i, CompareTestInput) in compareTestInputs.enumerated() {
             cpu.reset()
             cpu.Y = CompareTestInput.registerValue
-            memory[Int(cpu.resetVector)] = Opcodes6502.CPY_ZeroPage.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x55
+            memory[0xA000] = Opcodes6502.CPY_ZeroPage.rawValue
+            memory[0xA001] = 0x55
             memory[0x55] = CompareTestInput.value
             
             cpu.runForTicks(3)
@@ -47,9 +47,9 @@ struct CPYTests {
         for (i, CompareTestInput) in compareTestInputs.enumerated() {
             cpu.reset()
             cpu.Y = CompareTestInput.registerValue
-            memory[Int(cpu.resetVector)] = Opcodes6502.CPY_Absolute.rawValue
-            memory[Int(cpu.resetVector + 1)] = 0x34
-            memory[Int(cpu.resetVector + 2)] = 0x12
+            memory[0xA000] = Opcodes6502.CPY_Absolute.rawValue
+            memory[0xA001] = 0x34
+            memory[0xA002] = 0x12
             memory[0x1234] = CompareTestInput.value
             
             cpu.runForTicks(4)
