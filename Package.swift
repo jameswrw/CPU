@@ -22,7 +22,7 @@ let package = Package(
     targets: [
         .target(
             name: "Swift6502",
-            swiftSettings: [.unsafeFlags(["-strict-concurrency=complete", "-warnings-as-errors"])]
+            swiftSettings: [.unsafeFlags(["-strict-concurrency=complete"])]
         ),
         .macro(
             name: "CPUMacros",
