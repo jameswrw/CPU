@@ -5,7 +5,7 @@
 //  Created by James Weatherley on 28/10/2025.
 //
 
-public class CPU6502 {
+public actor CPU6502 {
     
     public init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
         self.memory = MemoryController(memory: memory, ioAddresses: ioAddresses)
