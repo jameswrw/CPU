@@ -16,7 +16,7 @@ public class CPU6502 {
     internal var tickcount: Int = 0
     
     // MARK: Memory
-    internal var memory: MemoryController
+    public var memory: MemoryController
     
     public func setIOReadCallback(_ ioReadCallback: @escaping IOCallBack) {
         memory.ioReadCallBack = ioReadCallback
