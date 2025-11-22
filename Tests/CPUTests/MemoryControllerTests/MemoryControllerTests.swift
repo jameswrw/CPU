@@ -62,7 +62,7 @@ struct MemoryControllerTests {
         let (cpu, memory) = initCPU(ioAddresses: [0x2000, 0x2001])
         defer { memory.deallocate() }
         
-        cpu.setIOWriteCallback { address in
+        cpu.setIOWriteCallback { address, value in
             if address == 0x2000 {
                 memory[0x3002] = 0xAB
             } else if address == 0x2001 {

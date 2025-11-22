@@ -51,11 +51,11 @@ public actor CPU6502 {
     // MARK: Memory
     public var memory: MemoryController
     
-    public func setIOReadCallback(_ ioReadCallback: @escaping IOCallBack) {
+    public func setIOReadCallback(_ ioReadCallback: @escaping IOReadCallback) {
         memory.ioReadCallBack = ioReadCallback
     }
     
-    public func setIOWriteCallback(_ ioWriteCallback: @escaping IOCallBack) {
+    public func setIOWriteCallback(_ ioWriteCallback: @escaping IOWriteCallback) {
         memory.ioWriteCallBack = ioWriteCallback
     }
     
