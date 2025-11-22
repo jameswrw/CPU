@@ -5,6 +5,35 @@
 //  Created by James Weatherley on 28/10/2025.
 //
 
+// CPU6502 has a small public interface, but testing wants to poke around with internals.
+// This is an issue because you end up with zillions of concurrency warnings. Fixing them
+// would be fine, but you seem to need to write accessors that are *only* used by testing.
+// e.g.
+//  #expect(cpu.X == 0x12)
+//
+// This produces errors and you end up needing to write something like:
+//  let x = await cpu.X
+//  #expect(x == 0x12)
+//
+// Setting values is worse:
+//  cpu.X = 0x34
+//
+// becomes:
+// await cpu.setX(0x34)
+//
+// Where setX() is *only* used in testing. All other access to X is within the actor,
+// so ordinarily setX() is not needed.
+//
+// Setting memory via MemoryController is peak awful:
+//  cpu.memory[0x1234] = 12
+//
+// becomes:
+//  await cpu.setMemory(address: 0x1234, value: 0x42)
+//
+// Again, the access function is only used by tests, and it results in harder to read code that won't
+// be used anywhere else. This seems a waste of time.
+//
+// The best I came up with for testing is to make this a class before running the tests.
 public actor CPU6502 {
     
     public init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
