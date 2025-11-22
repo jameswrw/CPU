@@ -49,7 +49,7 @@ extension CPU6502 {
     ///     targetOffset:       Offset form target (see comments above) - typically comes from Y
     ///     incrementTickcountIfPageBoundaryCrossed:    If true and target + target crosses a page boundary then add one to tickcount
     ///
-    internal func valueFrom(
+    internal func readValueFrom(
         zeroPageAddress: UInt8,
         zeroPageOffet: UInt8,
         targetOffset: UInt8,
@@ -64,6 +64,21 @@ extension CPU6502 {
             tickcount +=  samePage(address1: targetAddress, address2: offsetTargetAddress) ? 0 : 1
         }
         return memory[Int(offsetTargetAddress)]
+    }
+    
+    internal func writeValueTo(
+        value: UInt8,
+        zeroPageAddress: UInt8,
+        zeroPageOffet: UInt8,
+        targetOffset: UInt8
+    ) {
+        let offsetZeroPageAddress = addSignedByte(UInt16(zeroPageAddress), zeroPageOffet)
+        let loByte = memory[Int(offsetZeroPageAddress)]
+        let hiByte = memory[Int(offsetZeroPageAddress + 1)]
+        let targetAddress = (UInt16(hiByte) << 8) | (UInt16(loByte))
+        let offsetTargetAddress = addSignedByte(targetAddress, targetOffset)
+
+        return memory[Int(offsetTargetAddress)] = value
     }
 
     /// Are address1 and address2 on the same page, where a page is a block of 100 bytes.

@@ -1,5 +1,5 @@
 //
-//  Opcodes.swift
+//  Opcodes6502.swift
 //  Swift6502
 //
 //  Created by James Weatherley on 29/10/2025.

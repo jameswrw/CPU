@@ -8,12 +8,12 @@ import Foundation
 @testable import Swift6502
 
 @inline(__always)
-internal func initCPU(assertInitialState: Bool = true) -> (CPU6502, UnsafeMutablePointer<UInt8>) {
+internal func initCPU(assertInitialState: Bool = true, ioAddresses: Set<UInt16> = []) -> (CPU6502, UnsafeMutablePointer<UInt8>) {
     let memory = UnsafeMutablePointer<UInt8>.allocate(capacity: 0x10000)
     
     // 0xFF is an invalid opcode, so this should help catch some unitialised memory and tickcount issues.
     memset(memory, 0xFF, 0x10000)
-    let cpu = CPU6502(memory: memory)
+    let cpu = CPU6502(memory: memory, ioAddresses: ioAddresses)
 
     if assertInitialState {
         #expect(cpu.A == 0)

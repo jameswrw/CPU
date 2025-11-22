@@ -117,7 +117,7 @@ public extension CPU6502 {
                 tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
             case .LDA_IndirectX:
                 let zeroPageAddress = nextByte()
-                A = valueFrom(
+                A = readValueFrom(
                     zeroPageAddress: zeroPageAddress,
                     zeroPageOffet: X,
                     targetOffset: 0,
@@ -127,7 +127,7 @@ public extension CPU6502 {
                 tickcount += 6
             case .LDA_IndirectY:
                 let zeroPageAddress = nextByte()
-                A = valueFrom(
+                A = readValueFrom(
                     zeroPageAddress: zeroPageAddress,
                     zeroPageOffet: 0,
                     targetOffset: Y,
@@ -391,7 +391,7 @@ public extension CPU6502 {
                 tickcount += 4
             case .ADC_IndirectX:
                 if readFlag(.D) {
-                    let operand = valueFrom(
+                    let operand = readValueFrom(
                         zeroPageAddress: nextByte(),
                         zeroPageOffet: X,
                         targetOffset: 0,
@@ -399,7 +399,7 @@ public extension CPU6502 {
                     )
                     A = addDecimal(operand, to: A)
                 } else {
-                    let operand = valueFrom(
+                    let operand = readValueFrom(
                         zeroPageAddress: nextByte(),
                         zeroPageOffet: X,
                         targetOffset: 0,
@@ -411,7 +411,7 @@ public extension CPU6502 {
             case .ADC_IndirectY:
                 if readFlag(.D) {
                     let operand =
-                    valueFrom(
+                    readValueFrom(
                         zeroPageAddress: nextByte(),
                         zeroPageOffet: 0,
                         targetOffset: Y,
@@ -420,7 +420,7 @@ public extension CPU6502 {
                     A = addDecimal(operand, to: A)
                 } else {
                     let operand =
-                    valueFrom(
+                    readValueFrom(
                         zeroPageAddress: nextByte(),
                         zeroPageOffet: 0,
                         targetOffset: Y,
@@ -501,7 +501,7 @@ public extension CPU6502 {
                 tickcount += 4
             case .SBC_IndirectX:
                 if readFlag(.D) {
-                    let operand = valueFrom(
+                    let operand = readValueFrom(
                         zeroPageAddress: nextByte(),
                         zeroPageOffet: X,
                         targetOffset: 0,
@@ -509,7 +509,7 @@ public extension CPU6502 {
                     )
                     A = subtractDecimal(operand, from: A)
                 } else {
-                    let operand = valueFrom(
+                    let operand = readValueFrom(
                         zeroPageAddress: nextByte(),
                         zeroPageOffet: X,
                         targetOffset: 0,
@@ -520,7 +520,7 @@ public extension CPU6502 {
                 tickcount += 6
             case .SBC_IndirectY:
                 if readFlag(.D) {
-                    let operand = valueFrom(
+                    let operand = readValueFrom(
                         zeroPageAddress: nextByte(),
                         zeroPageOffet: 0,
                         targetOffset: Y,
@@ -528,7 +528,7 @@ public extension CPU6502 {
                     )
                     A = subtractDecimal(operand, from: A)
                 } else {
-                    let operand = valueFrom(
+                    let operand = readValueFrom(
                         zeroPageAddress: nextByte(),
                         zeroPageOffet: 0,
                         targetOffset: Y,
@@ -669,7 +669,7 @@ public extension CPU6502 {
                 tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
             case .AND_IndirectX:
                 let zeroPageBase = nextByte()
-                A = A & valueFrom(
+                A = A & readValueFrom(
                     zeroPageAddress: zeroPageBase,
                     zeroPageOffet: X,
                     targetOffset: 0,
@@ -679,7 +679,7 @@ public extension CPU6502 {
                 tickcount += 6
             case .AND_IndirectY:
                 let zeroPageBase = nextByte()
-                A = A & valueFrom(
+                A = A & readValueFrom(
                     zeroPageAddress: zeroPageBase,
                     zeroPageOffet: 0,
                     targetOffset: Y,
@@ -719,7 +719,7 @@ public extension CPU6502 {
                 tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
             case .ORA_IndirectX:
                 let zeroPageBase = nextByte()
-                A = A | valueFrom(
+                A = A | readValueFrom(
                     zeroPageAddress: zeroPageBase,
                     zeroPageOffet: X,
                     targetOffset: 0,
@@ -729,7 +729,7 @@ public extension CPU6502 {
                 tickcount += 6
             case .ORA_IndirectY:
                 let zeroPageBase = nextByte()
-                A = A | valueFrom(
+                A = A | readValueFrom(
                     zeroPageAddress: zeroPageBase,
                     zeroPageOffet: 0,
                     targetOffset: Y,
@@ -769,7 +769,7 @@ public extension CPU6502 {
                 tickcount += samePage(address1: baseAddress, address2: targetAddress) ? 4 : 5
             case .EOR_IndirectX:
                 let zeroPageBase = nextByte()
-                A = A ^ valueFrom(
+                A = A ^ readValueFrom(
                     zeroPageAddress: zeroPageBase,
                     zeroPageOffet: X,
                     targetOffset: 0,
@@ -779,7 +779,7 @@ public extension CPU6502 {
                 tickcount += 6
             case .EOR_IndirectY:
                 let zeroPageBase = nextByte()
-                A = A ^ valueFrom(
+                A = A ^ readValueFrom(
                     zeroPageAddress: zeroPageBase,
                     zeroPageOffet: 0,
                     targetOffset: Y,
@@ -820,7 +820,7 @@ public extension CPU6502 {
                 compare(value, withRegister: A)
                 tickcount += samePage(address1: baseAddress, address2: targetAddesss) ? 4 : 5
             case .CMP_IndirectX:
-                let value = valueFrom(
+                let value = readValueFrom(
                     zeroPageAddress: nextByte(),
                     zeroPageOffet: X,
                     targetOffset: 0,
@@ -829,7 +829,7 @@ public extension CPU6502 {
                 compare(value, withRegister: A)
                 tickcount += 6
             case .CMP_IndirectY:
-                let value = valueFrom(
+                let value = readValueFrom(
                     zeroPageAddress: nextByte(),
                     zeroPageOffet: 0,
                     targetOffset: Y,
@@ -867,45 +867,55 @@ public extension CPU6502 {
                 
                 // MARK: Stores
             case .STA_ZeroPage:
-                A = memory[Int(nextByte())]
+                memory[Int(nextByte())] = A
                 tickcount += 3
             case .STA_ZeroPageX:
-                A = memory[Int(addSignedByte(UInt16(nextByte()), X))]
+                memory[Int(addSignedByte(UInt16(nextByte()), X))] = A
                 tickcount += 4
             case .STA_Absolute:
-                A = memory[Int(nextWord())]
+                memory[Int(nextWord())] = A
                 tickcount += 4
             case .STA_AbsoluteX:
-                A = memory[Int(addSignedByte(nextWord(), X))]
+                memory[Int(addSignedByte(nextWord(), X))] = A
                 tickcount += 5
             case .STA_AbsoluteY:
-                A = memory[Int(addSignedByte(nextWord(), Y))]
+                memory[Int(addSignedByte(nextWord(), Y))] = A
                 tickcount += 5
             case .STA_IndirectX:
-                A = valueFrom(zeroPageAddress: nextByte(), zeroPageOffet: X, targetOffset: 0, incrementTickcountIfPageBoundaryCrossed: false)
+                writeValueTo(
+                    value: A,
+                    zeroPageAddress: nextByte(),
+                    zeroPageOffet: X,
+                    targetOffset: 0,
+                )
                 tickcount += 6
             case .STA_IndirectY:
-                A = valueFrom(zeroPageAddress: nextByte(), zeroPageOffet: 0, targetOffset: Y, incrementTickcountIfPageBoundaryCrossed: false)
+                writeValueTo(
+                    value: A,
+                    zeroPageAddress: nextByte(),
+                    zeroPageOffet: 0,
+                    targetOffset: Y
+                )
                 tickcount += 6
                 
             case .STX_ZeroPage:
-                X = memory[Int(nextByte())]
+                memory[Int(nextByte())] = X
                 tickcount += 3
             case .STX_ZeroPageY:
-                X = memory[Int(addSignedByte(UInt16(nextByte()), Y))]
+                memory[Int(addSignedByte(UInt16(nextByte()), Y))] = X
                 tickcount += 4
             case .STX_Absolute:
-                X = memory[Int(nextWord())]
+                memory[Int(nextWord())] = X
                 tickcount += 4
                 
             case .STY_ZeroPage:
                 tickcount += 3
-                Y = memory[Int(nextByte())]
+                memory[Int(nextByte())] = Y
             case .STY_ZeroPageX:
-                Y = memory[Int(addSignedByte(UInt16(nextByte()), X))]
+                memory[Int(addSignedByte(UInt16(nextByte()), X))] = Y
                 tickcount += 4
             case .STY_Absolute:
-                Y = memory[Int(nextWord())]
+                memory[Int(nextWord())] = Y
                 tickcount += 4
                 
                 // MARK: Clear flags

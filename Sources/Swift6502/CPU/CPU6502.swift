@@ -14,8 +14,18 @@ public class CPU6502 {
     
     internal let endianness = Endianness.little
     internal var tickcount: Int = 0
+    
+    // MARK: Memory
     internal var memory: MemoryController
-
+    
+    public func setIOReadCallback(_ ioReadCallback: @escaping IOCallBack) {
+        memory.ioReadCallBack = ioReadCallback
+    }
+    
+    public func setIOWriteCallback(_ ioWriteCallback: @escaping IOCallBack) {
+        memory.ioWriteCallBack = ioWriteCallback
+    }
+    
     // MARK: Interupts
     internal var waitingForNMIHandler: Bool = false
     internal var waitingForIRQHandler: Bool = false
