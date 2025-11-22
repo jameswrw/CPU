@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import CPU
+@testable import Swift6502
 
 struct TestLDY {
     @Test func testLDX_Immediate() async throws {

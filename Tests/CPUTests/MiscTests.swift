@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import CPU
+@testable import Swift6502
 
 struct MiscTests {
     @Test func testNOP() async throws {

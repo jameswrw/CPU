@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CPU"
-               BuildableName = "CPU"
-               BlueprintName = "CPU"
+               BlueprintIdentifier = "Swift6502"
+               BuildableName = "Swift6502"
+               BlueprintName = "Swift6502"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -59,15 +59,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CPU"
-            BuildableName = "CPU"
-            BlueprintName = "CPU"
-            ReferencedContainer = "container:">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

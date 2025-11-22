@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import CPU
+@testable import Swift6502
 
 struct CMPTests {
     @Test func testCMP_Immediate() async throws {

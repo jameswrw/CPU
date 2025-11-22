@@ -5,7 +5,7 @@
 
 import Testing
 import Foundation
-@testable import CPU
+@testable import Swift6502
 
 @inline(__always)
 internal func initCPU(assertInitialState: Bool = true) -> (CPU6502, UnsafeMutablePointer<UInt8>) {

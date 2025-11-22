@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import CPU
+@testable import Swift6502
 
 // With all the branch tests give ourselves some space by first doing a JMP away from the rest vector.
 //

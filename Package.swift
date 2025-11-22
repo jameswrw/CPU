@@ -12,8 +12,8 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "CPU",
-            targets: ["CPU"]
+            name: "Swift6502",
+            targets: ["Swift6502"]
         )
     ],
     dependencies: [
@@ -21,7 +21,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "CPU",
+            name: "Swift6502",
             swiftSettings: [.unsafeFlags(["-strict-concurrency=complete", "-warnings-as-errors"])]
         ),
         .macro(
@@ -37,7 +37,7 @@ let package = Package(
         ),
         .testTarget(
             name: "CPUTests",
-            dependencies: ["CPU"], // removed "CPUMacroDecls",
+            dependencies: ["Swift6502"], // removed "CPUMacroDecls",
             swiftSettings: [.unsafeFlags(["-strict-concurrency=complete", "-warnings-as-errors"])]
         )
     ]

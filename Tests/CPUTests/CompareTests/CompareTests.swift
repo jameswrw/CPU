@@ -5,7 +5,7 @@
 //  Created by James Weatherley on 14/11/2025.
 //
 
-@testable import CPU
+@testable import Swift6502
 import Testing
 
 internal struct CompareTestInput {

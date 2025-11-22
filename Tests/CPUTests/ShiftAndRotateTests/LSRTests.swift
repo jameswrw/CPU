@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import CPU
+@testable import Swift6502
 
 struct LSRTests {
     @Test func testLSR_Accumulator() async throws {

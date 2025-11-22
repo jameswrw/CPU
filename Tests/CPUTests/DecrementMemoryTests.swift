@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import CPU
+@testable import Swift6502
 
 struct DecrementMemoryTests {
     @Test func testDEC_ZeroPage() async throws {

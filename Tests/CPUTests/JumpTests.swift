@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import CPU
+@testable import Swift6502
 
 struct JumpTests {
     @Test func testJMP_Absolute() async throws {
