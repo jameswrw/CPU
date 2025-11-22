@@ -10,21 +10,21 @@
 
 public typealias IOCallBack = (_: UInt16) -> Void
 
-internal struct MemoryController {
+public struct MemoryController {
     
-    init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
+    internal init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
         self.memory = memory
         self.ioAddresses = ioAddresses
     }
     
-    let memory: UnsafeMutablePointer<UInt8>
+    internal let memory: UnsafeMutablePointer<UInt8>
 
     // Maybe an array of ranges of addresses makes more sense. We'll see.
     let ioAddresses: Set<UInt16>
     var ioReadCallBack: IOCallBack? = nil
     var ioWriteCallBack: IOCallBack? = nil
 
-    subscript(index: Int) -> UInt8 {
+    internal subscript(index: Int) -> UInt8 {
         get {
             if ioAddresses.contains(UInt16(index)) {
                 ioReadCallBack?(UInt16(index))
