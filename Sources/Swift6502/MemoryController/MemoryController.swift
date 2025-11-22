@@ -20,9 +20,9 @@ public struct MemoryController {
     internal let memory: UnsafeMutablePointer<UInt8>
 
     // Maybe an array of ranges of addresses makes more sense. We'll see.
-    let ioAddresses: Set<UInt16>
-    var ioReadCallBack: IOCallBack? = nil
-    var ioWriteCallBack: IOCallBack? = nil
+    public let ioAddresses: Set<UInt16>
+    public var ioReadCallBack: IOCallBack? = nil
+    public var ioWriteCallBack: IOCallBack? = nil
 
     internal subscript(index: Int) -> UInt8 {
         get {
