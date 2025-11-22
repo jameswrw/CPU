@@ -12,7 +12,7 @@ public class CPU6502 {
         PC = UInt16(resetVector)
     }
     
-    internal let endianness = XEndianness.little
+    internal let endianness = Endianness.little
     internal var tickcount: Int = 0
     internal var memory: MemoryController
 

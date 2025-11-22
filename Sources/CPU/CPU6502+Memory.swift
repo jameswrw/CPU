@@ -10,7 +10,7 @@ import Foundation
 extension CPU6502 {
     
     // MARK: Memory fundamentals
-    internal enum XEndianness {
+    internal enum Endianness {
         case big
         case little
     }
