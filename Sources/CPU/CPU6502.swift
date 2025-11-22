@@ -1,20 +1,20 @@
 //
-//  CPU6502.swift
-//  CPU6502
+//  Swift6502.swift
+//  Swift6502
 //
 //  Created by James Weatherley on 28/10/2025.
 //
 
 public class CPU6502 {
     
-    public init(memory: UnsafeMutablePointer<UInt8>) {
-        self.memory = memory
+    public init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
+        self.memory = MemoryController(memory: memory, ioAddresses: ioAddresses)
     }
     
-    internal let endianness = Endianness.little
+    internal let endianness = XEndianness.little
     internal var tickcount: Int = 0
-    internal var memory: UnsafeMutablePointer<UInt8>
-    
+    internal var memory: MemoryController
+
     // MARK: Interupts
     internal var waitingForNMIHandler: Bool = false
     internal var waitingForIRQHandler: Bool = false
@@ -32,4 +32,3 @@ public class CPU6502 {
     internal let irqVector = 0xFFFE
     internal let nmiVector = 0xFFFA
 }
-

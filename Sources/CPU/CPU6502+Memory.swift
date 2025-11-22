@@ -1,5 +1,5 @@
 //
-//  CPU6502+Memory.swift
+//  Swift6502+Memory.swift
 //  Swift6502
 //
 //  Created by James Weatherley on 21/11/2025.
@@ -10,7 +10,7 @@ import Foundation
 extension CPU6502 {
     
     // MARK: Memory fundamentals
-    internal enum Endianness {
+    internal enum XEndianness {
         case big
         case little
     }

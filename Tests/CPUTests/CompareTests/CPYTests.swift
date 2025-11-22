@@ -1,6 +1,6 @@
 //
 //  CPYTests.swift
-//  CPU6502
+//  Swift6502
 //
 //  Created by James Weatherley on 17/11/2025.
 //

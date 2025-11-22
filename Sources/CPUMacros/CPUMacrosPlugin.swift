@@ -1,6 +1,6 @@
 //
-//  CPU6502MacrosPlugin.swift
-//  CPU6502
+//  Swift6502MacrosPlugin.swift
+//  Swift6502
 //
 //  Created by James Weatherley on 01/11/2025.
 //

@@ -1,6 +1,6 @@
 //
 //  SBCDecimalTests.swift
-//  CPU6502
+//  Swift6502
 //
 //  Created by James Weatherley on 20/11/2025.
 //
