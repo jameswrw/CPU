@@ -9,6 +9,7 @@ public class CPU6502 {
     
     public init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
         self.memory = MemoryController(memory: memory, ioAddresses: ioAddresses)
+        PC = UInt16(resetVector)
     }
     
     internal let endianness = XEndianness.little
@@ -20,8 +21,8 @@ public class CPU6502 {
     internal var waitingForIRQHandler: Bool = false
     
     // MARK: Registers
-    internal var SP: UInt8 = 0xFF     // Top of stack. Base address is 0x100, so 0x1FF -> 0x100 is your stack.
-    internal var PC: UInt16 = 0xFFFC  // Reset vector - execution starts here.
+    internal var SP: UInt8 = 0xFF   // Top of stack. Base address is 0x100, so 0x1FF -> 0x100 is your stack.
+    internal var PC: UInt16         // Gets initialised to resetVector - execution starts here.
     internal var A: UInt8 = 0
     internal var X: UInt8 = 0
     internal var Y: UInt8 = 0
