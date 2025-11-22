@@ -6,5 +6,4 @@ Swift6502 is **not** ready for the prime time. It has only been tested against t
 
 Swift6502 is only the CPU core. There are hooks for I/O, but no devices are provided. It's up to client code to provide and hook up devices such as a keyboard and display.
 
-### Breaking Issue
-There is a breaking issue with the way the reset vector is handled. I assumed execution started at the reset vector. It doesn't, it magically starts execution from the address in resetVector and resetVector + 1. No biggie to fix - just a slog throught the tests.
+WozMon appears to work to some degree in the debugger. Need to figure out what values it expects from I/O reads.
