@@ -227,7 +227,7 @@ struct RORTests {
         #expect(memory[0x50FA] == 0x00)
         #expect(cpu.PC == 0xA003)
         #expect(cpu.readFlag(.Z) == true)
-        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.N) == fa2lse)
         #expect(cpu.readFlag(.C) == true)
         
         // Right rotate that clears the negative flag.
