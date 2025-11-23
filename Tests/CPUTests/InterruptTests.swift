@@ -1,5 +1,5 @@
 //
-//  InteruptTests.swift
+//  InterruptTests.swift
 //  Swift6502
 //
 //  Created by James Weatherley on 20/11/2025.
@@ -8,7 +8,7 @@
 import Testing
 @testable import Swift6502
 
-struct InteruptTests {
+struct interruptTests {
     
     @Test func testRTI() async throws {
         let (cpu, memory) = initCPU()

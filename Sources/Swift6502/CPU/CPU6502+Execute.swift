@@ -9,7 +9,7 @@ import Foundation
 
 public extension CPU6502 {
     
-    // MARK: Interupts
+    // MARK: Interrupts
     internal func requestIRQ() {
         waitingForIRQHandler = true
     }
@@ -42,7 +42,7 @@ public extension CPU6502 {
     func reset() {
         clearFlag(.C)
         clearFlag(.Z)
-        clearFlag(.I)
+        setFlag(.I)
         clearFlag(.D)
         clearFlag(.B)
         setFlag(.One)
@@ -588,11 +588,13 @@ public extension CPU6502 {
                 tickcount += 7
                 
             case .ROL_Accumulator:
-                let msb = A & 0x80
-                let newValue = (A << 1) | (msb >> 7)
-                A = newValue
+                let oldCarry: UInt8 = readFlag(.C) ? 1 : 0
+                let newCarry = (A & 0x80) != 0
+                A = (A << 1) | oldCarry
+                
                 updateNZFlagsFor(newValue: A)
-                (msb != 0) ? setFlag(.C) : clearFlag(.C)
+                newCarry ? setFlag(.C) : clearFlag(.C)
+                
                 tickcount += 2
             case .ROL_ZeroPage:
                 let address = nextByte()
@@ -612,11 +614,13 @@ public extension CPU6502 {
                 tickcount += 7
                 
             case .ROR_Accumulator:
-                let lsb = A & 0x01
-                let newValue = (A >> 1) | (lsb << 7)
-                A = newValue
+                let oldCarry: UInt8 = readFlag(.C) ? 0x80 : 0
+                let newCarry = (A & 0x01) != 0
+                A = (A >> 1) | oldCarry
+                
                 updateNZFlagsFor(newValue: A)
-                (lsb != 0) ? setFlag(.C) : clearFlag(.C)
+                newCarry ? setFlag(.C) : clearFlag(.C)
+                
                 tickcount += 2
             case .ROR_ZeroPage:
                 let address = nextByte()

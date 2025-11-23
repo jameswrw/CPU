@@ -16,26 +16,26 @@ extension CPU6502 {
     // MARK: Shifts
     internal func LeftShiftShared(address: Int, rotate: Bool) {
         let byte = memory[Int(address)]
-        let msb = byte & 0x80
-        var newValue = byte << 1
-        if rotate {
-            newValue |= msb >> 7
-        }
-        writeByte(addr: Int(address), value: newValue)
-        updateNZFlagsFor(newValue: newValue)
-        (msb != 0) ? setFlag(.C) : clearFlag(.C)
+        
+        let oldCarry: UInt8 = readFlag(.C) ? 1 : 0
+        let newCarry = (byte & 0x80) != 0
+        let newByte = (byte << 1) | oldCarry
+        
+        writeByte(addr: Int(address), value: newByte)
+        updateNZFlagsFor(newValue: newByte)
+        newCarry ? setFlag(.C) : clearFlag(.C)
     }
     
     internal func RightShiftShared(address: Int, rotate: Bool) {
         let byte = memory[Int(address)]
-        let lsb = byte & 0x01
-        var newValue = byte >> 1
-        if rotate {
-            newValue |= lsb << 7
-        }
-        writeByte(addr: Int(address), value: newValue)
-        updateNZFlagsFor(newValue: newValue)
-        (lsb != 0) ? setFlag(.C) : clearFlag(.C)
+        
+        let oldCarry: UInt8 = readFlag(.C) ? 0x80 : 0
+        let newCarry = (byte & 0x01) != 0
+        let newByte = (byte >> 1) | oldCarry
+        
+        writeByte(addr: Int(address), value: newByte)
+        updateNZFlagsFor(newValue: newByte)
+        newCarry ? setFlag(.C) : clearFlag(.C)
     }
     
     // MARK: Indirect addressing helper

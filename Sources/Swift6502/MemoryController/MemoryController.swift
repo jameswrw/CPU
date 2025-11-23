@@ -8,7 +8,7 @@
 // A grand title, but this is not an MMU.
 // It abstracts the memory allowing us to redirect I/O or trap reads and writes to specific locations.
 
-public typealias IOReadCallback = (_: UInt16) -> Void
+public typealias IOReadCallback = (_: UInt16) -> UInt8
 public typealias IOWriteCallback = (_: UInt16, _: UInt8) -> Void
 
 public struct MemoryController {

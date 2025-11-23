@@ -34,7 +34,7 @@ struct XORTests {
         }
     }
     
-    @Test func testEOR_ZerPage() async throws {
+    @Test func testEOR_ZeroPage() async throws {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         

@@ -20,6 +20,7 @@ struct MemoryControllerTests {
             } else if address == 0x2001 {
                 memory[0x3001] = 0x33
             }
+            return 0x42
         }
 
         // • JMP to 0x1000.

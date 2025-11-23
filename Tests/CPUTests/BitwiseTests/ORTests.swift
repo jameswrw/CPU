@@ -34,7 +34,7 @@ struct ORTests {
         }
     }
     
-    @Test func testORA_ZerPage() async throws {
+    @Test func testORA_ZeroPage() async throws {
         let (cpu, memory) = initCPU()
         defer { memory.deallocate() }
         

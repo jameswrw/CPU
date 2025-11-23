@@ -34,7 +34,7 @@
 // be used anywhere else. This seems a waste of time.
 //
 // The best I came up with for testing is to make this a class before running the tests.
-public actor CPU6502 {
+public class CPU6502 {
     
     public init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
         self.memory = MemoryController(memory: memory, ioAddresses: ioAddresses)
@@ -59,7 +59,7 @@ public actor CPU6502 {
         memory.ioWriteCallBack = ioWriteCallback
     }
     
-    // MARK: Interupts
+    // MARK: Interrupts
     internal var waitingForNMIHandler: Bool = false
     internal var waitingForIRQHandler: Bool = false
     

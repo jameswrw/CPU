@@ -10,7 +10,7 @@ import Foundation
 internal enum Flags: UInt8 {
     case C = 1      // Carry
     case Z = 2      // Zero
-    case I = 4      // Interupt disable
+    case I = 4      // Interrupt disable
     case D = 8      // Decimal
     case B = 16     // Break flag
     case One = 32   // Always 1

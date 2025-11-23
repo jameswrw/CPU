@@ -23,10 +23,22 @@ struct RORTests {
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
         
-        // Right rotate that sets negative and carry flag.
+        // Right rotate zero with carry flag initially unset.
         cpu.reset()
         memory[0xA000] = Opcodes6502.ROR_Accumulator.rawValue
         cpu.A = 0x01
+        
+        cpu.runForTicks(2)
+        #expect(cpu.A == 0x00)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == true)
+        
+        // Right rotate zero with carry flag initially set.
+        cpu.reset()
+        memory[0xA000] = Opcodes6502.ROR_Accumulator.rawValue
+        cpu.A = 0x01
+        cpu.setFlag(.C)
         
         cpu.runForTicks(2)
         #expect(cpu.A == 0x80)
@@ -70,10 +82,10 @@ struct RORTests {
         memory[0xBB] = 0x01
         
         cpu.runForTicks(5)
-        #expect(memory[0xBB] == 0x80)
+        #expect(memory[0xBB] == 0x00)
         #expect(cpu.PC == 0xA002)
-        #expect(cpu.readFlag(.Z) == false)
-        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == true)
         
         // Right rotate that clears the negative flag.
@@ -116,10 +128,10 @@ struct RORTests {
         memory[0x5A] = 0x01
         
         cpu.runForTicks(6)
-        #expect(memory[0x5A] == 0x80)
+        #expect(memory[0x5A] == 0x00)
         #expect(cpu.PC == 0xA002)
-        #expect(cpu.readFlag(.Z) == false)
-        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == true)
         
         // Right rotate that clears the negative flag.
@@ -163,10 +175,10 @@ struct RORTests {
         memory[0x2211] = 0x01
         
         cpu.runForTicks(6)
-        #expect(memory[0x2211] == 0x80)
+        #expect(memory[0x2211] == 0x00)
         #expect(cpu.PC == 0xA003)
-        #expect(cpu.readFlag(.Z) == false)
-        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == true)
         
         // Right rotate that clears the negative flag.
@@ -212,10 +224,10 @@ struct RORTests {
         memory[0x50FA] = 0x01
         
         cpu.runForTicks(7)
-        #expect(memory[0x50FA] == 0x80)
+        #expect(memory[0x50FA] == 0x00)
         #expect(cpu.PC == 0xA003)
-        #expect(cpu.readFlag(.Z) == false)
-        #expect(cpu.readFlag(.N) == true)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == true)
         
         // Right rotate that clears the negative flag.
