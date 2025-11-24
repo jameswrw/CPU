@@ -79,7 +79,7 @@ public actor CPU6502 {
     
     // MARK: Keyboard helper
     // This is a bit skanky, as the 6502 doesn't have this going on in real life.
-    internal nonisolated(unsafe) var kbdBuffer: [UInt8] = []
+    public nonisolated(unsafe) var kbdBuffer: [UInt8] = []
     
     public func enqueueKeys(_ bytes: [UInt8]) {
         kbdBuffer.append(contentsOf: bytes)
