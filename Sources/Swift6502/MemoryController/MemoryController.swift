@@ -34,15 +34,18 @@ public struct MemoryController {
     internal subscript(index: Int) -> UInt8 {
         get {
             if ioAddresses.contains(UInt16(index)) {
-                let _ = ioReadCallBack?(UInt16(index))
+                let ioByte = ioReadCallBack?(UInt16(index))
+                if ioByte != nil { return ioByte! }
             }
             return memory[index]
         }
         set(byte) {
-            if ioAddresses.contains(UInt16(index)) {
-                let _ = ioWriteCallBack?(UInt16(index), byte)
+            if ioAddresses.contains(UInt16(index)), let callback = ioWriteCallBack {
+                let ioValue = callback(UInt16(index), byte)
+                memory[index] = ioValue
+            } else {
+                memory[index] = byte
             }
-            memory[index] = byte
         }
     }
 }
