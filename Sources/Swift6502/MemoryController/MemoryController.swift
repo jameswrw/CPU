@@ -17,10 +17,15 @@
 public typealias IOReadCallback = (_: UInt16) -> UInt8?
 public typealias IOWriteCallback = (_: UInt16, _: UInt8) -> UInt8
 
+public struct MemoryWrapper: @unchecked Sendable {
+    public let rawMemory: UnsafeMutablePointer<UInt8>
+    public init(_ rawMemory: UnsafeMutablePointer<UInt8>) { self.rawMemory = rawMemory }
+}
+
 public struct MemoryController {
     
-    internal init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
-        self.memory = memory
+    internal init(memory: MemoryWrapper, ioAddresses: Set<UInt16> = []) {
+        self.memory = memory.rawMemory
         self.ioAddresses = ioAddresses
     }
     

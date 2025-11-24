@@ -37,7 +37,7 @@
 public actor CPU6502 {
     
     public init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
-        self.memory = MemoryController(memory: memory, ioAddresses: ioAddresses)
+        self.memory = MemoryController(memory: MemoryWrapper(memory), ioAddresses: ioAddresses)
         
         // Can't call readWord() here.
         let startAddressLo = UInt16(memory[resetVector])
