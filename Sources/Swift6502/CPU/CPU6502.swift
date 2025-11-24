@@ -76,4 +76,16 @@ public actor CPU6502 {
     internal let resetVector = 0xFFFC
     internal let irqVector = 0xFFFE
     internal let nmiVector = 0xFFFA
+    
+    // MARK: Keyboard helper
+    // This is a bit skanky, as the 6502 doesn't have this going on in real life.
+    internal var kbdBuffer: [UInt8] = []
+
+    public func enqueueKeys(_ bytes: [UInt8]) {
+        kbdBuffer.append(contentsOf: bytes)
+    }
+
+    public func enqueueKey(_ byte: UInt8) {
+        kbdBuffer.append(byte)
+    }
 }
