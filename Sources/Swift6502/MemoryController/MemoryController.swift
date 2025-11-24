@@ -24,8 +24,8 @@ public struct MemoryWrapper: @unchecked Sendable {
 
 public struct MemoryController {
     
-    internal init(memory: MemoryWrapper, ioAddresses: Set<UInt16> = []) {
-        self.memory = memory.rawMemory
+    internal init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
+        self.memory = memory
         self.ioAddresses = ioAddresses
     }
     

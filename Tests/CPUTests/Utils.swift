@@ -17,7 +17,7 @@ internal func initCPU(assertInitialState: Bool = true, ioAddresses: Set<UInt16> 
     // Start all tests from 0xA000
     memory[0xFFFC] = 0x00
     memory[0xFFFD] = 0xA0
-    let cpu = CPU6502(memory: memory, ioAddresses: ioAddresses)
+    let cpu = CPU6502(memory: MemoryWrapper(memory), ioAddresses: ioAddresses)
 
     if assertInitialState {
         #expect(cpu.A == 0)

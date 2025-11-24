@@ -36,12 +36,13 @@
 // The best I came up with for testing is to make this a class before running the tests.
 public actor CPU6502 {
     
-    public init(memory: UnsafeMutablePointer<UInt8>, ioAddresses: Set<UInt16> = []) {
-        self.memory = MemoryController(memory: MemoryWrapper(memory), ioAddresses: ioAddresses)
-        
+    public init(memory: MemoryWrapper, ioAddresses: Set<UInt16> = []) {
+        self.memory = MemoryController(memory: memory.rawMemory, ioAddresses: ioAddresses)
+            
         // Can't call readWord() here.
-        let startAddressLo = UInt16(memory[resetVector])
-        let startAddressHi = UInt16(memory[resetVector + 1]) << 8
+        let rawMemory = memory.rawMemory
+        let startAddressLo = UInt16(rawMemory[resetVector])
+        let startAddressHi = UInt16(rawMemory[resetVector + 1]) << 8
         PC = startAddressHi | startAddressLo
     }
     
