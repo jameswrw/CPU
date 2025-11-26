@@ -57,6 +57,11 @@ public extension CPU6502 {
     }
     
     
+    /// Single step the CPU - used for debugging 6502 issues.
+    func singlestep() {
+        runForTicks(0, singlestep: true)
+    }
+    
     /// Run for the length of a frame. The idea being that clients call this in a loop - something like
     /// :
     ///    while true {
@@ -74,7 +79,7 @@ public extension CPU6502 {
         runForTicks(ticksPerFrame)
     }
 
-    internal func runForTicks(_ ticks: Int) {
+    internal func runForTicks(_ ticks: Int, singlestep: Bool = false) {
         let startTicks = tickcount
         
         while true {
@@ -996,7 +1001,7 @@ public extension CPU6502 {
                 PC = popWord()
                 tickcount += 6
             }
-            if ticks > 0 && tickcount >= startTicks + ticks { break }
+            if singlestep || (ticks > 0 && tickcount >= startTicks + ticks) { break }
         }
     }
 }
