@@ -263,9 +263,17 @@ extension CPU6502 {
         }
     }
 
-    internal func compare(_ value: UInt8, withRegister register: UInt8) {
-        register >= value ? setFlag(.C) : clearFlag(.C)
-        register == value ? setFlag(.Z) : clearFlag(.Z)
-        (register & 0x80) != 0 ? setFlag(.N) : clearFlag(.N)
+    internal func compare(_ memory: UInt8, withRegister register: UInt8) {
+        
+        // Compare Result    N    Z    C
+        // Reg < Memory      *    0    0
+        // Reg = Memory      0    1    1
+        // Reg > Memory      *    0    1
+        //
+        // N (and Z) based on Reg - Memory
+        
+        let subtraction = register &- memory
+        updateNZFlagsFor(newValue: subtraction)
+        register < memory ? clearFlag(.C) : setFlag(.C)
     }
 }

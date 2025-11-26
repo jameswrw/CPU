@@ -17,7 +17,7 @@ struct CPYTests {
             cpu.reset()
             cpu.Y = CompareTestInput.registerValue
             memory[0xA000] = Opcodes6502.CPY_Immediate.rawValue
-            memory[0xA001] = CompareTestInput.value
+            memory[0xA001] = CompareTestInput.memory
             
             cpu.runForTicks(2)
             testCMP(cpu: cpu, CompareTestOutput: compareTestOutputs[i])
@@ -33,7 +33,7 @@ struct CPYTests {
             cpu.Y = CompareTestInput.registerValue
             memory[0xA000] = Opcodes6502.CPY_ZeroPage.rawValue
             memory[0xA001] = 0x55
-            memory[0x55] = CompareTestInput.value
+            memory[0x55] = CompareTestInput.memory
             
             cpu.runForTicks(3)
             testCMP(cpu: cpu, CompareTestOutput: compareTestOutputs[i])
@@ -50,7 +50,7 @@ struct CPYTests {
             memory[0xA000] = Opcodes6502.CPY_Absolute.rawValue
             memory[0xA001] = 0x34
             memory[0xA002] = 0x12
-            memory[0x1234] = CompareTestInput.value
+            memory[0x1234] = CompareTestInput.memory
             
             cpu.runForTicks(4)
             testCMP(cpu: cpu, CompareTestOutput: compareTestOutputs[i])
