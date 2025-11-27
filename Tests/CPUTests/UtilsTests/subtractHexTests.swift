@@ -46,7 +46,7 @@ struct SubtractHexTests {
                     #expect(!cpu.readFlag(.N))
                 }
                 
-                if Int16(j) - Int16(i) - (setCarryFlag ? 0 : 1) < 0 {
+                if Int16(j) - Int16(i) - (setCarryFlag ? 0 : 1) >= 0 {
                     #expect(cpu.readFlag(.C))
                 } else {
                     #expect(!cpu.readFlag(.C))

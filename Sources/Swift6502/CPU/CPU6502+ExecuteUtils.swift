@@ -219,10 +219,16 @@ extension CPU6502 {
         let result = num1 &- num0 &- (readFlag(.C) ? 0 : 1)
         updateNZFlagsFor(newValue: result)
         
+        // Compare Result    N    Z    C
+        // num1 < num0       *    0    0
+        // num1 = num0       0    1    1
+        // num1 > num0       *    0    1
+        //
+        // N (and Z) based on num1 - num0
         if Int16(num1) - Int16(num0) &- (readFlag(.C) ? 0 : 1) < 0 {
-            setFlag(.C)
-        } else {
             clearFlag(.C)
+        } else {
+            setFlag(.C)
         }
         
         // The logic sets V if subtracting numbers with different signs yields a result whose sign indicates wrap.
