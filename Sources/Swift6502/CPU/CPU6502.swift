@@ -48,6 +48,7 @@ public actor CPU6502 {
     
     internal let endianness = Endianness.little
     internal var tickcount: Int = 0
+    public var executionHalted = false
     
     // MARK: Memory
     public var memory: MemoryController

@@ -80,6 +80,7 @@ public extension CPU6502 {
     }
 
     internal func runForTicks(_ ticks: Int, singlestep: Bool = false) {
+        guard !executionHalted else { return }
         let startTicks = tickcount
         
         while true {
@@ -1001,7 +1002,7 @@ public extension CPU6502 {
                 PC = popWord()
                 tickcount += 6
             }
-            if singlestep || (ticks > 0 && tickcount >= startTicks + ticks) { break }
+            if executionHalted || singlestep || (ticks > 0 && tickcount >= startTicks + ticks) { break }
         }
     }
 }
