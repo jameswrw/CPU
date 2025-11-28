@@ -38,6 +38,15 @@ public extension CPU6502 {
         tickcount += 6
     }
     
+    // MARK: Halt and resume
+    func haltExecution() {
+        isHalted = true
+    }
+    
+    func resumeExecution() {
+        isHalted = false
+    }
+    
     // MARK: Reset and run
     func reset() {
         clearFlag(.C)
@@ -80,7 +89,7 @@ public extension CPU6502 {
     }
 
     internal func runForTicks(_ ticks: Int, singlestep: Bool = false) {
-        guard !executionHalted else { return }
+        guard !isHalted else { return }
         let startTicks = tickcount
         
         while true {
@@ -1002,7 +1011,7 @@ public extension CPU6502 {
                 PC = popWord()
                 tickcount += 6
             }
-            if executionHalted || singlestep || (ticks > 0 && tickcount >= startTicks + ticks) { break }
+            if isHalted || singlestep || (ticks > 0 && tickcount >= startTicks + ticks) { break }
         }
     }
 }
