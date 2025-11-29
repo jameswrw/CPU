@@ -56,7 +56,7 @@ public struct MemoryController {
         }
     }
     
-    func blitData(_ data: Data, toAddress: UInt16) {
+    public func blitData(_ data: Data, toAddress: UInt16) {
         let _ = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) in
             // Guards against going off the end of memory, but offers no more protection than that.
             // Clients should guard against over-writing stuff they care about like ROMs etc.
