@@ -100,5 +100,10 @@ extension CPU6502 {
         let hi = UInt16(popByte())
         return (hi << 8) | lo
     }
+    
+    public func blitData(_ data: Data, toAddress baseAddress: UInt16) {
+        memory.blitData(data, toAddress: baseAddress)
+    }
+
 }
 
