@@ -5,6 +5,8 @@
 //  Created by James Weatherley on 21/11/2025.
 //
 
+import Foundation
+
 // A grand title, but this is not an MMU.
 // It abstracts the memory allowing us to redirect I/O or trap reads and writes to specific locations.
 //
@@ -53,4 +55,13 @@ public struct MemoryController {
             }
         }
     }
+    
+    func blitData(_ data: Data, toAddress: UInt16) {
+        let _ = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) in
+            // Guards against going off the end of memory, but offers no more protection than that.
+            // Clients should guard against over-writing stuff they care about like ROMs etc.
+            memcpy(memory, bytes.baseAddress, 0x10000 - data.count)
+        }
+    }
+    
 }
