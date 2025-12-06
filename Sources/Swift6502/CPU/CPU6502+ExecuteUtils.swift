@@ -17,7 +17,7 @@ extension CPU6502 {
     internal func LeftShiftShared(address: Int, rotate: Bool) {
         let byte = memory[Int(address)]
         
-        let oldCarry: UInt8 = readFlag(.C) ? 1 : 0
+        let oldCarry: UInt8 = !rotate ? 0 : readFlag(.C) ? 1 : 0
         let newCarry = (byte & 0x80) != 0
         let newByte = (byte << 1) | oldCarry
         
@@ -29,7 +29,7 @@ extension CPU6502 {
     internal func RightShiftShared(address: Int, rotate: Bool) {
         let byte = memory[Int(address)]
         
-        let oldCarry: UInt8 = readFlag(.C) ? 0x80 : 0
+        let oldCarry: UInt8 = !rotate ? 0 : readFlag(.C) ? 0x80 : 0
         let newCarry = (byte & 0x01) != 0
         let newByte = (byte >> 1) | oldCarry
         

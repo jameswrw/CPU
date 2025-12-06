@@ -64,6 +64,20 @@ struct LSRTests {
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
         
+        // Right shift a value of zero. This broke when Carry was set.
+        cpu.reset()
+        cpu.setFlag(.C)
+        memory[0xA000] = Opcodes6502.LSR_ZeroPage.rawValue
+        memory[0xA001] = 0xBB
+        memory[0xBB] = 0x00
+        
+        cpu.runForTicks(5)
+        #expect(memory[0xBB] == 0x00)
+        #expect(cpu.PC == 0xA002)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
+        
         // Right shift that sets zero and carry flags.
         cpu.reset()
         memory[0xA000] = Opcodes6502.LSR_ZeroPage.rawValue

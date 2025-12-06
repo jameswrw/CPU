@@ -63,6 +63,20 @@ struct ASLTests {
         #expect(cpu.readFlag(.N) == false)
         #expect(cpu.readFlag(.C) == false)
         
+        // Left shift zero would fail if carry was set.
+        cpu.reset()
+        cpu.setFlag(.C)
+        memory[0xA000] = Opcodes6502.ASL_ZeroPage.rawValue
+        memory[0xA001] = 0x11
+        memory[0x11] = 0x00
+        
+        cpu.runForTicks(5)
+        #expect(memory[0x11] == 0x00)
+        #expect(cpu.PC == 0xA002)
+        #expect(cpu.readFlag(.Z) == true)
+        #expect(cpu.readFlag(.N) == false)
+        #expect(cpu.readFlag(.C) == false)
+        
         // Left shift that sets zero and carry flags.
         cpu.reset()
         memory[0xA000] = Opcodes6502.ASL_ZeroPage.rawValue
