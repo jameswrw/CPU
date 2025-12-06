@@ -100,7 +100,11 @@ public extension CPU6502 {
                 handleIRQ()
             }
             
-            switch nextOpcode() {
+            let pc = PC
+            let opCode = nextOpcode()
+            opCodeHook?(pc, opCode)
+            
+            switch opCode {
                 // MARK: LDA
             case .LDA_Immediate:
                 A = nextByte()

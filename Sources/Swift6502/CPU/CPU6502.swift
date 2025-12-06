@@ -34,6 +34,9 @@
 // be used anywhere else. This seems a waste of time.
 //
 // The best I came up with for testing is to make this a class before running the tests.
+
+public typealias OpCodeHook = (_: UInt16, _:Opcodes6502) -> Void
+
 public actor CPU6502 {
     
     public init(memory: MemoryWrapper, ioAddresses: Set<UInt16> = []) {
@@ -60,6 +63,9 @@ public actor CPU6502 {
     public func setIOWriteCallback(_ ioWriteCallback: @escaping IOWriteCallback) {
         memory.ioWriteCallBack = ioWriteCallback
     }
+    public func setOpCodeHook(_ opCodeHook: @escaping OpCodeHook) {
+        self.opCodeHook = opCodeHook
+    }
     
     // MARK: Interrupts
     internal var waitingForNMIHandler: Bool = false
@@ -77,4 +83,7 @@ public actor CPU6502 {
     internal let resetVector = 0xFFFC
     internal let irqVector = 0xFFFE
     internal let nmiVector = 0xFFFA
+    
+    // MARK: Hooks
+    var opCodeHook: OpCodeHook? = nil
 }
