@@ -202,3 +202,5 @@ public enum Opcodes6502: UInt8 {
     case BIT_Absolute = 0x2C        // Test added
     case RTI = 0x40                 // Test added
 }
+
+ extension Opcodes6502: @unchecked Sendable {}

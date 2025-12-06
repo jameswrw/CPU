@@ -35,7 +35,7 @@
 //
 // The best I came up with for testing is to make this a class before running the tests.
 
-public typealias OpCodeHook = (_: UInt16, _:Opcodes6502) -> Void
+public typealias OpCodeHook = @Sendable (_: UInt16, _: Opcodes6502) -> Void
 
 public actor CPU6502 {
     
@@ -63,7 +63,7 @@ public actor CPU6502 {
     public func setIOWriteCallback(_ ioWriteCallback: @escaping IOWriteCallback) {
         memory.ioWriteCallBack = ioWriteCallback
     }
-    public func setOpCodeHook(_ opCodeHook: @escaping OpCodeHook) {
+    public func setOpCodeHook(_ opCodeHook: @escaping @Sendable OpCodeHook) {
         self.opCodeHook = opCodeHook
     }
     
@@ -87,3 +87,4 @@ public actor CPU6502 {
     // MARK: Hooks
     var opCodeHook: OpCodeHook? = nil
 }
+
