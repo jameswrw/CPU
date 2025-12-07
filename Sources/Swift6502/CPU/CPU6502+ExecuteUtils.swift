@@ -59,7 +59,7 @@ extension CPU6502 {
         let loByte = memory[Int(offsetZeroPageAddress)]
         let hiByte = memory[Int(offsetZeroPageAddress + 1)]
         let targetAddress = (UInt16(hiByte) << 8) | (UInt16(loByte))
-        let offsetTargetAddress = addSignedByte(targetAddress, targetOffset)
+        let offsetTargetAddress = targetAddress &+ UInt16(targetOffset)
         if incrementTickcountIfPageBoundaryCrossed {
             tickcount +=  samePage(address1: targetAddress, address2: offsetTargetAddress) ? 0 : 1
         }
@@ -76,7 +76,7 @@ extension CPU6502 {
         let loByte = memory[Int(offsetZeroPageAddress)]
         let hiByte = memory[Int(offsetZeroPageAddress + 1)]
         let targetAddress = (UInt16(hiByte) << 8) | (UInt16(loByte))
-        let offsetTargetAddress = addSignedByte(targetAddress, targetOffset)
+        let offsetTargetAddress = targetAddress &+ UInt16(targetOffset)
 
         return memory[Int(offsetTargetAddress)] = value
     }
@@ -91,7 +91,7 @@ extension CPU6502 {
     }
     
     // MARK: Adds and subtracts
-    /// Performs ad addition of deltaUnsigned to base where deltaUnsigned is treated as a signed quantiy. e.g.:
+    /// Performs an addition of deltaUnsigned to base where deltaUnsigned is treated as a signed quantiy. e.g.:
     ///   0x200 + 0x33 -> 0x233
     ///   0x 200 + 0xFF -> 0x1FF
     internal func addSignedByte(_ base: UInt16, _ deltaUnsigned: UInt8) -> UInt16 {
