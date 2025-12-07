@@ -192,19 +192,39 @@ struct LDATests {
         }
         
         // Bonus page boundary crossing test.
-        cpu.reset()
-        cpu.Y = 0x20
-        memory[0xA000] = Opcodes6502.LDA_IndirectY.rawValue
-        memory[0xA001] = 0xF0
-        memory[0xF0] = 0xF0
-        memory[0xF1] = 0x66
-        memory[0x6710] = 0x34
+        do {
+            cpu.reset()
+            cpu.Y = 0x20
+            memory[0xA000] = Opcodes6502.LDA_IndirectY.rawValue
+            memory[0xA001] = 0xF0
+            memory[0xF0] = 0xF0
+            memory[0xF1] = 0x66
+            memory[0x6710] = 0x34
+            
+            let  oldTickcount = cpu.tickcount
+            cpu.runForTicks(6)
+            #expect(cpu.tickcount - oldTickcount == 6)
+            #expect(cpu.A == 0x34)
+            #expect(cpu.readFlag(.Z) == false)
+            #expect(cpu.readFlag(.N) == false)
+        }
         
-        let oldTickcount = cpu.tickcount
-        cpu.runForTicks(6)
-        #expect(cpu.tickcount - oldTickcount == 6)
-        #expect(cpu.A == 0x34)
-        #expect(cpu.readFlag(.Z) == false)
-        #expect(cpu.readFlag(.N) == false)
+        // Bonus Y > 0x80 test.
+        do {
+            cpu.reset()
+            cpu.Y = 0xFF
+            memory[0xA000] = Opcodes6502.LDA_IndirectY.rawValue
+            memory[0xA001] = 0xF0
+            memory[0xF0] = 0x00
+            memory[0xF1] = 0x66
+            memory[0x66FF] = 0x42
+            
+            let oldTickcount = cpu.tickcount
+            cpu.runForTicks(5)
+            #expect(cpu.tickcount - oldTickcount == 5)
+            #expect(cpu.A == 0x42)
+            #expect(cpu.readFlag(.Z) == false)
+        }
     }
+    
 }
